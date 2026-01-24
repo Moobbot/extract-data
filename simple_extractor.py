@@ -15,18 +15,29 @@ except ImportError:
 load_dotenv()
 
 
-def extract_with_gemini(image_path, api_key):
+def extract_with_gemini(image_path, api_key, output_format="markdown"):
+    """
+    Extracts table data from an image using Google Gemini API (new SDK).
+    """
     if not api_key:
         raise ValueError("GOOGLE_API_KEY not found in environment variables.")
 
     client = genai.Client(api_key=api_key)
 
-    prompt = """
-    Analyze this image. Identify any tables or structured data.
-    Extract the data and return it ONLY as a valid JSON object.
-    Do not include markdown formatting (like ```json).
-    The JSON should be a list of objects or a structured dictionary suitable for the data.
-    """
+    if output_format == "json":
+        prompt = """
+        Analyze this image. Identify any tables or structured data.
+        Extract the data and return it ONLY as a valid JSON object.
+        Do not include markdown formatting (like ```json).
+        The JSON should be a list of objects or a structured dictionary suitable for the data.
+        """
+    else:
+        prompt = """
+        Analyze this image. Identify any tables or structured data.
+        Extract the data and return it as a Markdown table.
+        Return ONLY the markdown content.
+        Do not wrap it in ```markdown code blocks.
+        """
 
     img = Image.open(image_path)
 
@@ -37,6 +48,7 @@ def extract_with_gemini(image_path, api_key):
         "gemini-flash-latest",
         "gemini-2.5-pro",
         "gemini-pro-latest",
+        "gemini-1.5-flash",
     ]
 
     last_err = None
@@ -53,7 +65,7 @@ def extract_with_gemini(image_path, api_key):
     raise RuntimeError(f"All Gemini model attempts failed. Last error: {last_err}")
 
 
-def extract_with_gpt(image_path, api_key):
+def extract_with_gpt(image_path, api_key, output_format="markdown"):
     """
     Extracts table data from an image using OpenAI GPT-4o.
     """
@@ -73,11 +85,19 @@ def extract_with_gpt(image_path, api_key):
 
     base64_image = encode_image(image_path)
 
-    prompt = """
-    Analyze this image. Identify any tables or structured data.
-    Extract the data and return it ONLY as a valid JSON object.
-    Do not include markdown formatting (like ```json).
-    """
+    if output_format == "json":
+        prompt = """
+        Analyze this image. Identify any tables or structured data.
+        Extract the data and return it ONLY as a valid JSON object.
+        Do not include markdown formatting (like ```json).
+        """
+    else:
+        prompt = """
+        Analyze this image. Identify any tables or structured data.
+        Extract the data and return it as a Markdown table.
+        Return ONLY the markdown content.
+        Do not wrap it in ```markdown code blocks.
+        """
 
     try:
         response = client.chat.completions.create(
@@ -172,6 +192,8 @@ def clean_json_string(s):
 HARDCODED_IMAGE_PATH = "datasets/Hinh04.jpg"
 # Example: HARDCODED_OUTPUT_PATH = "datasets/output.json"
 HARDCODED_OUTPUT_PATH = "outputs"
+# Output format: 'markdown' or 'json'
+HARDCODED_OUTPUT_FORMAT = "markdown"
 
 
 def main():
@@ -186,6 +208,12 @@ def main():
         choices=["gemini", "openai"],
         default=os.getenv("AI_PROVIDER", "gemini"),
         help="AI Provider to use.",
+    )
+    parser.add_argument(
+        "--format",
+        choices=["json", "markdown"],
+        default=HARDCODED_OUTPUT_FORMAT,
+        help="Output format (json or markdown).",
     )
     args = parser.parse_args()
 
@@ -203,17 +231,47 @@ def main():
         print(f"Error: File not found at {target_path}")
         return
 
-    print(f"Processing {target_path} using {args.provider}...")
+    print(f"Processing {target_path} using {args.provider} (format: {args.format})...")
 
     try:
         raw_result = ""
         if args.provider == "gemini":
             api_key = os.getenv("GOOGLE_API_KEY")
-            raw_result = extract_with_gemini(target_path, api_key)
+            raw_result = extract_with_gemini(
+                target_path, api_key, output_format=args.format
+            )
         elif args.provider == "openai":
             api_key = os.getenv("OPENAI_API_KEY")
-            raw_result = extract_with_gpt(target_path, api_key)
+            raw_result = extract_with_gpt(
+                target_path, api_key, output_format=args.format
+            )
 
+        # Determine output directory and filename base
+        image_basename = os.path.basename(target_path)
+        base_filename = os.path.splitext(image_basename)[0]
+
+        if output_path:
+            # If output_path is set, treat it as a folder
+            os.makedirs(output_path, exist_ok=True)
+            output_base = os.path.join(output_path, base_filename)
+        else:
+            # Default to same directory as input image
+            output_base = os.path.splitext(target_path)[0]
+
+        if args.format == "markdown":
+            # Save Raw Markdown
+            clean_md = clean_json_string(
+                raw_result
+            )  # re-use to clean potential code blocks
+            md_filename = output_base + ".md"
+            with open(md_filename, "w", encoding="utf-8") as f:
+                f.write(clean_md)
+            print(f"\nSaved Markdown result to {md_filename}")
+            print("\n--- Output Preview ---\n")
+            print(clean_md[:500] + "..." if len(clean_md) > 500 else clean_md)
+            return
+
+        # JSON/Excel Logic
         # Parse and pretty print
         cleaned_result = clean_json_string(raw_result)
         try:
@@ -221,24 +279,13 @@ def main():
             print(json.dumps(data, indent=2, ensure_ascii=False))
 
             # Save to file
-            # Determine output directory and filename
-            image_basename = os.path.basename(target_path)
-            json_filename = os.path.splitext(image_basename)[0] + ".json"
-
-            if output_path:
-                # If output_path is set, treat it as a folder
-                os.makedirs(output_path, exist_ok=True)
-                output_filename = os.path.join(output_path, json_filename)
-            else:
-                # Default to same directory as input image
-                output_filename = os.path.splitext(target_path)[0] + ".json"
-
-            with open(output_filename, "w", encoding="utf-8") as f:
+            json_filename = output_base + ".json"
+            with open(json_filename, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
-            print(f"\nSaved JSON result to {output_filename}")
+            print(f"\nSaved JSON result to {json_filename}")
 
             # Save to Excel
-            save_to_excel(data, output_filename)
+            save_to_excel(data, json_filename)
 
         except json.JSONDecodeError:
             print("Warning: Could not parse JSON. Raw output:")
