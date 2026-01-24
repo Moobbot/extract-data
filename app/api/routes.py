@@ -1,110 +1,65 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 import shutil
 import os
 import tempfile
-from app.services.ai_providers import AIProviderFactory
-from app.services.prompt_manager import PromptManager
-from app.api.models import ExtractionResponse
+from celery.result import AsyncResult
+from app.core.config import settings
+from app.services.tasks import process_image_task
+from app.api.models import ExtractionResponse, ErrorResponse
 
 router = APIRouter()
 
 
-@router.post("/extract", response_model=ExtractionResponse)
-async def extract_table(
+@router.post("/extract", response_model=Dict[str, Any])
+async def extract_table_task(
     file: UploadFile = File(...),
     provider: str = Form("gemini"),
     output_format: str = Form("markdown"),
 ):
     """
-    Extracts table data from an uploaded image.
+    Submits an image for background processing via Celery.
+    Returns a task_id to poll for results.
     """
-    tmp_path = None
+    # Save file to a persistent upload directory for the worker to access
+    # Note: In production with multiple workers, use shared storage (S3/NFS)
+    file_ext = os.path.splitext(file.filename)[1]
+    import uuid
+
+    safe_filename = f"{uuid.uuid4()}{file_ext}"
+    file_path = os.path.join(settings.UPLOAD_DIR, safe_filename)
+
     try:
-        # Save temp file
-        with tempfile.NamedTemporaryFile(
-            delete=False, suffix=os.path.splitext(file.filename)[1]
-        ) as tmp:
-            shutil.copyfileobj(file.file, tmp)
-            tmp_path = tmp.name
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save file: {e}")
 
-        # Get Provider
-        try:
-            ai_provider = AIProviderFactory.get_provider(provider)
-        except ValueError as e:
-            raise HTTPException(status_code=400, detail=str(e))
+    # Dispatch Task
+    task = process_image_task.delay(file_path, provider, output_format)
 
-        # Get Prompt
-        prompt = PromptManager.get_prompt(output_format)
-
-        # Generate
-        try:
-            content = ai_provider.generate_content(tmp_path, prompt)
-        except Exception as e:
-            raise HTTPException(
-                status_code=500, detail=f"AI generation failed: {str(e)}"
-            )
-
-        return ExtractionResponse(
-            filename=file.filename,
-            content=content,
-            provider=provider,
-            format=output_format,
-        )
-
-    finally:
-        # Cleanup
-        if tmp_path and os.path.exists(tmp_path):
-            os.remove(tmp_path)
+    return {
+        "task_id": task.id,
+        "message": "Task submitted successfully",
+        "status": "pending",
+    }
 
 
-@router.post("/extract/batch", response_model=List[ExtractionResponse])
-async def extract_batch(
-    files: List[UploadFile] = File(...),
-    provider: str = Form("gemini"),
-    output_format: str = Form("markdown"),
-):
+@router.get("/task-status/{task_id}")
+async def get_task_status(task_id: str):
     """
-    Extracts table data from multiple uploaded images.
+    Get the status and result of a background task.
     """
-    results = []
-    # Note: In a real app, you might want to process these in parallel using asyncio.gather
-    # For now, sequential for simplicity.
+    task = AsyncResult(task_id)
 
-    for file in files:
-        tmp_path = None
-        try:
-            with tempfile.NamedTemporaryFile(
-                delete=False, suffix=os.path.splitext(file.filename)[1]
-            ) as tmp:
-                shutil.copyfileobj(file.file, tmp)
-                tmp_path = tmp.name
+    response = {
+        "task_id": task_id,
+        "status": task.state,
+    }
 
-            ai_provider = AIProviderFactory.get_provider(provider)
-            prompt = PromptManager.get_prompt(output_format)
+    if task.state == "SUCCESS":
+        response["result"] = task.result
+    elif task.state == "FAILURE":
+        response["error"] = str(task.result)
 
-            content = ai_provider.generate_content(tmp_path, prompt)
-
-            results.append(
-                ExtractionResponse(
-                    filename=file.filename,
-                    content=content,
-                    provider=provider,
-                    format=output_format,
-                )
-            )
-
-        except Exception as e:
-            results.append(
-                ExtractionResponse(
-                    filename=file.filename,
-                    content=f"Error: {str(e)}",
-                    provider=provider,
-                    format=output_format,
-                )
-            )
-        finally:
-            if tmp_path and os.path.exists(tmp_path):
-                os.remove(tmp_path)
-
-    return results
+    return response

@@ -6,4 +6,6 @@ pandas
 openpyxl
 fastapi
 uvicorn
+celery
+redis
 python-multipart
