@@ -1,0 +1,38 @@
+{
+  "project_name": "AI Table Extractor",
+  "architecture": {
+    "style": "SOLID, Layered Architecture",
+    "structure": {
+      "app/core": "Configuration, Settings, and Interfaces (Abstract Base Classes)",
+      "app/services": "Business Logic, AI Providers, Image Processing, Celery Tasks",
+      "app/api": "API Routes, Pydantic Models (Request/Response)",
+      "app/main.py": "Application Entry Point"
+    }
+  },
+  "tech_stack": {
+    "framework": "FastAPI",
+    "async_task_queue": "Celery",
+    "broker": "Redis",
+    "ai_sdk": ["google-generativeai (Gemini)", "openai (GPT-4o)"],
+    "validation": "Pydantic"
+  },
+  "coding_standards": {
+    "solid_principles": {
+      "SRP": "Single Responsibility Principle - Classes/Functions should have one job.",
+      "OCP": "Open/Closed Principle - Open for extension, closed for modification (use Interfaces).",
+      "LSP": "Liskov Substitution Principle - Subclasses must be substitutable for base classes.",
+      "ISP": "Interface Segregation Principle - Specific interfaces are better than general purpose ones.",
+      "DIP": "Dependency Inversion Principle - Depend on abstractions, not concretions."
+    },
+    "async_await": "Use `async def` for API route handlers to prevent blocking.",
+    "type_hinting": "Enforce strict type hinting using Python `typing` module.",
+    "configuration": "Use `app/core/config.py` for all environment variables and settings.",
+    "error_handling": "Use `HTTPException` for API errors. Log errors in background tasks.",
+    "naming_convention": "snake_case for functions/variables, PascalCase for Classes."
+  },
+  "files_and_directories": {
+    "doc/": "Documentation and rules",
+    "outputs/": "Generated files (Markdown, JSON, Excel)",
+    "uploaded_images/": "Temporary storage for uploaded files"
+  }
+}
