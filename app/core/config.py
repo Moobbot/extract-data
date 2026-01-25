@@ -18,9 +18,11 @@ class Settings:
 
     # Uploads
     UPLOAD_DIR: str = "uploaded_images"
+    OUTPUT_DIR: str = "outputs"
 
 
 settings = Settings()
 
-# Ensure upload dir exists
+# Ensure dirs exist
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+os.makedirs(settings.OUTPUT_DIR, exist_ok=True)
