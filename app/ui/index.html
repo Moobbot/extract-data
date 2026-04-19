@@ -219,6 +219,13 @@
           <label for="imagePath">or Image Path (server local path, optional)</label>
           <input id="imagePath" placeholder="D:/path/to/image.png" />
         </div>
+
+        <div class="field full">
+          <label for="saveToFile">
+            <input id="saveToFile" type="checkbox" checked style="width:auto; margin-right: 8px;" />
+            Save output files (required for Download JSON/Excel)
+          </label>
+        </div>
       </div>
 
       <div class="row" style="margin-top: 12px;">
@@ -253,6 +260,7 @@
     const apiKeyEl = document.getElementById("apiKey");
     const imageFileEl = document.getElementById("imageFile");
     const imagePathEl = document.getElementById("imagePath");
+    const saveToFileEl = document.getElementById("saveToFile");
     const submitBtn = document.getElementById("submitBtn");
     const downloadJsonBtn = document.getElementById("downloadJsonBtn");
     const downloadExcelBtn = document.getElementById("downloadExcelBtn");
@@ -321,11 +329,21 @@
         if (data.status === "SUCCESS") {
           const result = data.result || {};
           lastTaskResult = result;
+          const savedTo = typeof result.saved_to === "string" ? result.saved_to.toLowerCase() : "";
+          const savedExcel = typeof result.saved_excel === "string" ? result.saved_excel.toLowerCase() : "";
+          const hasJsonArtifact = savedTo.endsWith(".json");
+          const hasExcelArtifact = savedExcel.endsWith(".xlsx");
+
           contentBoxEl.textContent = result.content || "(empty content)";
-          downloadJsonBtn.disabled = !result.saved_to;
-          downloadExcelBtn.disabled = !result.saved_excel;
+          downloadJsonBtn.disabled = !hasJsonArtifact;
+          downloadExcelBtn.disabled = !hasExcelArtifact;
           copyContentBtn.disabled = !result.content;
-          setStatus("Completed", "ok");
+
+          if (!hasJsonArtifact && !hasExcelArtifact) {
+            setStatus("Completed. Download buttons require Save output files enabled.", "");
+          } else {
+            setStatus("Completed", "ok");
+          }
           return;
         }
 
@@ -411,7 +429,7 @@
           filename: file ? file.name : null,
           agent: agentEl.value,
           output_format: outputFormatEl.value,
-          save_to_file: false,
+          save_to_file: Boolean(saveToFileEl.checked),
           options: {
             model: modelEl.value.trim() || null,
             base_url: baseUrlEl.value.trim() || null,

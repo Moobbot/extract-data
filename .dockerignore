@@ -1,0 +1,26 @@
+# Git and local metadata
+
+.git
+.gitignore
+.vscode
+.idea
+
+# Python caches and virtual environments
+
+**pycache**/
+_.pyc
+_.pyo
+\*.pyd
+.pytest_cache/
+.venv/
+venv/
+
+# Runtime/generated artifacts
+
+uploaded_images/
+outputs/
+
+# Local env and docs not needed in image build context
+
+.env
+datasets/
