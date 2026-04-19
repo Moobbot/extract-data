@@ -2,7 +2,10 @@ from app.core.celery_app import celery_app
 from app.services.ai_providers import AIProviderFactory
 from app.services.prompt_manager import PromptManager
 import os
+import json
 from typing import Any, Dict, Optional
+
+import pandas as pd
 
 
 @celery_app.task(bind=True)
@@ -17,6 +20,46 @@ def process_image_task(
     """
     Background task to process an image.
     """
+
+    def _clean_json_string(raw_text: str) -> str:
+        text = raw_text.strip()
+        if text.startswith("```json"):
+            text = text[7:]
+        if text.startswith("```"):
+            text = text[3:]
+        if text.endswith("```"):
+            text = text[:-3]
+        return text.strip()
+
+    def _save_excel_from_json(data: Any, saved_path: str) -> Optional[str]:
+        excel_path = os.path.splitext(saved_path)[0] + ".xlsx"
+
+        try:
+            sheets = {}
+
+            if isinstance(data, list):
+                sheets["Sheet1"] = pd.DataFrame(data)
+            elif isinstance(data, dict):
+                found_list = False
+                for key, value in data.items():
+                    if isinstance(value, list) and value and isinstance(value[0], dict):
+                        sheet_name = str(key)[:31]
+                        sheets[sheet_name] = pd.DataFrame(value)
+                        found_list = True
+
+                if not found_list:
+                    sheets["Sheet1"] = pd.DataFrame([data])
+            else:
+                sheets["Sheet1"] = pd.DataFrame([{"result": data}])
+
+            with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
+                for sheet_name, frame in sheets.items():
+                    frame.to_excel(writer, sheet_name=sheet_name, index=False)
+
+            return excel_path
+        except Exception:
+            return None
+
     try:
         self.update_state(state="PROGRESS", meta={"message": "Processing started"})
 
@@ -41,6 +84,7 @@ def process_image_task(
 
         # 4. Save to file if requested
         saved_path = None
+        saved_excel = None
         if save_to_file:
             from app.core.config import settings
 
@@ -52,6 +96,15 @@ def process_image_task(
             with open(saved_path, "w", encoding="utf-8") as f:
                 f.write(content)
 
+            if output_format == "json":
+                try:
+                    parsed = json.loads(_clean_json_string(content))
+                except json.JSONDecodeError:
+                    parsed = None
+
+                if parsed is not None:
+                    saved_excel = _save_excel_from_json(parsed, saved_path)
+
         return {
             "status": "success",
             "agent": agent,
@@ -60,6 +113,7 @@ def process_image_task(
             "filename": os.path.basename(image_path),
             "content": content,
             "saved_to": saved_path,
+            "saved_excel": saved_excel,
         }
 
     except Exception as e:

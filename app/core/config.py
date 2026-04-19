@@ -13,6 +13,7 @@ class Settings:
     DEFAULT_OPENAI_BASE_URL: str = os.getenv("OPENAI_BASE_URL", "")
     DEFAULT_LOCAL_HTTP_TIMEOUT: int = int(os.getenv("LOCAL_HTTP_TIMEOUT", "60"))
     DEFAULT_OUTPUT_FORMAT: str = "markdown"
+    CORS_ALLOW_ORIGINS: str = os.getenv("CORS_ALLOW_ORIGINS", "")
 
     # Celery / Redis
     CELERY_BROKER_URL: str = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")

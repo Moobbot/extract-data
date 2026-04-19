@@ -1,4 +1,5 @@
 import base64
+import json
 from types import SimpleNamespace
 import importlib
 
@@ -37,6 +38,10 @@ def test_quick_ui_endpoint_served():
     assert response.status_code == 200
     assert "text/html" in response.headers.get("content-type", "")
     assert "Extract PDF - Quick UI" in response.text
+    assert "Download JSON" in response.text
+    assert "Download Excel" in response.text
+    assert "Copy Content" in response.text
+    assert "Clear" in response.text
 
 
 def test_extract_form_builtin_agent_dispatch(monkeypatch, tmp_path):
@@ -161,3 +166,69 @@ def test_extract_json_local_http_dispatch(monkeypatch):
         "base_url": "http://127.0.0.1:8080/ocr",
         "api_key": "local-token",
     }
+
+
+def test_process_image_task_saves_excel_for_json(monkeypatch, tmp_path):
+    from app.core import config as core_config
+    from app.services import tasks
+
+    monkeypatch.setattr(core_config.settings, "OUTPUT_DIR", str(tmp_path))
+    monkeypatch.setattr(
+        tasks.AIProviderFactory, "get_provider", lambda *a, **k: DummyProvider()
+    )
+    monkeypatch.setattr(
+        tasks.PromptManager, "get_prompt", lambda output_format: "prompt"
+    )
+    monkeypatch.setattr(
+        DummyProvider,
+        "generate_content",
+        lambda self, image_path, prompt: json.dumps(
+            [{"name": "Alice", "score": 10}, {"name": "Bob", "score": 20}],
+            ensure_ascii=False,
+        ),
+    )
+    monkeypatch.setattr(tasks.process_image_task, "update_state", lambda *a, **k: None)
+
+    image_file = tmp_path / "sample.jpg"
+    image_file.write_bytes(b"fake-image-content")
+
+    result = tasks.process_image_task.__wrapped__(
+        str(image_file),
+        "gemini",
+        "json",
+        True,
+        {},
+    )
+
+    assert result["status"] == "success"
+    assert result["saved_to"].endswith(".json")
+    assert result["saved_excel"] is not None
+    assert result["saved_excel"].endswith(".xlsx")
+    assert (tmp_path / "sample.json").exists()
+    assert (tmp_path / "sample.xlsx").exists()
+
+
+def test_download_task_artifact_endpoint(monkeypatch, tmp_path):
+    from app.api import routes
+
+    client = get_test_client()
+    json_file = tmp_path / "sample.json"
+    excel_file = tmp_path / "sample.xlsx"
+    json_file.write_text("{\"name\": \"Alice\"}", encoding="utf-8")
+    excel_file.write_bytes(b"fake-xlsx")
+
+    monkeypatch.setattr(routes.settings, "OUTPUT_DIR", str(tmp_path))
+
+    class DummyAsyncResult:
+        state = "SUCCESS"
+        result = {"saved_to": str(json_file), "saved_excel": str(excel_file)}
+
+    monkeypatch.setattr(routes, "AsyncResult", lambda task_id: DummyAsyncResult())
+
+    json_response = client.get("/api/v1/task-artifact/task-123/json")
+    excel_response = client.get("/api/v1/task-artifact/task-123/excel")
+
+    assert json_response.status_code == 200
+    assert excel_response.status_code == 200
+    assert json_response.headers["content-disposition"].endswith('filename="sample.json"')
+    assert excel_response.headers["content-disposition"].endswith('filename="sample.xlsx"')

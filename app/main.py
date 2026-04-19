@@ -1,8 +1,10 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router
 import uvicorn
 import os
 from fastapi.responses import FileResponse
+from app.core.config import settings
 
 app = FastAPI(
     title="AI Table Extractor API",
@@ -11,6 +13,17 @@ app = FastAPI(
 )
 
 app.include_router(router, prefix="/api/v1")
+
+if settings.CORS_ALLOW_ORIGINS.strip():
+    allow_origins = [origin.strip() for origin in settings.CORS_ALLOW_ORIGINS.split(",") if origin.strip()]
+    if allow_origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=allow_origins,
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
 
 
 @app.get("/")

@@ -103,6 +103,22 @@
       flex-wrap: wrap;
     }
 
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .btn.secondary {
+      background: #243042;
+    }
+
+    .btn.ghost {
+      background: #e2e8f0;
+      color: #1f2a37;
+    }
+
     .btn {
       border: none;
       border-radius: 10px;
@@ -209,6 +225,13 @@
         <button id="submitBtn" class="btn">Submit Task</button>
         <div id="statusText" class="status">Ready</div>
       </div>
+
+      <div class="actions">
+        <button id="downloadJsonBtn" class="btn secondary" disabled>Download JSON</button>
+        <button id="downloadExcelBtn" class="btn secondary" disabled>Download Excel</button>
+        <button id="copyContentBtn" class="btn ghost" disabled>Copy Content</button>
+        <button id="clearBtn" class="btn ghost">Clear</button>
+      </div>
     </div>
 
     <div class="panel">
@@ -231,9 +254,15 @@
     const imageFileEl = document.getElementById("imageFile");
     const imagePathEl = document.getElementById("imagePath");
     const submitBtn = document.getElementById("submitBtn");
+    const downloadJsonBtn = document.getElementById("downloadJsonBtn");
+    const downloadExcelBtn = document.getElementById("downloadExcelBtn");
+    const copyContentBtn = document.getElementById("copyContentBtn");
+    const clearBtn = document.getElementById("clearBtn");
     const statusText = document.getElementById("statusText");
     const rawResultEl = document.getElementById("rawResult");
     const contentBoxEl = document.getElementById("contentBox");
+    let lastTaskId = null;
+    let lastTaskResult = null;
 
     function setStatus(text, kind) {
       statusText.textContent = text;
@@ -273,6 +302,12 @@
     }
 
     async function pollTask(taskId) {
+      lastTaskId = taskId;
+      lastTaskResult = null;
+      downloadJsonBtn.disabled = true;
+      downloadExcelBtn.disabled = true;
+      copyContentBtn.disabled = true;
+
       const maxAttempts = 120;
       const pendingWarningAfter = 12;
       let attempts = 0;
@@ -285,7 +320,11 @@
 
         if (data.status === "SUCCESS") {
           const result = data.result || {};
+          lastTaskResult = result;
           contentBoxEl.textContent = result.content || "(empty content)";
+          downloadJsonBtn.disabled = !result.saved_to;
+          downloadExcelBtn.disabled = !result.saved_excel;
+          copyContentBtn.disabled = !result.content;
           setStatus("Completed", "ok");
           return;
         }
@@ -309,6 +348,49 @@
 
       setStatus("Polling timeout. Please check Worker/Redis status.", "err");
     }
+
+    function triggerDownload(url) {
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "";
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+    }
+
+    downloadJsonBtn.addEventListener("click", () => {
+      if (!lastTaskId) {
+        return;
+      }
+      triggerDownload("/api/v1/task-artifact/" + encodeURIComponent(lastTaskId) + "/json");
+    });
+
+    downloadExcelBtn.addEventListener("click", () => {
+      if (!lastTaskId) {
+        return;
+      }
+      triggerDownload("/api/v1/task-artifact/" + encodeURIComponent(lastTaskId) + "/excel");
+    });
+
+    copyContentBtn.addEventListener("click", async () => {
+      const text = (lastTaskResult && lastTaskResult.content) || contentBoxEl.textContent || "";
+      if (!text) {
+        return;
+      }
+      await navigator.clipboard.writeText(text);
+      setStatus("Content copied to clipboard", "ok");
+    });
+
+    clearBtn.addEventListener("click", () => {
+      lastTaskId = null;
+      lastTaskResult = null;
+      contentBoxEl.textContent = "";
+      rawResultEl.textContent = "{}";
+      downloadJsonBtn.disabled = true;
+      downloadExcelBtn.disabled = true;
+      copyContentBtn.disabled = true;
+      setStatus("Ready");
+    });
 
     submitBtn.addEventListener("click", async () => {
       submitBtn.disabled = true;
@@ -351,6 +433,7 @@
 
         const data = await res.json();
         rawResultEl.textContent = JSON.stringify(data, null, 2);
+        lastTaskResult = data;
 
         if (!res.ok) {
           throw new Error(data.detail || "Request failed");

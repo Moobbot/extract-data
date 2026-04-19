@@ -1,9 +1,11 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Body
+from fastapi.responses import FileResponse
 from typing import List, Dict, Any, Optional
 import shutil
 import os
 import uuid
 import base64
+from pathlib import Path
 from celery.result import AsyncResult
 from app.core.config import settings
 from app.services.tasks import process_image_task
@@ -256,3 +258,47 @@ async def get_task_status(task_id: str):
         response["error"] = str(task.result)  # Use str() for safety or task.info
 
     return response
+
+
+@router.get("/task-artifact/{task_id}/{artifact_kind}")
+async def download_task_artifact(task_id: str, artifact_kind: str):
+    """
+    Download a saved task artifact from the outputs directory.
+    artifact_kind can be 'json' or 'excel'.
+    """
+    if artifact_kind not in {"json", "excel"}:
+        raise HTTPException(status_code=400, detail="Invalid artifact kind")
+
+    task = AsyncResult(task_id)
+    if task.state != "SUCCESS" or not isinstance(task.result, dict):
+        raise HTTPException(status_code=404, detail="Task result not available")
+
+    result_key = "saved_excel" if artifact_kind == "excel" else "saved_to"
+    artifact_path = task.result.get(result_key)
+    if not artifact_path:
+        raise HTTPException(status_code=404, detail=f"No {artifact_kind} artifact found")
+
+    artifact_file = Path(artifact_path).resolve()
+    outputs_dir = Path(settings.OUTPUT_DIR).resolve()
+
+    if artifact_file.suffix.lower() not in {".json", ".xlsx"}:
+        raise HTTPException(status_code=400, detail="Unsupported artifact type")
+
+    try:
+        artifact_file.relative_to(outputs_dir)
+    except ValueError:
+        raise HTTPException(status_code=403, detail="Artifact path is not allowed")
+
+    if not artifact_file.exists():
+        raise HTTPException(status_code=404, detail="Artifact file not found")
+
+    media_type = (
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        if artifact_file.suffix.lower() == ".xlsx"
+        else "application/json"
+    )
+    return FileResponse(
+        path=str(artifact_file),
+        media_type=media_type,
+        filename=artifact_file.name,
+    )
