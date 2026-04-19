@@ -8,6 +8,10 @@ class Settings:
     GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY", "")
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     DEFAULT_PROVIDER: str = os.getenv("AI_PROVIDER", "gemini")
+    DEFAULT_OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4o")
+    DEFAULT_GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    DEFAULT_OPENAI_BASE_URL: str = os.getenv("OPENAI_BASE_URL", "")
+    DEFAULT_LOCAL_HTTP_TIMEOUT: int = int(os.getenv("LOCAL_HTTP_TIMEOUT", "60"))
     DEFAULT_OUTPUT_FORMAT: str = "markdown"
 
     # Celery / Redis

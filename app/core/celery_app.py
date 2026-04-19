@@ -1,3 +1,5 @@
+import os
+
 from celery import Celery
 from app.core.config import settings
 
@@ -15,4 +17,11 @@ celery_app.conf.update(
     result_serializer="json",
     timezone="Asia/Ho_Chi_Minh",
     enable_utc=True,
+    worker_prefetch_multiplier=1,
+    broker_connection_retry_on_startup=True,
 )
+
+if os.name == "nt":
+    # Windows is unstable with prefork/spawn pool for Celery workers.
+    celery_app.conf.worker_pool = "solo"
+    celery_app.conf.worker_concurrency = 1

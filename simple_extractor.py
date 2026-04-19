@@ -1,17 +1,9 @@
 import os
 import json
 import argparse
-import base64
 from dotenv import load_dotenv
-from PIL import Image
-from google import genai
 import pandas as pd
-
-# Optional: Import OpenAI if you want to use GPT
-try:
-    from openai import OpenAI
-except ImportError:
-    OpenAI = None
+from app.services.ai_providers import AIProviderFactory
 
 load_dotenv()
 
@@ -58,14 +50,6 @@ def clean_json_string(s):
     if s.endswith("```"):
         s = s[:-3]
     return s.strip()
-
-
-def encode_image_base64(image_path):
-    """
-    Encodes an image to base64 string (for OpenAI).
-    """
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode("utf-8")
 
 
 def save_to_excel(data, output_filename):
@@ -150,84 +134,31 @@ def save_results(raw_result, output_base, output_format):
             print(raw_result)
 
 
-# --- AI Service Calls ---
-def call_gemini(image_path, api_key, prompt):
-    if not api_key:
-        raise ValueError("GOOGLE_API_KEY not found in environment variables.")
-
-    client = genai.Client(api_key=api_key)
-    img = Image.open(image_path)
-
-    candidate_models = [
-        "gemini-2.5-flash",
-        "gemini-2.0-flash",
-        "gemini-flash-latest",
-        "gemini-2.5-pro",
-        "gemini-pro-latest",
-        "gemini-1.5-flash",
-    ]
-
-    last_err = None
-    for m in candidate_models:
-        try:
-            resp = client.models.generate_content(
-                model=m,
-                contents=[prompt, img],
-            )
-            return resp.text
-        except Exception as e:
-            last_err = e
-
-    raise RuntimeError(f"All Gemini model attempts failed. Last error: {last_err}")
-
-
-def call_gpt(image_path, api_key, prompt):
-    if not OpenAI:
-        raise ImportError("openai module not installed.")
-    if not api_key:
-        raise ValueError("OPENAI_API_KEY not found in environment variables.")
-
-    client = OpenAI(api_key=api_key)
-    base64_image = encode_image_base64(image_path)
-
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": prompt},
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/jpeg;base64,{base64_image}"
-                            },
-                        },
-                    ],
-                }
-            ],
-            max_tokens=4096,
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        return f"Error calling OpenAI: {str(e)}"
-
-
-def call_ai_service(provider, image_path, prompt):
+def call_ai_service(agent, image_path, prompt, model=None, base_url=None, api_key=None):
     """
     Dispatches the call to the appropriate AI provider.
     """
-    if provider == "gemini":
-        return call_gemini(image_path, os.getenv("GOOGLE_API_KEY"), prompt)
-    elif provider == "openai":
-        return call_gpt(image_path, os.getenv("OPENAI_API_KEY"), prompt)
-    else:
-        raise ValueError(f"Unknown provider: {provider}")
+    agent_config = {
+        "model": model,
+        "base_url": base_url,
+        "api_key": api_key,
+    }
+    agent_config = {k: v for k, v in agent_config.items() if v}
+
+    provider = AIProviderFactory.get_provider(agent, agent_config)
+    return provider.generate_content(image_path, prompt)
 
 
 # --- Pipeline ---
-def run_extraction_pipeline(image_path, output_path, provider, output_format):
+def run_extraction_pipeline(
+    image_path,
+    output_path,
+    agent,
+    output_format,
+    model=None,
+    base_url=None,
+    api_key=None,
+):
     """
     Orchestrates the entire extraction process.
     """
@@ -239,14 +170,21 @@ def run_extraction_pipeline(image_path, output_path, provider, output_format):
         print(f"Error: File not found at {image_path}")
         return
 
-    print(f"Processing {image_path} using {provider} (format: {output_format})...")
+    print(f"Processing {image_path} using {agent} (format: {output_format})...")
 
     # 2. Get Prompt
     prompt = get_prompt(output_format)
 
     # 3. Call AI Service
     try:
-        raw_result = call_ai_service(provider, image_path, prompt)
+        raw_result = call_ai_service(
+            agent=agent,
+            image_path=image_path,
+            prompt=prompt,
+            model=model,
+            base_url=base_url,
+            api_key=api_key,
+        )
     except Exception as e:
         print(f"An error occurred during AI processing: {e}")
         return
@@ -273,10 +211,27 @@ def main():
     parser.add_argument("image_path", nargs="?", help="Path to the image file.")
     parser.add_argument("output_path", nargs="?", help="Path to save the output.")
     parser.add_argument(
-        "--provider",
-        choices=["gemini", "openai"],
+        "--agent",
         default=os.getenv("AI_PROVIDER", "gemini"),
-        help="AI Provider to use.",
+        help="Agent/provider name (gemini, openai, openai_compatible, local_http, or AGENT_<NAME> env config).",
+    )
+    parser.add_argument(
+        "--provider",
+        default=None,
+        help="Backward-compatible alias of --agent.",
+    )
+    parser.add_argument(
+        "--model", default=None, help="Model override for the selected agent."
+    )
+    parser.add_argument(
+        "--base-url",
+        default=None,
+        help="Base URL for OpenAI-compatible endpoints.",
+    )
+    parser.add_argument(
+        "--api-key",
+        default=None,
+        help="API key override for the selected agent.",
     )
     parser.add_argument(
         "--format",
@@ -290,7 +245,16 @@ def main():
     target_path = args.image_path or HARDCODED_IMAGE_PATH
     output_path = args.output_path or HARDCODED_OUTPUT_PATH
 
-    run_extraction_pipeline(target_path, output_path, args.provider, args.format)
+    selected_agent = args.provider or args.agent
+    run_extraction_pipeline(
+        target_path,
+        output_path,
+        selected_agent,
+        args.format,
+        model=args.model,
+        base_url=args.base_url,
+        api_key=args.api_key,
+    )
 
 
 if __name__ == "__main__":

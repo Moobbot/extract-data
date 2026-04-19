@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extract PDF - Quick UI</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #1f2a37;
+      --muted: #6b7280;
+      --accent: #0f766e;
+      --accent-2: #0ea5a0;
+      --border: #e5e7eb;
+      --danger: #b91c1c;
+      --ok: #166534;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at top right, #d1fae5 0, var(--bg) 45%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .header {
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 22px rgba(15, 118, 110, 0.08);
+      margin-bottom: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .status {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    .status.err {
+      color: var(--danger);
+    }
+
+    pre {
+      margin: 0;
+      background: #0b1020;
+      color: #d1d5db;
+      padding: 12px;
+      border-radius: 10px;
+      overflow: auto;
+      max-height: 340px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .content-box {
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      white-space: pre-wrap;
+      min-height: 120px;
+      background: #fcfcfd;
+    }
+
+    @media (max-width: 760px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>Extract PDF - Quick UI</h1>
+      <p>Small test UI for team members to try extraction without using Swagger manually.</p>
+    </div>
+
+    <div class="panel">
+      <div class="grid">
+        <div class="field">
+          <label for="agent">Agent</label>
+          <select id="agent"></select>
+        </div>
+        <div class="field">
+          <label for="outputFormat">Output Format</label>
+          <select id="outputFormat">
+            <option value="markdown">markdown</option>
+            <option value="json">json</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="model">Model (optional)</label>
+          <input id="model" placeholder="e.g. gpt-4o, qwen2.5-vl" />
+        </div>
+        <div class="field">
+          <label for="baseUrl">Base URL (optional)</label>
+          <input id="baseUrl" placeholder="e.g. http://127.0.0.1:8080/ocr" />
+        </div>
+
+        <div class="field full">
+          <label for="apiKey">API Key (optional)</label>
+          <input id="apiKey" placeholder="token" />
+        </div>
+
+        <div class="field full">
+          <label for="imageFile">Image File</label>
+          <input id="imageFile" type="file" accept="image/*" />
+        </div>
+
+        <div class="field full">
+          <label for="imagePath">or Image Path (server local path, optional)</label>
+          <input id="imagePath" placeholder="D:/path/to/image.png" />
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 12px;">
+        <button id="submitBtn" class="btn">Submit Task</button>
+        <div id="statusText" class="status">Ready</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin-top: 0;">Extracted Content</h3>
+      <div id="contentBox" class="content-box"></div>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin-top: 0;">Raw Result</h3>
+      <pre id="rawResult">{}</pre>
+    </div>
+  </div>
+
+  <script>
+    const agentEl = document.getElementById("agent");
+    const outputFormatEl = document.getElementById("outputFormat");
+    const modelEl = document.getElementById("model");
+    const baseUrlEl = document.getElementById("baseUrl");
+    const apiKeyEl = document.getElementById("apiKey");
+    const imageFileEl = document.getElementById("imageFile");
+    const imagePathEl = document.getElementById("imagePath");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusText = document.getElementById("statusText");
+    const rawResultEl = document.getElementById("rawResult");
+    const contentBoxEl = document.getElementById("contentBox");
+
+    function setStatus(text, kind) {
+      statusText.textContent = text;
+      statusText.className = "status" + (kind ? " " + kind : "");
+    }
+
+    async function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = String(reader.result || "");
+          const base64 = result.includes(",") ? result.split(",")[1] : result;
+          resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function loadAgents() {
+      try {
+        const res = await fetch("/api/v1/agents");
+        const data = await res.json();
+        agentEl.innerHTML = "";
+        (data.agents || []).forEach((a) => {
+          const opt = document.createElement("option");
+          opt.value = a.name;
+          opt.textContent = a.name + " (" + a.source + ")";
+          if (a.name === data.default_agent) {
+            opt.selected = true;
+          }
+          agentEl.appendChild(opt);
+        });
+      } catch (e) {
+        setStatus("Cannot load agents: " + e.message, "err");
+      }
+    }
+
+    async function pollTask(taskId) {
+      const maxAttempts = 120;
+      const pendingWarningAfter = 12;
+      let attempts = 0;
+
+      while (attempts < maxAttempts) {
+        attempts += 1;
+        const res = await fetch("/api/v1/task-status/" + encodeURIComponent(taskId));
+        const data = await res.json();
+        rawResultEl.textContent = JSON.stringify(data, null, 2);
+
+        if (data.status === "SUCCESS") {
+          const result = data.result || {};
+          contentBoxEl.textContent = result.content || "(empty content)";
+          setStatus("Completed", "ok");
+          return;
+        }
+
+        if (data.status === "FAILURE") {
+          setStatus("Task failed", "err");
+          return;
+        }
+
+        if (data.status === "PENDING" && attempts >= pendingWarningAfter) {
+          setStatus(
+            "Task is still PENDING. Worker/Redis may not be running. Start Redis and Celery worker, then submit again.",
+            "err"
+          );
+          return;
+        }
+
+        setStatus("Task status: " + data.status + " ...", "");
+        await new Promise((r) => setTimeout(r, 2000));
+      }
+
+      setStatus("Polling timeout. Please check Worker/Redis status.", "err");
+    }
+
+    submitBtn.addEventListener("click", async () => {
+      submitBtn.disabled = true;
+      contentBoxEl.textContent = "";
+      rawResultEl.textContent = "{}";
+
+      try {
+        const file = imageFileEl.files && imageFileEl.files[0];
+        const imagePath = imagePathEl.value.trim();
+
+        if (!file && !imagePath) {
+          throw new Error("Please provide image file or image path.");
+        }
+
+        const payload = {
+          image_path: imagePath || null,
+          image_base64: null,
+          filename: file ? file.name : null,
+          agent: agentEl.value,
+          output_format: outputFormatEl.value,
+          save_to_file: false,
+          options: {
+            model: modelEl.value.trim() || null,
+            base_url: baseUrlEl.value.trim() || null,
+            api_key: apiKeyEl.value.trim() || null
+          }
+        };
+
+        if (file) {
+          setStatus("Encoding image...", "");
+          payload.image_base64 = await toBase64(file);
+        }
+
+        setStatus("Submitting task...", "");
+        const res = await fetch("/api/v1/extract/json", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        rawResultEl.textContent = JSON.stringify(data, null, 2);
+
+        if (!res.ok) {
+          throw new Error(data.detail || "Request failed");
+        }
+
+        const taskId = data.task_id;
+        if (!taskId) {
+          throw new Error("No task_id returned");
+        }
+
+        await pollTask(taskId);
+      } catch (e) {
+        setStatus("Error: " + e.message, "err");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    loadAgents();
+  </script>
+</body>
+</html>

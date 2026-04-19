@@ -2,11 +2,17 @@ from app.core.celery_app import celery_app
 from app.services.ai_providers import AIProviderFactory
 from app.services.prompt_manager import PromptManager
 import os
+from typing import Any, Dict, Optional
 
 
 @celery_app.task(bind=True)
 def process_image_task(
-    self, image_path: str, provider: str, output_format: str, save_to_file: bool = False
+    self,
+    image_path: str,
+    agent: str,
+    output_format: str,
+    save_to_file: bool = False,
+    agent_config: Optional[Dict[str, Any]] = None,
 ):
     """
     Background task to process an image.
@@ -16,7 +22,7 @@ def process_image_task(
 
         # 1. Get Provider
         try:
-            ai_provider = AIProviderFactory.get_provider(provider)
+            ai_provider = AIProviderFactory.get_provider(agent, agent_config)
         except ValueError as e:
             return {"error": str(e), "status": "failed"}
 
@@ -48,7 +54,8 @@ def process_image_task(
 
         return {
             "status": "success",
-            "provider": provider,
+            "agent": agent,
+            "provider": agent,
             "format": output_format,
             "filename": os.path.basename(image_path),
             "content": content,
