@@ -25,3 +25,7 @@
 conda activate extract-pdf
 pip install -r requirements.txt
 ```
+
+## Quick UI help
+
+Trong `http://127.0.0.1:8000/ui`, hover vao input/select/checkbox hoac nut se hien giai thich ngan o khung ben phai.

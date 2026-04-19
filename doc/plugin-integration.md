@@ -21,8 +21,8 @@ const response = await fetch("http://127.0.0.1:8000/api/v1/extract/json", {
     agent: "gemini",
     output_format: "json",
     save_to_file: true,
-    options: { model: "gemini-2.5-flash" }
-  })
+    options: { model: "gemini-2.5-flash" },
+  }),
 });
 
 const submitResult = await response.json();
@@ -32,7 +32,7 @@ Sau do poll:
 
 ```js
 const statusResponse = await fetch(
-  `http://127.0.0.1:8000/api/v1/task-status/${submitResult.task_id}`
+  `http://127.0.0.1:8000/api/v1/task-status/${submitResult.task_id}`,
 );
 const statusData = await statusResponse.json();
 ```
@@ -42,6 +42,57 @@ Neu task `SUCCESS`, response `result` se co:
 - `content`: noi dung ket qua
 - `saved_to`: duong dan JSON neu `save_to_file=true`
 - `saved_excel`: duong dan Excel neu `output_format=json` va parse duoc JSON
+
+## Setup API Agent cho plugin truoc khi nhung
+
+Ban co 2 cach cau hinh agent:
+
+1. Khai bao co dinh qua env tren server extract-pdf.
+2. Truyen runtime qua `options` trong moi request.
+
+### Mau env cho agent co dinh
+
+```env
+AGENT_LIGHTONOCR_TYPE=local_http
+AGENT_LIGHTONOCR_BASE_URL=http://127.0.0.1:9000/ocr
+AGENT_LIGHTONOCR_API_KEY=
+```
+
+Khi do frontend chi can gui `agent: "lightonocr"`.
+
+### Mau runtime khong can env
+
+```json
+{
+  "agent": "local_http",
+  "options": {
+    "base_url": "http://127.0.0.1:9000/ocr",
+    "api_key": "optional-token"
+  }
+}
+```
+
+## Huong dan nhung LightOnOCR vao web/app
+
+Muc tieu: dung extract-pdf nhu gateway, LightOnOCR la he OCR ben ngoai.
+
+1. Chay LightOnOCR service rieng va dam bao endpoint nhan `image_base64`, `prompt`.
+2. Tu web/app, goi `POST /api/v1/extract/json` cua extract-pdf voi `agent = lightonocr` (hoac `local_http`).
+3. Poll `GET /api/v1/task-status/{task_id}`.
+4. Hien thi `result.content` hoac hien nut tai artifact neu co.
+
+Vi du payload khi nhung LightOnOCR:
+
+```json
+{
+  "image_base64": "<base64-image>",
+  "filename": "soa_page_1.jpg",
+  "agent": "lightonocr",
+  "output_format": "markdown",
+  "save_to_file": false,
+  "options": {}
+}
+```
 
 ## Luong plugin de xai trong web
 

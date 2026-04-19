@@ -57,6 +57,32 @@
       margin-bottom: 16px;
     }
 
+    .layout {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .help-box {
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      background: #fcfffe;
+      min-height: 130px;
+    }
+
+    .help-box h4 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .help-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -169,6 +195,8 @@
     }
 
     @media (max-width: 760px) {
+
+      .layout,
       .grid {
         grid-template-columns: 1fr;
       }
@@ -182,62 +210,92 @@
       <p>Small test UI for team members to try extraction without using Swagger manually.</p>
     </div>
 
-    <div class="panel">
-      <div class="grid">
-        <div class="field">
-          <label for="agent">Agent</label>
-          <select id="agent"></select>
-        </div>
-        <div class="field">
-          <label for="outputFormat">Output Format</label>
-          <select id="outputFormat">
-            <option value="markdown">markdown</option>
-            <option value="json">json</option>
-          </select>
+    <div class="layout">
+      <div class="panel">
+        <div class="grid">
+          <div class="field">
+            <label for="agent">Agent</label>
+            <select id="agent" data-help-title="Agent"
+              data-help-text="Chon provider/agent se xu ly anh. Co the dung gemini, openai, openai_compatible, local_http, hoac agent khai bao qua env."></select>
+          </div>
+
+          <div class="field">
+            <label for="outputFormat">Output Format</label>
+            <select id="outputFormat" data-help-title="Output Format"
+              data-help-text="Chon markdown neu muon ket qua text, hoac json neu muon ket qua co cau truc de luu file va tai Excel.">
+              <option value="markdown">markdown</option>
+              <option value="json">json</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="model">Model (optional)</label>
+            <input id="model" placeholder="e.g. gpt-4o, qwen2.5-vl" data-help-title="Model"
+              data-help-text="Nhap ten model neu agent can override model mac dinh, vi du gpt-4o, qwen2.5-vl, hoac model OCR rieng." />
+          </div>
+
+          <div class="field">
+            <label for="baseUrl">Base URL (optional)</label>
+            <input id="baseUrl" placeholder="e.g. http://127.0.0.1:8080/ocr" data-help-title="Base URL"
+              data-help-text="Nhap endpoint API cua agent/LightOnOCR neu dung local_http hoac openai_compatible." />
+          </div>
+
+          <div class="field full">
+            <label for="apiKey">API Key (optional)</label>
+            <input id="apiKey" placeholder="token" data-help-title="API Key"
+              data-help-text="Nhap token neu endpoint can xac thuc. Neu endpoint public hoac local khong can key, co the de trong." />
+          </div>
+
+          <div class="field full">
+            <label for="imageFile">Image File</label>
+            <input id="imageFile" type="file" accept="image/*" data-help-title="Image File"
+              data-help-text="Tai anh tu may local len. Neu co file, he thong se encode sang base64 va gui trong request." />
+          </div>
+
+          <div class="field full">
+            <label for="imagePath">or Image Path (server local path, optional)</label>
+            <input id="imagePath" placeholder="D:/path/to/image.png" data-help-title="Image Path"
+              data-help-text="Dung duong dan file nam tren server. Chi phu hop khi API server truy cap duoc file local do." />
+          </div>
+
+          <div class="field full">
+            <label for="saveToFile" data-help-title="Save output files"
+              data-help-text="Bat len neu ban muon luu ket qua ra file va co the tai JSON/Excel tu UI sau khi task xong.">
+              <input id="saveToFile" type="checkbox" checked style="width:auto; margin-right: 8px;" />
+              Save output files (required for Download JSON/Excel)
+            </label>
+          </div>
         </div>
 
-        <div class="field">
-          <label for="model">Model (optional)</label>
-          <input id="model" placeholder="e.g. gpt-4o, qwen2.5-vl" />
-        </div>
-        <div class="field">
-          <label for="baseUrl">Base URL (optional)</label>
-          <input id="baseUrl" placeholder="e.g. http://127.0.0.1:8080/ocr" />
+        <div class="row" style="margin-top: 12px;">
+          <button id="submitBtn" class="btn" data-help-title="Submit Task"
+            data-help-text="Gui payload toi endpoint /api/v1/extract/json de tao task OCR trong background worker.">Submit
+            Task</button>
+          <div id="statusText" class="status">Ready</div>
         </div>
 
-        <div class="field full">
-          <label for="apiKey">API Key (optional)</label>
-          <input id="apiKey" placeholder="token" />
-        </div>
-
-        <div class="field full">
-          <label for="imageFile">Image File</label>
-          <input id="imageFile" type="file" accept="image/*" />
-        </div>
-
-        <div class="field full">
-          <label for="imagePath">or Image Path (server local path, optional)</label>
-          <input id="imagePath" placeholder="D:/path/to/image.png" />
-        </div>
-
-        <div class="field full">
-          <label for="saveToFile">
-            <input id="saveToFile" type="checkbox" checked style="width:auto; margin-right: 8px;" />
-            Save output files (required for Download JSON/Excel)
-          </label>
+        <div class="actions">
+          <button id="downloadJsonBtn" class="btn secondary" disabled data-help-title="Download JSON"
+            data-help-text="Tai file JSON ket qua cua task. Chi bat len khi task SUCCESS va save_to_file duoc bat.">Download
+            JSON</button>
+          <button id="downloadExcelBtn" class="btn secondary" disabled data-help-title="Download Excel"
+            data-help-text="Tai file Excel duoc worker tao khi output_format=json va parse thanh cong du lieu co cau truc.">Download
+            Excel</button>
+          <button id="copyContentBtn" class="btn ghost" disabled data-help-title="Copy Content"
+            data-help-text="Copy noi dung content hien tai vao clipboard de dan sang app khac nhanh hon.">Copy
+            Content</button>
+          <button id="clearBtn" class="btn ghost" data-help-title="Clear"
+            data-help-text="Xoa task hien tai va reset trang thai man hinh ve Ready, khong xoa file da luu tren server.">Clear</button>
         </div>
       </div>
 
-      <div class="row" style="margin-top: 12px;">
-        <button id="submitBtn" class="btn">Submit Task</button>
-        <div id="statusText" class="status">Ready</div>
-      </div>
-
-      <div class="actions">
-        <button id="downloadJsonBtn" class="btn secondary" disabled>Download JSON</button>
-        <button id="downloadExcelBtn" class="btn secondary" disabled>Download Excel</button>
-        <button id="copyContentBtn" class="btn ghost" disabled>Copy Content</button>
-        <button id="clearBtn" class="btn ghost">Clear</button>
+      <div class="panel">
+        <h3 style="margin-top: 0;">Field & Button Help</h3>
+        <div class="help-box">
+          <h4 id="hoverHelpTitle">Hover a field or button</h4>
+          <p id="hoverHelpText">Di chuot vao input, select, checkbox hoac nut o ben trai de xem giai thich ngan ve tung
+            thanh phan.</p>
+        </div>
       </div>
     </div>
 
@@ -269,8 +327,34 @@
     const statusText = document.getElementById("statusText");
     const rawResultEl = document.getElementById("rawResult");
     const contentBoxEl = document.getElementById("contentBox");
+    const hoverHelpTitleEl = document.getElementById("hoverHelpTitle");
+    const hoverHelpTextEl = document.getElementById("hoverHelpText");
+
     let lastTaskId = null;
     let lastTaskResult = null;
+
+    const defaultHelp = {
+      title: "Hover a field or button",
+      text: "Di chuot vao input, select, checkbox hoac nut o ben trai de xem giai thich ngan ve tung thanh phan."
+    };
+
+    function setHoverHelp(title, text) {
+      hoverHelpTitleEl.textContent = title || defaultHelp.title;
+      hoverHelpTextEl.textContent = text || defaultHelp.text;
+    }
+
+    function bindHoverHelp() {
+      const hoverTargets = document.querySelectorAll("[data-help-title]");
+      hoverTargets.forEach((el) => {
+        const title = el.getAttribute("data-help-title") || el.textContent.trim();
+        const text = el.getAttribute("data-help-text") || "No description";
+
+        el.addEventListener("mouseenter", () => setHoverHelp(title, text));
+        el.addEventListener("focus", () => setHoverHelp(title, text));
+        el.addEventListener("mouseleave", () => setHoverHelp(defaultHelp.title, defaultHelp.text));
+        el.addEventListener("blur", () => setHoverHelp(defaultHelp.title, defaultHelp.text));
+      });
+    }
 
     function setStatus(text, kind) {
       statusText.textContent = text;
@@ -353,10 +437,7 @@
         }
 
         if (data.status === "PENDING" && attempts >= pendingWarningAfter) {
-          setStatus(
-            "Task is still PENDING. Worker/Redis may not be running. Start Redis and Celery worker, then submit again.",
-            "err"
-          );
+          setStatus("Task is still PENDING. Worker/Redis may not be running. Start Redis and Celery worker, then submit again.", "err");
           return;
         }
 
@@ -470,6 +551,7 @@
       }
     });
 
+    bindHoverHelp();
     loadAgents();
   </script>
 </body>
