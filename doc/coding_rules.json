@@ -6,15 +6,23 @@
       "app/core": "Configuration, Settings, and Interfaces (Abstract Base Classes)",
       "app/services": "Business Logic, AI Providers, Image Processing, Celery Tasks",
       "app/api": "API Routes, Pydantic Models (Request/Response)",
-      "app/main.py": "Application Entry Point"
+      "app/ui": "Quick UI static page for manual testing",
+      "app/main.py": "Application Entry Point and middleware setup",
+      "tests": "Integration tests for API flows and task dispatch",
+      "doc": "Split documentation by topic (installation, config, runbook, api, integration, docker)"
     }
   },
   "tech_stack": {
     "framework": "FastAPI",
     "async_task_queue": "Celery",
     "broker": "Redis",
-    "ai_sdk": ["google-generativeai (Gemini)", "openai (GPT-4o)"],
-    "validation": "Pydantic"
+    "ai_sdk": [
+      "google-genai (Gemini)",
+      "openai"
+    ],
+    "validation": "Pydantic",
+    "testing": "pytest",
+    "containerization": "Docker + Docker Compose"
   },
   "coding_standards": {
     "solid_principles": {
@@ -28,11 +36,26 @@
     "type_hinting": "Enforce strict type hinting using Python `typing` module.",
     "configuration": "Use `app/core/config.py` for all environment variables and settings.",
     "error_handling": "Use `HTTPException` for API errors. Log errors in background tasks.",
-    "naming_convention": "snake_case for functions/variables, PascalCase for Classes."
+    "naming_convention": "snake_case for functions/variables, PascalCase for Classes.",
+    "api_contract": "Keep response fields stable for UI integration (`status`, `result`, `saved_to`, `saved_excel`).",
+    "file_artifacts": "Download links in UI must depend on real saved artifacts, not only output format.",
+    "docs_policy": "Keep README concise as index/quick-start, move detailed guides into `doc/*.md`.",
+    "docker_policy": "When changing Celery app path or startup logic, update docker-compose command and healthchecks together."
   },
   "files_and_directories": {
-    "doc/": "Documentation and rules",
+    "doc/": "Documentation split by topic and project rules",
+    "docker-compose.yml": "Local container orchestration for redis/api/worker",
+    "Dockerfile": "Base runtime image for API and worker",
+    ".dockerignore": "Build context optimization and local artifact exclusion",
+    "tests/": "Integration tests",
     "outputs/": "Generated files (Markdown, JSON, Excel)",
     "uploaded_images/": "Temporary storage for uploaded files"
+  },
+  "quality_checks": {
+    "required_before_merge": [
+      "pytest tests/test_agent_flows_integration.py",
+      "docker compose config"
+    ],
+    "documentation_sync": "When adding endpoint/UI behavior, update corresponding docs in `doc/` and README index if needed."
   }
 }
