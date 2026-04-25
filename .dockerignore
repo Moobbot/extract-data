@@ -24,3 +24,11 @@ outputs/
 
 .env
 datasets/
+LightOnOCR-2-1B/
+templates/
+
+# Misc local files
+
+_.log
+_.tmp
+\*.swp

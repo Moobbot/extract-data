@@ -2,6 +2,9 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
 # Install system dependencies (if any needed for Pillow/Pandas)
 # RUN apt-get update && apt-get install -y ...
 
