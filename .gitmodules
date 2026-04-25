@@ -1,0 +1,3 @@
+[submodule "LightOnOCR-2-1B"]
+	path = LightOnOCR-2-1B
+	url = https://github.com/Moobbot/LightOnOCR-2-1B.git
