@@ -1,0 +1,38 @@
+{
+  "active_profile_id": "lightonocr-2-1b",
+  "profiles": [
+    {
+      "id": "lightonocr-2-1b",
+      "label": "LightOnOCR-2-1B",
+      "agent": "local_http",
+      "model": "LightOnOCR-2-1B",
+      "base_url": "http://127.0.0.1:7860/ocr",
+      "api_key": "",
+      "output_format": "markdown",
+      "save_to_file": false,
+      "description": "Preset chạy LightOnOCR như một API local_http."
+    },
+    {
+      "id": "gemini-flash",
+      "label": "Gemini 2.5 Flash",
+      "agent": "gemini",
+      "model": "gemini-2.5-flash",
+      "base_url": "",
+      "api_key": "",
+      "output_format": "markdown",
+      "save_to_file": false,
+      "description": "Preset Gemini cho OCR tổng quát."
+    },
+    {
+      "id": "openai-gpt4o",
+      "label": "OpenAI GPT-4o",
+      "agent": "openai",
+      "model": "gpt-4o",
+      "base_url": "",
+      "api_key": "",
+      "output_format": "markdown",
+      "save_to_file": false,
+      "description": "Preset OpenAI cho trường hợp cần model đa phương thức."
+    }
+  ]
+}

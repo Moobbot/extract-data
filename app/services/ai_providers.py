@@ -96,12 +96,18 @@ class OpenAIProvider(AIProvider):
 
 
 class LocalHTTPProvider(AIProvider):
-    def __init__(self, endpoint: str, api_key: Optional[str] = None):
+    def __init__(
+        self,
+        endpoint: str,
+        api_key: Optional[str] = None,
+        model: Optional[str] = None,
+    ):
         if not endpoint:
             raise ValueError("Missing base_url/endpoint for local_http agent")
 
         self.endpoint = endpoint
         self.api_key = api_key
+        self.model = model
 
     def generate_content(self, image_path: str, prompt: str) -> str:
         base64_image = ImageProcessor.encode_image_base64(image_path)
@@ -109,6 +115,8 @@ class LocalHTTPProvider(AIProvider):
             "image_base64": base64_image,
             "prompt": prompt,
         }
+        if self.model:
+            payload["model"] = self.model
 
         headers = {
             "Content-Type": "application/json",
@@ -183,7 +191,8 @@ class AIProviderFactory:
     def _build_local_http(config: Dict[str, Any]) -> AIProvider:
         endpoint = config.get("base_url")
         api_key = config.get("api_key")
-        return LocalHTTPProvider(endpoint=endpoint, api_key=api_key)
+        model = config.get("model")
+        return LocalHTTPProvider(endpoint=endpoint, api_key=api_key, model=model)
 
     @staticmethod
     def list_available_agents() -> List[Dict[str, Any]]:

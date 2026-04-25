@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extract PDF - Settings</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #07111c;
+      --panel: rgba(255, 255, 255, 0.96);
+      --text: #142033;
+      --muted: #5f6f86;
+      --accent: #0f766e;
+      --accent-2: #2563eb;
+      --border: rgba(20, 32, 51, 0.12);
+      --danger: #b42318;
+      --ok: #067647;
+      --shadow: 0 24px 80px rgba(8, 19, 31, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(20, 184, 166, 0.24), transparent 28%),
+        linear-gradient(180deg, #07111c 0%, #0b1727 38%, #eef4fb 38%, #eef4fb 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 16px 32px;
+    }
+
+    .hero {
+      color: #f8fbff;
+      padding: 18px 20px 24px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(37, 99, 235, 0.82));
+      box-shadow: var(--shadow);
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 40px);
+      letter-spacing: -0.03em;
+    }
+
+    .brand p {
+      margin: 6px 0 0;
+      color: rgba(248, 251, 255, 0.78);
+      max-width: 720px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip,
+    .btn,
+    input,
+    select,
+    textarea {
+      border-radius: 14px;
+      font: inherit;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f7fbff;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      text-decoration: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 18px 20px 0;
+    }
+
+    .panel-body {
+      padding: 18px 20px 20px;
+    }
+
+    .section-title {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+
+    .section-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .grid-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(20, 32, 51, 0.18);
+      background: #fff;
+      color: var(--text);
+      padding: 11px 12px;
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(37, 99, 235, 0.55);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(230px, 0.78fr) minmax(0, 1.22fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .profile-list {
+      border: 1px solid rgba(20, 32, 51, 0.12);
+      border-radius: 18px;
+      background: #fff;
+      padding: 10px;
+      display: grid;
+      gap: 10px;
+      max-height: 420px;
+      overflow: auto;
+    }
+
+    .profile-item {
+      border: 1px solid rgba(20, 32, 51, 0.12);
+      border-radius: 16px;
+      padding: 12px;
+      cursor: pointer;
+      background: linear-gradient(180deg, #fff, #f8fbff);
+      transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+    }
+
+    .profile-item:hover {
+      transform: translateY(-1px);
+      border-color: rgba(37, 99, 235, 0.35);
+    }
+
+    .profile-item.active {
+      border-color: rgba(15, 118, 110, 0.45);
+      box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.09);
+    }
+
+    .profile-item .name {
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .profile-item .meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    .actions-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: none;
+      padding: 11px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, opacity 140ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.58;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn.primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #14b8a6);
+    }
+
+    .btn.secondary {
+      color: #fff;
+      background: linear-gradient(135deg, #334155, #1e293b);
+    }
+
+    .btn.ghost {
+      color: var(--text);
+      background: #e8eef6;
+    }
+
+    .status {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f5f8fc;
+      color: var(--muted);
+      border: 1px solid rgba(20, 32, 51, 0.08);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .status.ok {
+      color: var(--ok);
+      background: rgba(6, 118, 71, 0.08);
+    }
+
+    .status.err {
+      color: var(--danger);
+      background: rgba(180, 35, 24, 0.08);
+    }
+
+    .help-box,
+    pre {
+      border: 1px solid rgba(20, 32, 51, 0.12);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    .help-box {
+      padding: 16px;
+    }
+
+    .help-box h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .help-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px;
+      overflow: auto;
+      background: #08131f;
+      color: #d8e2f0;
+      max-height: 360px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 960px) {
+
+      .layout,
+      .split,
+      .grid-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-top">
+        <div class="brand">
+          <h1>Settings</h1>
+          <p>Chỉnh file JSON cấu hình dùng cho trang trích xuất. Preset mặc định được đặt là LightOnOCR-2-1B và có thể
+            đổi agent/model/base_url/api_key ngay tại đây.</p>
+        </div>
+        <div class="actions">
+          <a class="chip" href="/ui" target="_blank" rel="noreferrer">Back to extraction</a>
+          <a class="chip" href="/api/v1/ui-config" target="_blank" rel="noreferrer">View config JSON</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <h2 class="section-title">Profiles</h2>
+          <p class="section-copy">Chọn preset đang active để chỉnh. Khi bấm Save, toàn bộ cấu hình sẽ được ghi vào
+            `ui-config.json`.</p>
+        </div>
+        <div class="panel-body split">
+          <div>
+            <div id="profileList" class="profile-list"></div>
+            <div class="actions-row">
+              <button id="newProfileBtn" class="btn ghost">Duplicate preset</button>
+              <button id="resetBtn" class="btn secondary">Reset defaults</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="grid-form">
+              <div class="field">
+                <label for="activeProfileId">Active profile</label>
+                <select id="activeProfileId"></select>
+              </div>
+              <div class="field">
+                <label for="profileId">Profile ID</label>
+                <input id="profileId" placeholder="lightonocr-2-1b">
+              </div>
+              <div class="field full">
+                <label for="profileLabel">Label</label>
+                <input id="profileLabel" placeholder="LightOnOCR-2-1B">
+              </div>
+              <div class="field">
+                <label for="profileAgent">Agent</label>
+                <select id="profileAgent">
+                  <option value="local_http">local_http</option>
+                  <option value="gemini">gemini</option>
+                  <option value="openai">openai</option>
+                  <option value="openai_compatible">openai_compatible</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="profileModel">Model</label>
+                <input id="profileModel" placeholder="LightOnOCR-2-1B">
+              </div>
+              <div class="field full">
+                <label for="profileBaseUrl">Base URL</label>
+                <input id="profileBaseUrl" placeholder="http://127.0.0.1:7860/ocr">
+              </div>
+              <div class="field full">
+                <label for="profileApiKey">API key</label>
+                <input id="profileApiKey" placeholder="optional token">
+              </div>
+              <div class="field">
+                <label for="profileOutputFormat">Output format</label>
+                <select id="profileOutputFormat">
+                  <option value="markdown">markdown</option>
+                  <option value="json">json</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Save output files</label>
+                <div class="profile-item" style="padding: 12px 14px; cursor: default;">
+                  <input id="profileSaveToFile" type="checkbox" style="width:auto; margin-right: 8px;">
+                  <span>Enable saved artifacts for this preset</span>
+                </div>
+              </div>
+              <div class="field full">
+                <label for="profileDescription">Description</label>
+                <textarea id="profileDescription" placeholder="Notes about this preset"></textarea>
+              </div>
+            </div>
+
+            <div class="actions-row">
+              <button id="saveBtn" class="btn primary">Save config</button>
+            </div>
+            <div id="statusText" class="status">Ready</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <div class="panel-head">
+          <h2 class="section-title">Config preview</h2>
+          <p class="section-copy">Xem JSON sau khi chỉnh để đảm bảo đúng preset và default profile.</p>
+        </div>
+        <div class="panel-body" style="display:grid; gap: 16px;">
+          <div class="help-box">
+            <h4 id="helpTitle">Select a profile</h4>
+            <p id="helpText">Chọn một profile ở bên trái để chỉnh hoặc duplicate sang preset mới.</p>
+          </div>
+          <pre id="rawConfig">{}</pre>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const profileListEl = document.getElementById("profileList");
+    const activeProfileIdEl = document.getElementById("activeProfileId");
+    const profileIdEl = document.getElementById("profileId");
+    const profileLabelEl = document.getElementById("profileLabel");
+    const profileAgentEl = document.getElementById("profileAgent");
+    const profileModelEl = document.getElementById("profileModel");
+    const profileBaseUrlEl = document.getElementById("profileBaseUrl");
+    const profileApiKeyEl = document.getElementById("profileApiKey");
+    const profileOutputFormatEl = document.getElementById("profileOutputFormat");
+    const profileSaveToFileEl = document.getElementById("profileSaveToFile");
+    const profileDescriptionEl = document.getElementById("profileDescription");
+    const statusTextEl = document.getElementById("statusText");
+    const rawConfigEl = document.getElementById("rawConfig");
+    const helpTitleEl = document.getElementById("helpTitle");
+    const helpTextEl = document.getElementById("helpText");
+    const saveBtn = document.getElementById("saveBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const newProfileBtn = document.getElementById("newProfileBtn");
+
+    let configState = null;
+    let selectedProfileId = null;
+
+    const defaultHelp = {
+      title: "Select a profile",
+      text: "Chọn một profile ở bên trái để chỉnh hoặc duplicate sang preset mới."
+    };
+
+    function setStatus(text, kind) {
+      statusTextEl.textContent = text;
+      statusTextEl.className = "status" + (kind ? " " + kind : "");
+    }
+
+    function setHelp(title, text) {
+      helpTitleEl.textContent = title || defaultHelp.title;
+      helpTextEl.textContent = text || defaultHelp.text;
+    }
+
+    function renderConfig() {
+      rawConfigEl.textContent = JSON.stringify(configState, null, 2);
+      activeProfileIdEl.innerHTML = "";
+      (configState.profiles || []).forEach((profile) => {
+        const option = document.createElement("option");
+        option.value = profile.id;
+        option.textContent = profile.label;
+        if (profile.id === configState.active_profile_id) {
+          option.selected = true;
+        }
+        activeProfileIdEl.appendChild(option);
+      });
+    }
+
+    function renderProfileList() {
+      profileListEl.innerHTML = "";
+      (configState.profiles || []).forEach((profile) => {
+        const item = document.createElement("div");
+        item.className = "profile-item" + (profile.id === selectedProfileId ? " active" : "");
+        item.tabIndex = 0;
+        item.innerHTML = `
+          <div class="name">${profile.label}</div>
+          <div class="meta">
+            <div>ID: ${profile.id}</div>
+            <div>Agent: ${profile.agent}</div>
+            <div>Model: ${profile.model || "-"}</div>
+            <div>${profile.description || ""}</div>
+          </div>
+        `;
+        item.addEventListener("click", () => selectProfile(profile.id));
+        item.addEventListener("focus", () => setHelp(profile.label, profile.description || ""));
+        profileListEl.appendChild(item);
+      });
+    }
+
+    function findProfile(profileId) {
+      return (configState.profiles || []).find((profile) => profile.id === profileId);
+    }
+
+    function applyProfileToForm(profile) {
+      if (!profile) {
+        return;
+      }
+
+      selectedProfileId = profile.id;
+      profileIdEl.value = profile.id || "";
+      profileLabelEl.value = profile.label || "";
+      profileAgentEl.value = profile.agent || "local_http";
+      profileModelEl.value = profile.model || "";
+      profileBaseUrlEl.value = profile.base_url || "";
+      profileApiKeyEl.value = profile.api_key || "";
+      profileOutputFormatEl.value = profile.output_format || "markdown";
+      profileSaveToFileEl.checked = Boolean(profile.save_to_file);
+      profileDescriptionEl.value = profile.description || "";
+      setHelp(profile.label || defaultHelp.title, profile.description || defaultHelp.text);
+      renderProfileList();
+    }
+
+    function selectProfile(profileId) {
+      const profile = findProfile(profileId);
+      if (!profile) {
+        return;
+      }
+      applyProfileToForm(profile);
+    }
+
+    function upsertCurrentProfile() {
+      const currentId = profileIdEl.value.trim();
+      if (!currentId) {
+        throw new Error("Profile ID is required");
+      }
+
+      const profile = {
+        id: currentId,
+        label: profileLabelEl.value.trim() || currentId,
+        agent: profileAgentEl.value,
+        model: profileModelEl.value.trim() || null,
+        base_url: profileBaseUrlEl.value.trim() || null,
+        api_key: profileApiKeyEl.value.trim() || null,
+        output_format: profileOutputFormatEl.value,
+        save_to_file: Boolean(profileSaveToFileEl.checked),
+        description: profileDescriptionEl.value.trim() || null,
+      };
+
+      const existingIndex = (configState.profiles || []).findIndex((item) => item.id === selectedProfileId);
+      if (existingIndex >= 0) {
+        configState.profiles[existingIndex] = profile;
+      } else {
+        configState.profiles = [...(configState.profiles || []), profile];
+      }
+
+      const activeProfileId = activeProfileIdEl.value || profile.id;
+      configState.active_profile_id = activeProfileId;
+      const activeExists = (configState.profiles || []).some((item) => item.id === configState.active_profile_id);
+      if (!activeExists) {
+        configState.active_profile_id = profile.id;
+      }
+      selectedProfileId = profile.id;
+    }
+
+    async function loadConfig() {
+      try {
+        const response = await fetch("/api/v1/ui-config");
+        configState = await response.json();
+        renderConfig();
+        const activeProfile = findProfile(configState.active_profile_id) || (configState.profiles || [])[0];
+        selectedProfileId = activeProfile ? activeProfile.id : null;
+        if (activeProfile) {
+          applyProfileToForm(activeProfile);
+        }
+        setStatus("Config loaded.", "ok");
+      } catch (error) {
+        setStatus("Cannot load config: " + error.message, "err");
+      }
+    }
+
+    activeProfileIdEl.addEventListener("change", () => {
+      if (!configState) {
+        return;
+      }
+      configState.active_profile_id = activeProfileIdEl.value;
+      renderConfig();
+      renderProfileList();
+    });
+
+    saveBtn.addEventListener("click", async () => {
+      try {
+        if (!configState) {
+          throw new Error("Config not loaded yet");
+        }
+        upsertCurrentProfile();
+        renderConfig();
+        renderProfileList();
+
+        const response = await fetch("/api/v1/ui-config", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(configState),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || "Save failed");
+        }
+        configState = data;
+        renderConfig();
+        renderProfileList();
+        const activeProfile = findProfile(configState.active_profile_id) || (configState.profiles || [])[0];
+        if (activeProfile) {
+          applyProfileToForm(activeProfile);
+        }
+        setStatus("Config saved to ui-config.json", "ok");
+      } catch (error) {
+        setStatus("Error: " + error.message, "err");
+      }
+    });
+
+    resetBtn.addEventListener("click", async () => {
+      try {
+        const response = await fetch("/api/v1/ui-config", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            active_profile_id: "lightonocr-2-1b",
+            profiles: [
+              {
+                id: "lightonocr-2-1b",
+                label: "LightOnOCR-2-1B",
+                agent: "local_http",
+                model: "LightOnOCR-2-1B",
+                base_url: "http://127.0.0.1:7860/ocr",
+                api_key: "",
+                output_format: "markdown",
+                save_to_file: false,
+                description: "Preset chạy LightOnOCR như một API local_http.",
+              },
+              {
+                id: "gemini-flash",
+                label: "Gemini 2.5 Flash",
+                agent: "gemini",
+                model: "gemini-2.5-flash",
+                base_url: "",
+                api_key: "",
+                output_format: "markdown",
+                save_to_file: false,
+                description: "Preset Gemini cho OCR tổng quát.",
+              },
+              {
+                id: "openai-gpt4o",
+                label: "OpenAI GPT-4o",
+                agent: "openai",
+                model: "gpt-4o",
+                base_url: "",
+                api_key: "",
+                output_format: "markdown",
+                save_to_file: false,
+                description: "Preset OpenAI cho trường hợp cần model đa phương thức.",
+              },
+            ],
+          }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || "Reset failed");
+        }
+        configState = data;
+        renderConfig();
+        const activeProfile = findProfile(configState.active_profile_id) || (configState.profiles || [])[0];
+        if (activeProfile) {
+          applyProfileToForm(activeProfile);
+        }
+        setStatus("Defaults restored.", "ok");
+      } catch (error) {
+        setStatus("Error: " + error.message, "err");
+      }
+    });
+
+    newProfileBtn.addEventListener("click", () => {
+      if (!configState) {
+        return;
+      }
+      const source = findProfile(selectedProfileId) || (configState.profiles || [])[0];
+      if (!source) {
+        return;
+      }
+      const copy = { ...source };
+      copy.id = `${source.id}-copy`;
+      copy.label = `${source.label} Copy`;
+      configState.profiles = [...configState.profiles, copy];
+      selectedProfileId = copy.id;
+      applyProfileToForm(copy);
+      renderConfig();
+      setStatus("Preset duplicated. Edit the fields, then Save.", "ok");
+    });
+
+    loadConfig();
+  </script>
+</body>
+</html>

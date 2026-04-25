@@ -3,6 +3,8 @@
 ## API chinh
 
 - `GET /api/v1/agents`
+- `GET /api/v1/ui-config`
+- `PUT /api/v1/ui-config`
 - `POST /api/v1/extract`
 - `POST /api/v1/extract/batch`
 - `POST /api/v1/extract/folder`
@@ -65,6 +67,7 @@ Parser uu tien field: `content`, `text`, `result`, `markdown`, `output`.
 - Chay LightOnOCR trong env/doc vu rieng.
 - Trong `extract-pdf`, goi bang `agent = local_http`.
 - Set `options.base_url` toi endpoint OCR cua LightOnOCR.
+- Neu muon chon model theo preset UI, `local_http` se gui them field `model` trong payload body.
 
 ## Huong dan setup API Agent cho nguoi dung
 
@@ -90,7 +93,7 @@ AGENT_QWEN_MODEL=qwen2.5-vl
 
 # LightOnOCR endpoint ngoai (goi theo local_http)
 AGENT_LIGHTONOCR_TYPE=local_http
-AGENT_LIGHTONOCR_BASE_URL=http://127.0.0.1:9000/ocr
+AGENT_LIGHTONOCR_BASE_URL=http://127.0.0.1:7860/ocr
 AGENT_LIGHTONOCR_API_KEY=
 ```
 
@@ -133,7 +136,7 @@ Vi du override runtime khong can env (local_http):
   "output_format": "markdown",
   "save_to_file": false,
   "options": {
-    "base_url": "http://127.0.0.1:9000/ocr",
+    "base_url": "http://127.0.0.1:7860/ocr",
     "api_key": "optional-token",
     "model": null
   }

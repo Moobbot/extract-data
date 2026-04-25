@@ -54,7 +54,7 @@ Ban co 2 cach cau hinh agent:
 
 ```env
 AGENT_LIGHTONOCR_TYPE=local_http
-AGENT_LIGHTONOCR_BASE_URL=http://127.0.0.1:9000/ocr
+AGENT_LIGHTONOCR_BASE_URL=http://127.0.0.1:7860/ocr
 AGENT_LIGHTONOCR_API_KEY=
 ```
 
@@ -66,7 +66,7 @@ Khi do frontend chi can gui `agent: "lightonocr"`.
 {
   "agent": "local_http",
   "options": {
-    "base_url": "http://127.0.0.1:9000/ocr",
+    "base_url": "http://127.0.0.1:7860/ocr",
     "api_key": "optional-token"
   }
 }

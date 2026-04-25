@@ -35,5 +35,7 @@ Redis note:
 ## Quick UI
 
 - `http://127.0.0.1:8000/ui`
+- `http://127.0.0.1:8000/ui/settings`
 - Co cac nut: submit task, download JSON, download Excel, copy content, clear.
 - De tai JSON/Excel, bat tuy chon `Save output files` truoc khi submit.
+- Preset UI duoc luu trong `ui-config.json` va se nap mac dinh LightOnOCR-2-1B.

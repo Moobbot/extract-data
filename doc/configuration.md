@@ -36,3 +36,10 @@ AGENT_QWEN_MODEL=qwen2.5-vl
 ```
 
 Khi goi API, dung `agent = qwen`.
+
+## UI config JSON
+
+- File cau hinh UI: `ui-config.json` o root repository.
+- Trang settings: `http://127.0.0.1:8000/ui/settings`.
+- Preset mac dinh: `LightOnOCR-2-1B` qua `local_http` voi `base_url = http://127.0.0.1:7860/ocr`.
+- Neu doi preset, UI se luu lai vao file JSON va trang trich xuat se nap lai preset do luc mo trang.

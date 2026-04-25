@@ -43,3 +43,20 @@ class AgentDescriptor(BaseModel):
 class AgentsListResponse(BaseModel):
     default_agent: str
     agents: List[AgentDescriptor]
+
+
+class UIProfileConfig(BaseModel):
+    id: str
+    label: str
+    agent: str
+    model: Optional[str] = None
+    base_url: Optional[str] = None
+    api_key: Optional[str] = None
+    output_format: str = "markdown"
+    save_to_file: bool = False
+    description: Optional[str] = None
+
+
+class UIConfigPayload(BaseModel):
+    active_profile_id: str
+    profiles: List[UIProfileConfig]

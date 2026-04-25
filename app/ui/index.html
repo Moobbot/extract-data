@@ -6,15 +6,20 @@
   <title>Extract PDF - Quick UI</title>
   <style>
     :root {
-      --bg: #f5f7fb;
-      --panel: #ffffff;
-      --text: #1f2a37;
-      --muted: #6b7280;
+      color-scheme: light;
+      --bg: #08131f;
+      --bg-soft: #0f1e31;
+      --panel: rgba(255, 255, 255, 0.96);
+      --panel-strong: #ffffff;
+      --text: #142033;
+      --muted: #5f6f86;
       --accent: #0f766e;
-      --accent-2: #0ea5a0;
-      --border: #e5e7eb;
-      --danger: #b91c1c;
-      --ok: #166534;
+      --accent-2: #2563eb;
+      --accent-3: #14b8a6;
+      --border: rgba(20, 32, 51, 0.12);
+      --danger: #b42318;
+      --ok: #067647;
+      --shadow: 0 24px 80px rgba(8, 19, 31, 0.22);
     }
 
     * {
@@ -24,68 +29,172 @@
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: radial-gradient(circle at top right, #d1fae5 0, var(--bg) 45%);
+      background:
+        radial-gradient(circle at top left, rgba(20, 184, 166, 0.26), transparent 30%),
+        radial-gradient(circle at 85% 15%, rgba(37, 99, 235, 0.22), transparent 28%),
+        linear-gradient(180deg, #07111c 0%, #0b1727 35%, #eef4fb 35%, #eef4fb 100%);
       color: var(--text);
+      min-height: 100vh;
     }
 
     .wrap {
-      max-width: 980px;
-      margin: 24px auto;
-      padding: 0 16px;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px 16px 32px;
     }
 
-    .header {
-      margin-bottom: 16px;
+    .hero {
+      color: #f8fbff;
+      padding: 18px 20px 28px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(15, 118, 110, 0.88));
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
     }
 
-    .header h1 {
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -12% -45% auto;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 64%);
+      pointer-events: none;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .brand h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
     }
 
-    .header p {
-      margin: 6px 0 0;
-      color: var(--muted);
+    .brand p {
+      margin: 0;
+      max-width: 760px;
+      color: rgba(248, 251, 255, 0.78);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip,
+    .btn,
+    input,
+    select,
+    textarea {
+      border-radius: 14px;
+      font: inherit;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f7fbff;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(12px);
+      text-decoration: none;
+    }
+
+    .chip small {
+      color: rgba(247, 251, 255, 0.7);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.9fr);
+      gap: 16px;
+      margin-top: 18px;
+      align-items: start;
     }
 
     .panel {
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: 0 8px 22px rgba(15, 118, 110, 0.08);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 18px 20px 0;
+    }
+
+    .panel-body {
+      padding: 18px 20px 20px;
+    }
+
+    .section-title {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+
+    .section-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
       margin-bottom: 16px;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 16px;
-      align-items: start;
+    .card {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fff, #f8fbff);
     }
 
-    .help-box {
-      border: 1px dashed var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      background: #fcfffe;
-      min-height: 130px;
-    }
-
-    .help-box h4 {
-      margin: 0 0 8px;
-      font-size: 16px;
-    }
-
-    .help-box p {
-      margin: 0;
+    .card label {
+      display: block;
       color: var(--muted);
-      line-height: 1.45;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
-    .grid {
+    .card .value {
+      min-height: 24px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .grid-form {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
     }
 
@@ -102,102 +211,173 @@
     label {
       font-size: 13px;
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     input,
     select,
     textarea {
       width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font: inherit;
-      color: var(--text);
+      border: 1px solid rgba(20, 32, 51, 0.18);
       background: #fff;
+      color: var(--text);
+      padding: 11px 12px;
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
     }
 
     textarea {
-      min-height: 100px;
+      min-height: 110px;
       resize: vertical;
     }
 
-    .row {
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(15, 118, 110, 0.55);
+      box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.11);
+    }
+
+    .switch-row {
       display: flex;
-      gap: 10px;
       align-items: center;
-      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid rgba(20, 32, 51, 0.14);
+      border-radius: 14px;
+      background: #fff;
+      min-height: 46px;
+    }
+
+    .switch-row input {
+      width: auto;
+      margin: 0;
     }
 
     .actions {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .btn.secondary {
-      background: #243042;
-    }
-
-    .btn.ghost {
-      background: #e2e8f0;
-      color: #1f2a37;
+      margin-top: 14px;
     }
 
     .btn {
       border: none;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #fff;
-      padding: 10px 16px;
-      font-weight: 600;
+      padding: 11px 16px;
+      font-weight: 700;
       cursor: pointer;
+      transition: transform 140ms ease, opacity 140ms ease, box-shadow 140ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
     }
 
     .btn:disabled {
-      opacity: 0.6;
+      opacity: 0.58;
       cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn.primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow: 0 12px 24px rgba(15, 118, 110, 0.22);
+    }
+
+    .btn.secondary {
+      color: #fff;
+      background: linear-gradient(135deg, #334155, #1e293b);
+    }
+
+    .btn.ghost {
+      color: var(--text);
+      background: #e8eef6;
     }
 
     .status {
-      font-size: 14px;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f5f8fc;
       color: var(--muted);
+      border: 1px solid rgba(20, 32, 51, 0.08);
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     .status.ok {
       color: var(--ok);
+      background: rgba(6, 118, 71, 0.08);
     }
 
     .status.err {
       color: var(--danger);
+      background: rgba(180, 35, 24, 0.08);
+    }
+
+    .help-box,
+    .content-box,
+    pre {
+      border: 1px solid rgba(20, 32, 51, 0.12);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    .help-box {
+      padding: 16px;
+      min-height: 220px;
+    }
+
+    .help-box h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .help-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .content-box {
+      min-height: 160px;
+      padding: 14px;
+      white-space: pre-wrap;
+      background: linear-gradient(180deg, #fff, #fbfdff);
     }
 
     pre {
       margin: 0;
-      background: #0b1020;
-      color: #d1d5db;
-      padding: 12px;
-      border-radius: 10px;
+      max-height: 360px;
       overflow: auto;
-      max-height: 340px;
+      padding: 14px;
+      background: #08131f;
+      color: #d8e2f0;
       font-size: 12px;
-      line-height: 1.45;
+      line-height: 1.5;
+      border-color: rgba(8, 19, 31, 0.2);
     }
 
-    .content-box {
-      border: 1px dashed var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      white-space: pre-wrap;
-      min-height: 120px;
-      background: #fcfcfd;
+    .stack {
+      display: grid;
+      gap: 16px;
     }
 
-    @media (max-width: 760px) {
+    .footer-link {
+      display: inline-flex;
+      margin-top: 12px;
+      color: var(--accent-2);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+    }
 
-      .layout,
-      .grid {
+    @media (max-width: 980px) {
+
+      .grid,
+      .cards,
+      .grid-form {
         grid-template-columns: 1fr;
       }
     }
@@ -205,108 +385,165 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="header">
-      <h1>Extract PDF - Quick UI</h1>
-      <p>Small test UI for team members to try extraction without using Swagger manually.</p>
-    </div>
-
-    <div class="layout">
-      <div class="panel">
-        <div class="grid">
-          <div class="field">
-            <label for="agent">Agent</label>
-            <select id="agent" data-help-title="Agent"
-              data-help-text="Chon provider/agent se xu ly anh. Co the dung gemini, openai, openai_compatible, local_http, hoac agent khai bao qua env."></select>
-          </div>
-
-          <div class="field">
-            <label for="outputFormat">Output Format</label>
-            <select id="outputFormat" data-help-title="Output Format"
-              data-help-text="Chon markdown neu muon ket qua text, hoac json neu muon ket qua co cau truc de luu file va tai Excel.">
-              <option value="markdown">markdown</option>
-              <option value="json">json</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="model">Model (optional)</label>
-            <input id="model" placeholder="e.g. gpt-4o, qwen2.5-vl" data-help-title="Model"
-              data-help-text="Nhap ten model neu agent can override model mac dinh, vi du gpt-4o, qwen2.5-vl, hoac model OCR rieng." />
-          </div>
-
-          <div class="field">
-            <label for="baseUrl">Base URL (optional)</label>
-            <input id="baseUrl" placeholder="e.g. http://127.0.0.1:8080/ocr" data-help-title="Base URL"
-              data-help-text="Nhap endpoint API cua agent/LightOnOCR neu dung local_http hoac openai_compatible." />
-          </div>
-
-          <div class="field full">
-            <label for="apiKey">API Key (optional)</label>
-            <input id="apiKey" placeholder="token" data-help-title="API Key"
-              data-help-text="Nhap token neu endpoint can xac thuc. Neu endpoint public hoac local khong can key, co the de trong." />
-          </div>
-
-          <div class="field full">
-            <label for="imageFile">Image File</label>
-            <input id="imageFile" type="file" accept="image/*" data-help-title="Image File"
-              data-help-text="Tai anh tu may local len. Neu co file, he thong se encode sang base64 va gui trong request." />
-          </div>
-
-          <div class="field full">
-            <label for="imagePath">or Image Path (server local path, optional)</label>
-            <input id="imagePath" placeholder="D:/path/to/image.png" data-help-title="Image Path"
-              data-help-text="Dung duong dan file nam tren server. Chi phu hop khi API server truy cap duoc file local do." />
-          </div>
-
-          <div class="field full">
-            <label for="saveToFile" data-help-title="Save output files"
-              data-help-text="Bat len neu ban muon luu ket qua ra file va co the tai JSON/Excel tu UI sau khi task xong.">
-              <input id="saveToFile" type="checkbox" checked style="width:auto; margin-right: 8px;" />
-              Save output files (required for Download JSON/Excel)
-            </label>
-          </div>
+    <section class="hero">
+      <div class="hero-top">
+        <div class="brand">
+          <h1>Extract PDF - Quick UI</h1>
+          <p>Trang mặc định để chạy trích xuất theo preset lưu trong file JSON. Preset mặc định là LightOnOCR-2-1B qua
+            local_http, nhưng bạn có thể đổi model hoặc agent từ settings.</p>
         </div>
+        <div class="hero-actions">
+          <a class="chip" href="/ui/settings" target="_blank" rel="noreferrer">
+            Settings
+            <small>manage config</small>
+          </a>
+          <a class="chip" href="/docs" target="_blank" rel="noreferrer">
+            API Docs
+            <small>inspect endpoints</small>
+          </a>
+        </div>
+      </div>
+    </section>
 
-        <div class="row" style="margin-top: 12px;">
-          <button id="submitBtn" class="btn" data-help-title="Submit Task"
-            data-help-text="Gui payload toi endpoint /api/v1/extract/json de tao task OCR trong background worker.">Submit
-            Task</button>
+    <div class="grid">
+      <section class="panel">
+        <div class="panel-head">
+          <h2 class="section-title">Run extraction</h2>
+          <p class="section-copy">Chọn preset từ file config, rồi upload ảnh hoặc dán đường dẫn local để gửi vào
+            `/api/v1/extract/json`.</p>
+        </div>
+        <div class="panel-body">
+          <div class="cards">
+            <div class="card">
+              <label>Active preset</label>
+              <div class="value" id="activePresetText">Loading...</div>
+            </div>
+            <div class="card">
+              <label>Selected agent</label>
+              <div class="value" id="activeAgentText">-</div>
+            </div>
+            <div class="card">
+              <label>Selected model</label>
+              <div class="value" id="activeModelText">-</div>
+            </div>
+          </div>
+
+          <div class="grid-form">
+            <div class="field full">
+              <label for="profileSelect">Preset from config</label>
+              <select id="profileSelect" data-help-title="Preset from config"
+                data-help-text="Chọn preset sẽ nạp agent, model, base_url và output mặc định từ file ui-config.json."></select>
+            </div>
+
+            <div class="field">
+              <label for="agent">Agent</label>
+              <select id="agent" data-help-title="Agent"
+                data-help-text="Chọn provider/agent sẽ xử lý ảnh. Preset LightOnOCR dùng local_http để gọi API ngoài."></select>
+            </div>
+
+            <div class="field">
+              <label for="outputFormat">Output format</label>
+              <select id="outputFormat" data-help-title="Output format"
+                data-help-text="Markdown phù hợp khi muốn xem nhanh; JSON phù hợp nếu muốn parse thêm hoặc lưu Excel.">
+                <option value="markdown">markdown</option>
+                <option value="json">json</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="model">Model</label>
+              <input id="model" placeholder="LightOnOCR-2-1B" data-help-title="Model"
+                data-help-text="Model sẽ được gửi sang agent nếu agent hỗ trợ. Với local_http, field này cũng được đẩy vào payload để LightOnOCR chọn model.">
+            </div>
+
+            <div class="field">
+              <label for="baseUrl">Base URL</label>
+              <input id="baseUrl" placeholder="http://127.0.0.1:7860/ocr" data-help-title="Base URL"
+                data-help-text="Endpoint của LightOnOCR hoặc API OCR khác khi dùng local_http / openai_compatible.">
+            </div>
+
+            <div class="field full">
+              <label for="apiKey">API key</label>
+              <input id="apiKey" placeholder="optional token" data-help-title="API key"
+                data-help-text="Giữ trống nếu endpoint không yêu cầu xác thực. Nếu có token, trường này sẽ được gửi lên server xử lý.">
+            </div>
+
+            <div class="field full">
+              <label for="imageFile">Image file</label>
+              <input id="imageFile" type="file" accept="image/*" data-help-title="Image file"
+                data-help-text="Tải ảnh từ máy local lên; UI sẽ encode sang base64 trước khi gửi request.">
+            </div>
+
+            <div class="field full">
+              <label for="imagePath">Image path on server</label>
+              <input id="imagePath" placeholder="D:/path/to/image.png" data-help-title="Image path"
+                data-help-text="Dùng nếu file đã nằm trên máy chạy API và server có thể truy cập trực tiếp đường dẫn này.">
+            </div>
+
+            <div class="field full">
+              <div class="switch-row" data-help-title="Save output files"
+                data-help-text="Bật lên nếu muốn lưu kết quả ra JSON/MD và cho phép download file sau khi task hoàn tất.">
+                <input id="saveToFile" type="checkbox" checked>
+                <label for="saveToFile">Save output files</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="submitBtn" class="btn primary" data-help-title="Submit task"
+              data-help-text="Gửi payload tới backend và bắt đầu Celery task để trích xuất nội dung.">Submit
+              Task</button>
+            <button id="downloadJsonBtn" class="btn secondary" disabled data-help-title="Download JSON"
+              data-help-text="Tải JSON nếu task lưu artifact thật sự trên server.">Download JSON</button>
+            <button id="downloadExcelBtn" class="btn secondary" disabled data-help-title="Download Excel"
+              data-help-text="Tải Excel nếu output là JSON và parse thành công dữ liệu có cấu trúc.">Download
+              Excel</button>
+            <button id="copyContentBtn" class="btn ghost" disabled data-help-title="Copy content"
+              data-help-text="Copy nội dung content hiện tại vào clipboard.">Copy Content</button>
+            <button id="clearBtn" class="btn ghost" data-help-title="Clear"
+              data-help-text="Xóa kết quả hiện tại trên màn hình, không xóa file output trên server.">Clear</button>
+          </div>
+
           <div id="statusText" class="status">Ready</div>
         </div>
+      </section>
 
-        <div class="actions">
-          <button id="downloadJsonBtn" class="btn secondary" disabled data-help-title="Download JSON"
-            data-help-text="Tai file JSON ket qua cua task. Chi bat len khi task SUCCESS va save_to_file duoc bat.">Download
-            JSON</button>
-          <button id="downloadExcelBtn" class="btn secondary" disabled data-help-title="Download Excel"
-            data-help-text="Tai file Excel duoc worker tao khi output_format=json va parse thanh cong du lieu co cau truc.">Download
-            Excel</button>
-          <button id="copyContentBtn" class="btn ghost" disabled data-help-title="Copy Content"
-            data-help-text="Copy noi dung content hien tai vao clipboard de dan sang app khac nhanh hon.">Copy
-            Content</button>
-          <button id="clearBtn" class="btn ghost" data-help-title="Clear"
-            data-help-text="Xoa task hien tai va reset trang thai man hinh ve Ready, khong xoa file da luu tren server.">Clear</button>
+      <aside class="panel">
+        <div class="panel-head">
+          <h2 class="section-title">Field help</h2>
+          <p class="section-copy">Di chuột vào trường nhập liệu hoặc nút để xem mô tả ngắn.</p>
         </div>
-      </div>
-
-      <div class="panel">
-        <h3 style="margin-top: 0;">Field & Button Help</h3>
-        <div class="help-box">
-          <h4 id="hoverHelpTitle">Hover a field or button</h4>
-          <p id="hoverHelpText">Di chuot vao input, select, checkbox hoac nut o ben trai de xem giai thich ngan ve tung
-            thanh phan.</p>
+        <div class="panel-body stack">
+          <div class="help-box">
+            <h4 id="hoverHelpTitle">Hover a field or button</h4>
+            <p id="hoverHelpText">Di chuột vào input, select, checkbox hoặc nút để xem giải thích ngắn về từng thành
+              phần.</p>
+          </div>
+          <a class="footer-link" href="/ui/settings" target="_blank" rel="noreferrer">Open settings page</a>
         </div>
-      </div>
+      </aside>
     </div>
 
-    <div class="panel">
-      <h3 style="margin-top: 0;">Extracted Content</h3>
-      <div id="contentBox" class="content-box"></div>
-    </div>
+    <div class="grid" style="margin-top: 16px;">
+      <section class="panel">
+        <div class="panel-head">
+          <h2 class="section-title">Extracted content</h2>
+          <p class="section-copy">Nội dung đã trích xuất sẽ hiển thị ở đây sau khi task hoàn tất.</p>
+        </div>
+        <div class="panel-body">
+          <div id="contentBox" class="content-box"></div>
+        </div>
+      </section>
 
-    <div class="panel">
-      <h3 style="margin-top: 0;">Raw Result</h3>
-      <pre id="rawResult">{}</pre>
+      <section class="panel">
+        <div class="panel-head">
+          <h2 class="section-title">Raw result</h2>
+          <p class="section-copy">Response thô từ backend và task status.</p>
+        </div>
+        <div class="panel-body">
+          <pre id="rawResult">{}</pre>
+        </div>
+      </section>
     </div>
   </div>
 
@@ -329,13 +566,18 @@
     const contentBoxEl = document.getElementById("contentBox");
     const hoverHelpTitleEl = document.getElementById("hoverHelpTitle");
     const hoverHelpTextEl = document.getElementById("hoverHelpText");
+    const profileSelectEl = document.getElementById("profileSelect");
+    const activePresetTextEl = document.getElementById("activePresetText");
+    const activeAgentTextEl = document.getElementById("activeAgentText");
+    const activeModelTextEl = document.getElementById("activeModelText");
 
     let lastTaskId = null;
     let lastTaskResult = null;
+    let currentConfig = null;
 
     const defaultHelp = {
       title: "Hover a field or button",
-      text: "Di chuot vao input, select, checkbox hoac nut o ben trai de xem giai thich ngan ve tung thanh phan."
+      text: "Di chuot vao input, select, checkbox hoac nut de xem giai thich ngan ve tung thanh phan."
     };
 
     function setHoverHelp(title, text) {
@@ -344,11 +586,9 @@
     }
 
     function bindHoverHelp() {
-      const hoverTargets = document.querySelectorAll("[data-help-title]");
-      hoverTargets.forEach((el) => {
+      document.querySelectorAll("[data-help-title]").forEach((el) => {
         const title = el.getAttribute("data-help-title") || el.textContent.trim();
         const text = el.getAttribute("data-help-text") || "No description";
-
         el.addEventListener("mouseenter", () => setHoverHelp(title, text));
         el.addEventListener("focus", () => setHoverHelp(title, text));
         el.addEventListener("mouseleave", () => setHoverHelp(defaultHelp.title, defaultHelp.text));
@@ -374,22 +614,74 @@
       });
     }
 
-    async function loadAgents() {
+    function safeValue(value) {
+      return value == null ? "" : String(value);
+    }
+
+    function updateSummary(profile) {
+      activePresetTextEl.textContent = profile ? profile.label : "-";
+      activeAgentTextEl.textContent = profile ? profile.agent : "-";
+      activeModelTextEl.textContent = profile && profile.model ? profile.model : "-";
+    }
+
+    function fillAgentOptions(agents, selectedAgent) {
+      agentEl.innerHTML = "";
+      (agents || []).forEach((agent) => {
+        const option = document.createElement("option");
+        option.value = agent.name;
+        option.textContent = `${agent.name} (${agent.source})`;
+        if (agent.name === selectedAgent) {
+          option.selected = true;
+        }
+        agentEl.appendChild(option);
+      });
+    }
+
+    function fillProfileSelect(config) {
+      profileSelectEl.innerHTML = "";
+      (config.profiles || []).forEach((profile) => {
+        const option = document.createElement("option");
+        option.value = profile.id;
+        option.textContent = profile.label;
+        if (profile.id === config.active_profile_id) {
+          option.selected = true;
+        }
+        profileSelectEl.appendChild(option);
+      });
+    }
+
+    function applyProfile(profile) {
+      if (!profile) {
+        return;
+      }
+
+      agentEl.value = safeValue(profile.agent);
+      modelEl.value = safeValue(profile.model);
+      baseUrlEl.value = safeValue(profile.base_url);
+      apiKeyEl.value = safeValue(profile.api_key);
+      outputFormatEl.value = profile.output_format || "markdown";
+      saveToFileEl.checked = Boolean(profile.save_to_file);
+      updateSummary(profile);
+    }
+
+    async function loadConfig() {
       try {
-        const res = await fetch("/api/v1/agents");
-        const data = await res.json();
-        agentEl.innerHTML = "";
-        (data.agents || []).forEach((a) => {
-          const opt = document.createElement("option");
-          opt.value = a.name;
-          opt.textContent = a.name + " (" + a.source + ")";
-          if (a.name === data.default_agent) {
-            opt.selected = true;
-          }
-          agentEl.appendChild(opt);
-        });
-      } catch (e) {
-        setStatus("Cannot load agents: " + e.message, "err");
+        const [configRes, agentsRes] = await Promise.all([
+          fetch("/api/v1/ui-config"),
+          fetch("/api/v1/agents")
+        ]);
+        const config = await configRes.json();
+        const agents = await agentsRes.json();
+        currentConfig = config;
+
+        fillProfileSelect(config);
+        fillAgentOptions(agents.agents || [], agents.default_agent || "gemini");
+
+        const activeProfile = (config.profiles || []).find((profile) => profile.id === config.active_profile_id) || (config.profiles || [])[0];
+        applyProfile(activeProfile);
+        setStatus(`Loaded config from preset ${activeProfile ? activeProfile.label : "default"}.`, "ok");
+      } catch (error) {
+        setStatus(`Cannot load config: ${error.message}`, "err");
       }
     }
 
@@ -442,7 +734,7 @@
         }
 
         setStatus("Task status: " + data.status + " ...", "");
-        await new Promise((r) => setTimeout(r, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
 
       setStatus("Polling timeout. Please check Worker/Redis status.", "err");
@@ -456,6 +748,14 @@
       anchor.click();
       anchor.remove();
     }
+
+    profileSelectEl.addEventListener("change", () => {
+      if (!currentConfig) {
+        return;
+      }
+      const profile = (currentConfig.profiles || []).find((item) => item.id === profileSelectEl.value);
+      applyProfile(profile);
+    });
 
     downloadJsonBtn.addEventListener("click", () => {
       if (!lastTaskId) {
@@ -544,15 +844,15 @@
         }
 
         await pollTask(taskId);
-      } catch (e) {
-        setStatus("Error: " + e.message, "err");
+      } catch (error) {
+        setStatus("Error: " + error.message, "err");
       } finally {
         submitBtn.disabled = false;
       }
     });
 
     bindHoverHelp();
-    loadAgents();
+    loadConfig();
   </script>
 </body>
 </html>

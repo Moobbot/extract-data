@@ -15,7 +15,11 @@ app = FastAPI(
 app.include_router(router, prefix="/api/v1")
 
 if settings.CORS_ALLOW_ORIGINS.strip():
-    allow_origins = [origin.strip() for origin in settings.CORS_ALLOW_ORIGINS.split(",") if origin.strip()]
+    allow_origins = [
+        origin.strip()
+        for origin in settings.CORS_ALLOW_ORIGINS.split(",")
+        if origin.strip()
+    ]
     if allow_origins:
         app.add_middleware(
             CORSMiddleware,
@@ -34,6 +38,12 @@ def health_check():
 @app.get("/ui")
 def quick_ui():
     ui_path = os.path.join(os.path.dirname(__file__), "ui", "index.html")
+    return FileResponse(ui_path)
+
+
+@app.get("/ui/settings")
+def ui_settings():
+    ui_path = os.path.join(os.path.dirname(__file__), "ui", "settings.html")
     return FileResponse(ui_path)
 
 

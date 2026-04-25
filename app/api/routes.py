@@ -8,9 +8,14 @@ import base64
 from pathlib import Path
 from celery.result import AsyncResult
 from app.core.config import settings
+from app.core.ui_config import load_ui_config, save_ui_config
 from app.services.tasks import process_image_task
 from app.services.ai_providers import AIProviderFactory
-from app.api.models import ExtractionJsonRequest, AgentsListResponse
+from app.api.models import (
+    AgentsListResponse,
+    ExtractionJsonRequest,
+    UIConfigPayload,
+)
 
 router = APIRouter()
 
@@ -66,6 +71,16 @@ async def list_agents():
         "default_agent": settings.DEFAULT_PROVIDER,
         "agents": AIProviderFactory.list_available_agents(),
     }
+
+
+@router.get("/ui-config", response_model=UIConfigPayload)
+async def get_ui_config():
+    return load_ui_config()
+
+
+@router.put("/ui-config", response_model=UIConfigPayload)
+async def update_ui_config(payload: UIConfigPayload):
+    return save_ui_config(payload.model_dump())
 
 
 @router.post("/extract", response_model=Dict[str, Any])
@@ -276,7 +291,9 @@ async def download_task_artifact(task_id: str, artifact_kind: str):
     result_key = "saved_excel" if artifact_kind == "excel" else "saved_to"
     artifact_path = task.result.get(result_key)
     if not artifact_path:
-        raise HTTPException(status_code=404, detail=f"No {artifact_kind} artifact found")
+        raise HTTPException(
+            status_code=404, detail=f"No {artifact_kind} artifact found"
+        )
 
     artifact_file = Path(artifact_path).resolve()
     outputs_dir = Path(settings.OUTPUT_DIR).resolve()

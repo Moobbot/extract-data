@@ -22,4 +22,7 @@ Service trich xuat bang du lieu/structured text tu anh, ho tro nhieu AI agent qu
 4. Mo nhanh:
 
 - UI: `http://127.0.0.1:8000/ui`
+- Settings: `http://127.0.0.1:8000/ui/settings`
 - Swagger: `http://127.0.0.1:8000/docs`
+
+Preset UI config is stored in `ui-config.json` at the repository root.

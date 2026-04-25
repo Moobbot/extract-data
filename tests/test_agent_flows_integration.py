@@ -44,6 +44,43 @@ def test_quick_ui_endpoint_served():
     assert "Clear" in response.text
 
 
+def test_settings_ui_endpoint_served():
+    client = get_test_client()
+    response = client.get("/ui/settings")
+
+    assert response.status_code == 200
+    assert "text/html" in response.headers.get("content-type", "")
+    assert "Settings" in response.text
+    assert "ui-config.json" in response.text
+
+
+def test_ui_config_roundtrip(monkeypatch, tmp_path):
+    from app.core import ui_config
+
+    monkeypatch.setattr(ui_config, "CONFIG_PATH", tmp_path / "ui-config.json")
+
+    client = get_test_client()
+    response = client.get("/api/v1/ui-config")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["active_profile_id"] == "lightonocr-2-1b"
+    lighton_profile = next(
+        profile
+        for profile in payload["profiles"]
+        if profile["label"] == "LightOnOCR-2-1B"
+    )
+    assert lighton_profile["base_url"] == "http://127.0.0.1:7860/ocr"
+
+    payload["active_profile_id"] = "gemini-flash"
+    save_response = client.put("/api/v1/ui-config", json=payload)
+
+    assert save_response.status_code == 200
+    saved = save_response.json()
+    assert saved["active_profile_id"] == "gemini-flash"
+    assert (tmp_path / "ui-config.json").exists()
+
+
 def test_extract_form_builtin_agent_dispatch(monkeypatch, tmp_path):
     from app.api import routes
 
@@ -214,7 +251,7 @@ def test_download_task_artifact_endpoint(monkeypatch, tmp_path):
     client = get_test_client()
     json_file = tmp_path / "sample.json"
     excel_file = tmp_path / "sample.xlsx"
-    json_file.write_text("{\"name\": \"Alice\"}", encoding="utf-8")
+    json_file.write_text('{"name": "Alice"}', encoding="utf-8")
     excel_file.write_bytes(b"fake-xlsx")
 
     monkeypatch.setattr(routes.settings, "OUTPUT_DIR", str(tmp_path))
@@ -230,5 +267,9 @@ def test_download_task_artifact_endpoint(monkeypatch, tmp_path):
 
     assert json_response.status_code == 200
     assert excel_response.status_code == 200
-    assert json_response.headers["content-disposition"].endswith('filename="sample.json"')
-    assert excel_response.headers["content-disposition"].endswith('filename="sample.xlsx"')
+    assert json_response.headers["content-disposition"].endswith(
+        'filename="sample.json"'
+    )
+    assert excel_response.headers["content-disposition"].endswith(
+        'filename="sample.xlsx"'
+    )
