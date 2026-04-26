@@ -1,0 +1,14 @@
+{
+  "chung_chi_so": {
+    "id": "chung_chi_so",
+    "name": "Chung Chi So",
+    "description": "Template trích xuất dữ liệu Chứng Chỉ Số",
+    "fields": []
+  },
+  "van_bang_dai_hoc": {
+    "id": "van_bang_dai_hoc",
+    "name": "Van Bang Dai Hoc",
+    "description": "Template trích xuất dữ liệu Văn Bằng Đại Học",
+    "fields": []
+  }
+}

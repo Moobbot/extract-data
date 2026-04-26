@@ -181,6 +181,7 @@ async def extract_folder_task(
     model: Optional[str] = Form(None),
     base_url: Optional[str] = Form(None),
     api_key: Optional[str] = Form(None),
+    template: str = Form("default"),
 ):
     """
     Scans a local directory for images and submits them for processing.
@@ -208,6 +209,9 @@ async def extract_folder_task(
                         save_to_file,
                         agent_config,
                     )
+                    from app.core.db import insert_task
+                    insert_task(task.id, filename, template, folder_path=folder_path)
+
                     tasks.append(
                         {
                             "filename": filename,
@@ -254,7 +258,8 @@ async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
             save_to_file=save_to_file,
             model=model,
             base_url=base_url,
-            api_key=api_key
+            api_key=api_key,
+            template=payload.template or "default"
         )
         return {
             "task_id": "folder_batch",
@@ -274,11 +279,30 @@ async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
         agent_config,
     )
 
+    from app.core.db import insert_task
+    insert_task(task.id, os.path.basename(file_path), payload.template or "default")
+
     return {
         "task_id": task.id,
         "message": "Task submitted successfully",
         "status": "pending",
     }
+
+
+@router.get("/task-artifact/{task_id}/json")
+async def get_task_artifact_json(task_id: str):
+    return FileResponse(os.path.join(settings.OUTPUT_DIR, f"artifact_{task_id}.json"))
+
+
+@router.get("/task-artifact/{task_id}/excel")
+async def get_task_artifact_excel(task_id: str):
+    return FileResponse(os.path.join(settings.OUTPUT_DIR, f"artifact_{task_id}.xlsx"))
+
+
+@router.get("/tasks")
+async def get_tasks():
+    from app.core.db import get_all_tasks
+    return get_all_tasks()
 
 
 @router.get("/task-status/{task_id}")

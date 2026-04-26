@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extract PDF - History</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #07111c;
+      --panel: rgba(255, 255, 255, 0.96);
+      --text: #142033;
+      --muted: #5f6f86;
+      --accent: #0f766e;
+      --border: rgba(20, 32, 51, 0.12);
+      --danger: #b42318;
+      --ok: #067647;
+      --shadow: 0 24px 80px rgba(8, 19, 31, 0.22);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.22), transparent 28%),
+                  radial-gradient(circle at top right, rgba(20, 184, 166, 0.24), transparent 28%),
+                  linear-gradient(180deg, #07111c 0%, #0b1727 38%, #eef4fb 38%, #eef4fb 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 16px 32px;
+    }
+    .hero {
+      color: #f8fbff;
+      padding: 18px 20px 24px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(37, 99, 235, 0.82));
+      box-shadow: var(--shadow);
+    }
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .brand h1 { margin: 0; font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.03em; }
+    .brand p { margin: 6px 0 0; color: rgba(248, 251, 255, 0.78); font-size: 14px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.12); color: #f7fbff;
+      border: 1px solid rgba(255, 255, 255, 0.14); text-decoration: none; border-radius: 14px;
+    }
+    .panel {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 22px; box-shadow: var(--shadow); overflow: hidden; margin-top: 18px;
+    }
+    .panel-body { padding: 20px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    th { font-weight: 700; color: var(--muted); }
+    .status-badge {
+      display: inline-block; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    }
+    .status-success { background: rgba(6, 118, 71, 0.1); color: var(--ok); }
+    .status-failed { background: rgba(180, 35, 24, 0.1); color: var(--danger); }
+    .status-pending { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
+    .btn {
+      padding: 6px 12px; border: none; border-radius: 8px; background: #e8eef6; cursor: pointer;
+      color: var(--text); font-weight: 600; text-decoration: none; display: inline-block;
+    }
+    .btn:hover { background: #d1d9e6; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-top">
+        <div class="brand">
+          <h1>Lịch sử xử lý (History)</h1>
+          <p>Danh sách các tệp đã được đưa vào hàng đợi và kết quả xử lý của Celery Worker.</p>
+        </div>
+        <div class="actions">
+          <a class="chip" href="/ui" rel="noreferrer">Quay lại Upload</a>
+          <a class="chip" href="/ui/settings" rel="noreferrer">Cấu hình</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="panel">
+      <div class="panel-body">
+        <table id="historyTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Thư mục</th>
+              <th>Tên file</th>
+              <th>Template</th>
+              <th>Trạng thái</th>
+              <th>Thời gian gửi</th>
+              <th>Thời gian xong</th>
+              <th>Tải xuống</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <tr><td colspan="8">Đang tải dữ liệu...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const historyBody = document.getElementById("historyBody");
+
+    function formatDate(isoString) {
+      if (!isoString) return "-";
+      return new Date(isoString).toLocaleString("vi-VN");
+    }
+
+    async function fetchTasks() {
+      try {
+        const res = await fetch("/api/v1/tasks");
+        const tasks = await res.json();
+        
+        historyBody.innerHTML = "";
+        if (tasks.length === 0) {
+          historyBody.innerHTML = `<tr><td colspan="8">Chưa có dữ liệu nào trong lịch sử.</td></tr>`;
+          return;
+        }
+
+        tasks.forEach(task => {
+          const tr = document.createElement("tr");
+          
+          let statusHtml = "";
+          if (task.status === "success") {
+            statusHtml = `<span class="status-badge status-success">Thành công</span>`;
+          } else if (task.status === "failed") {
+            statusHtml = `<span class="status-badge status-failed" title="${task.error || ''}">Thất bại</span>`;
+          } else {
+            statusHtml = `<span class="status-badge status-pending">Đang xử lý</span>`;
+          }
+
+          let downloadHtml = "-";
+          if (task.status === "success") {
+            downloadHtml = `
+              <div style="display:flex; gap: 8px;">
+                <a class="btn" ${task.json_path ? `href="/api/v1/task-artifact/${task.id}/json" target="_blank"` : 'disabled'}>JSON</a>
+                <a class="btn" ${task.excel_path ? `href="/api/v1/task-artifact/${task.id}/excel" target="_blank"` : 'disabled'}>Excel</a>
+              </div>
+            `;
+          } else if (task.status === "failed") {
+            downloadHtml = `<span style="font-size: 12px; color: var(--danger);">${task.error || ''}</span>`;
+          }
+
+          tr.innerHTML = `
+            <td><small>${task.id.split('-')[0]}...</small></td>
+            <td><small style="color: var(--muted); word-break: break-all;">${task.folder_path || "-"}</small></td>
+            <td>${task.filename || "-"}</td>
+            <td>${task.template || "default"}</td>
+            <td>${statusHtml}</td>
+            <td>${formatDate(task.created_at)}</td>
+            <td>${formatDate(task.completed_at)}</td>
+            <td>${downloadHtml}</td>
+          `;
+          historyBody.appendChild(tr);
+        });
+      } catch (err) {
+        historyBody.innerHTML = `<tr><td colspan="8" style="color:red">Lỗi tải dữ liệu: ${err.message}</td></tr>`;
+      }
+    }
+
+    fetchTasks();
+    setInterval(fetchTasks, 5000); // Tự động reload mỗi 5s
+  </script>
+</body>
+</html>

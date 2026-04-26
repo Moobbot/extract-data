@@ -1,0 +1,7 @@
+Danh mục tình trạng văn bằng	
+	
+Mã	Tên
+1	Chỉnh sửa
+2	Thu hồi
+3	Cấp lại
+4	Hủy bỏ

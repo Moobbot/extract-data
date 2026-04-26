@@ -1,0 +1,37 @@
+Danh mục tỉnh thành hiện nay 	
+	
+Mã	Tên
+1	Hải Phòng
+2	Lạng Sơn
+3	Hà Tĩnh
+4	Ninh Bình
+5	Phú Thọ
+6	Hồ Chí Minh
+7	Cao Bằng
+8	Sơn La
+9	Đà Nẵng
+10	Quảng Ngãi
+11	Bắc Ninh
+12	Quảng Ninh
+13	Vĩnh Long
+14	Lai Châu
+15	Cần Thơ
+16	Quảng Trị
+17	Huế
+18	Hưng Yên
+19	Cà Mau
+20	Hà Nội
+21	Nghệ An
+22	Tây Ninh
+23	Thanh Hóa
+24	Điện Biên
+25	Khánh Hòa
+26	Đồng Tháp
+27	Đồng Nai
+28	Tuyên Quang
+29	Gia Lai
+30	Lào Cai
+31	Lâm Đồng
+32	An Giang
+33	Đắk Lắk
+34	Thái Nguyên

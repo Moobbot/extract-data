@@ -1,0 +1,6 @@
+Danh mục trạng thái số hóa	
+	
+Mã	Tên
+1	Số hóa chưa đầy đủ, chính xác
+2	Chưa số hóa
+3	Đã số hóa đầy đủ, chính xác

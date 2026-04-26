@@ -1,0 +1,162 @@
+Danh mục quốc gia		
+		
+Mã	Tên 	Tên quốc tế
+1	Lit-va	
+2	Kê-nia	
+3	Hy Lạp	
+4	Dăm-bia	
+5	Vê-nê-xu-ê-la	
+6	CH Trung Phi	
+7	Cô-lôm-bi-a	
+8	Nam-mi-bia	
+9	Thụy Sỹ	
+10	Et-to-ni	
+11	Giooc-đa-ni	
+12	Cooxxta Rica	
+13	Na Uy	
+14	I-ra-li-a	
+15	Xu-đăng	
+16	Dominica	
+17	Pa-Ki-xtan	
+18	Ka-dắc-xtan	
+19	Li Băng	
+20	Áp-ga-ni-xtan	
+21	Turkmênistan	
+22	Phần Lan	
+23	Quatar	
+24	Vương Quốc Anh	
+25	Sri-lan-ka	
+26	Ê-cu-a-đo	
+27	Goa-tê-ma-la	
+28	Công-Kinshasa	
+29	Ả rập Xê út	
+30	Pa-na-ma	
+31	Hà Lan	
+32	CHDCND Lào	
+33	Ma-la0uy	
+34	Ma-na-cô	
+35	Guy-a-na	
+36	Pa-pua Niu Ghi - nê	
+37	Gam-bi-a	
+38	Ha-i-ti	
+39	Libi	
+40	Thái Lan	
+41	Môn-đô-va	
+42	Căm-Pu-Chia	
+43	Úc	
+44	Đài Loan	
+45	Tây Ban Nha	
+46	Nam phi	
+47	Bồ Đào Nha	
+48	No-giê	
+49	Gha-na	
+50	I-rắc	
+51	Ni Di Lân	
+52	Ca-na-đa	
+53	Bu-run-đi	
+54	CHND Trung Hoa	
+55	Tat-gi-ki-xtan	
+56	Dim-ba-buê	
+57	Mi-cờ-rô-nê-xia-a	
+58	Ru-ma-no	
+59	Nga	
+60	Phi-li-pin	
+61	Croát-chia-a	
+62	Be-lo-rut-xia	
+63	Sat	
+64	Ba-ranh	
+65	U-krai-na	
+66	En Xan-va-đo	
+67	Buốc-ki-na-pha-xô	
+68	Ma Rốc	
+69	Liên Bang Nga	
+70	Cư-rơ-gư-dơ-xtan	
+71	I-ran	
+72	Pu-ec-to Ri-cô	
+73	Nê-Pan	
+74	My-an-ma	
+75	Quần đảo Sô-lô-môn	
+76	Cô-oét	
+77	Ôn-đu-rát	
+78	Hàn Quốc	
+79	U-dơ-bê-ki-xtan	
+80	Tôn-ga	
+81	Sec-bi-a	
+82	Ma-đa-gát-xka	
+83	Việt Nam	
+84	Ma-lai-xi-a	
+85	Man-đi-vơ	
+86	Hung-ga-ri	
+87	Tan-da-nia	
+88	Thụy Điển	
+89	Việt Nam	
+90	Ma Cao	
+91	Mỹ	
+92	Ma-li	
+93	Các Tiểu vương quốc Ả Rập Thống Nhất	
+94	Tu-va-lu	
+95	Li-bê-ri-a	
+96	B-ru-nây	
+97	I-xra-en	
+98	U-ru-goay	
+99	Phi-Ghi	
+100	Cuba	
+101	Ai-xlen	
+102	Latvia	
+103	Hồng Công	
+104	Xê nê gan	
+105	Man-ta	
+106	Pa-ra-goay	
+107	Mông-tê-nê-groo	
+108	Thổ Nhĩ Kỳ	
+109	Mông Cổ	
+110	Mê hi cô	
+111	Đông -ti-mo	
+112	Quần đảo Ma-rơ-san	
+113	Slô-vac-ki-a	
+114	Ô man	
+115	Gru-dia	
+116	An giê ri	
+117	Ki-ri-ba-ti	
+118	Ấn Độ	
+119	Ni-ca-ra-goa	
+120	Pê - ru	
+121	Ruanđa	
+122	Gia-mai-ca	
+123	Bun-ga-ri	
+124	Luc-xem-bua	
+125	Ba Lan	
+126	Nam Xu-đăng	
+127	Chi lê	
+128	Xi-ga-po	
+129	U-gan-da	
+130	Nhật Bản	
+131	Si-ri-a	
+132	A-rơ-len	
+133	Ghi nê	
+134	Tuy-ni-di	
+135	Áo	
+136	Đan Mạch	
+137	Sô-ma-li	
+138	Mau-ri-ti-út	
+139	Cộng hòa Séc	
+140	Đức	
+141	To-go	
+142	Pháp	
+143	Va-nu-a-tu	
+144	Palestine	
+145	A-déc-bai-gian	
+146	Ăng -gô-la	
+147	Can-mơ-run	
+148	Lit-ten-xten	
+149	Tây Sa-moa	
+150	Ma-xê-đô-ni-a	
+151	Ni-giê-ri-a	
+152	Y-ê-men	
+153	In-đô-nê-xi-a	
+154	Mô-dăm-bich	
+155	Ac-hen-ti-na	
+156	Xi-ê-a Lê- ôn	
+157	Slô-ven-ni-a	
+158	Triều Tiên	
+159	Ai cập	

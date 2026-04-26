@@ -1,0 +1,11 @@
+Danh mục trình độ đào tạo	
+	
+Mã	Tên
+1	THCS
+2	Sơ cấp
+3	Thạc sĩ
+4	Trung cấp
+5	Cao đẳng
+6	Tiến sĩ
+7	THPT
+8	Đại học

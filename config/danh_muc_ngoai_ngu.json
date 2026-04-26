@@ -1,0 +1,38 @@
+{
+  "1": {
+    "ten": "Tiếng Trung Quốc",
+    "extra": []
+  },
+  "2": {
+    "ten": "Tiếng Nhật",
+    "extra": []
+  },
+  "3": {
+    "ten": "Tiếng Đức",
+    "extra": []
+  },
+  "4": {
+    "ten": "Tiếng Việt",
+    "extra": []
+  },
+  "5": {
+    "ten": "Tiếng Nga",
+    "extra": []
+  },
+  "6": {
+    "ten": "Tiếng Anh",
+    "extra": []
+  },
+  "7": {
+    "ten": "Tiếng Hàn Quốc",
+    "extra": []
+  },
+  "8": {
+    "ten": "Ngoại ngữ khác",
+    "extra": []
+  },
+  "9": {
+    "ten": "Tiếng Pháp",
+    "extra": []
+  }
+}

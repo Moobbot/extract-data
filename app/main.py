@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router
+from app.core import ui_config
+from app.core import reference_data
 import uvicorn
 import os
 from fastapi.responses import FileResponse
@@ -11,6 +13,9 @@ app = FastAPI(
     description="API to extract tables from images using configurable AI agents",
     version="1.0.0",
 )
+
+from app.core.db import init_db
+init_db()
 
 app.include_router(router, prefix="/api/v1")
 
@@ -44,6 +49,11 @@ def quick_ui():
 @app.get("/ui/settings")
 def ui_settings():
     ui_path = os.path.join(os.path.dirname(__file__), "ui", "settings.html")
+    return FileResponse(ui_path)
+
+@app.get("/ui/history")
+def ui_history():
+    ui_path = os.path.join(os.path.dirname(__file__), "ui", "history.html")
     return FileResponse(ui_path)
 
 

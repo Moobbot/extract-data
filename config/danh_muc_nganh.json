@@ -1,0 +1,6638 @@
+{
+  "5110101": {
+    "ten": "Sư phạm mầm non",
+    "extra": []
+  },
+  "5110102": {
+    "ten": "Giáo dục mầm non",
+    "extra": []
+  },
+  "5110201": {
+    "ten": "Giáo dục tiểu học",
+    "extra": []
+  },
+  "5110301": {
+    "ten": "Sư phạm Toán - Tin",
+    "extra": []
+  },
+  "5110302": {
+    "ten": "Sư phạm Ngữ văn",
+    "extra": []
+  },
+  "5110303": {
+    "ten": "Sư phạm Tiếng Anh",
+    "extra": []
+  },
+  "5110304": {
+    "ten": "Sư phạm Vật lý",
+    "extra": []
+  },
+  "5110305": {
+    "ten": "Sư phạm Hóa học",
+    "extra": []
+  },
+  "5110306": {
+    "ten": "Sư phạm Sinh học",
+    "extra": []
+  },
+  "5110307": {
+    "ten": "Sư phạm Lịch sử",
+    "extra": []
+  },
+  "5110308": {
+    "ten": "Sư phạm Địa lý",
+    "extra": []
+  },
+  "5110309": {
+    "ten": "Sư phạm Thể dục",
+    "extra": []
+  },
+  "5110310": {
+    "ten": "Sư phạm Mỹ thuật",
+    "extra": []
+  },
+  "5110311": {
+    "ten": "Sư phạm Âm nhạc",
+    "extra": []
+  },
+  "51140201": {
+    "ten": "Giáo dục mầm non",
+    "extra": []
+  },
+  "51140202": {
+    "ten": "Giáo dục tiểu học",
+    "extra": []
+  },
+  "51140217": {
+    "ten": "Sư phạm Ngữ văn",
+    "extra": []
+  },
+  "51140231": {
+    "ten": "Sư phạm Tiếng Anh",
+    "extra": []
+  },
+  "5140101": {
+    "ten": "Giáo dục đặc biệt",
+    "extra": []
+  },
+  "5140201": {
+    "ten": "Sư phạm giáo dục nghề nghiệp",
+    "extra": []
+  },
+  "5140202": {
+    "ten": "Sư phạm kỹ thuật công nghiệp",
+    "extra": []
+  },
+  "5140203": {
+    "ten": "Sư phạm kỹ thuật nông nghiệp",
+    "extra": []
+  },
+  "5140204": {
+    "ten": "Sư phạm kỹ thuật xây dựng",
+    "extra": []
+  },
+  "5140205": {
+    "ten": "Giáo viên huấn luyện xiếc",
+    "extra": []
+  },
+  "5210101": {
+    "ten": "Nghệ thuật biểu diễn dân ca",
+    "extra": []
+  },
+  "5210102": {
+    "ten": "Biểu diễn nhạc cụ truyền thống",
+    "extra": []
+  },
+  "5210103": {
+    "ten": "Biểu diễn nhạc cụ phương Tây",
+    "extra": []
+  },
+  "5210104": {
+    "ten": "Sáng tác âm nhạc",
+    "extra": []
+  },
+  "5210105": {
+    "ten": "Chỉ huy âm nhạc",
+    "extra": []
+  },
+  "5210106": {
+    "ten": "Thanh nhạc",
+    "extra": []
+  },
+  "5210107": {
+    "ten": "Lý luận và lịch sử âm nhạc",
+    "extra": []
+  },
+  "5210108": {
+    "ten": "Biểu diễn múa",
+    "extra": []
+  },
+  "5210109": {
+    "ten": "Biên đạo múa",
+    "extra": []
+  },
+  "5210110": {
+    "ten": "Lý luận và lịch sử múa",
+    "extra": []
+  },
+  "5210111": {
+    "ten": "Diễn viên sân khấu kịch nói",
+    "extra": []
+  },
+  "5210112": {
+    "ten": "Diễn viên sân khấu kịch hát",
+    "extra": []
+  },
+  "5210113": {
+    "ten": "Diễn viên múa rối",
+    "extra": []
+  },
+  "5210114": {
+    "ten": "Đạo diễn sân khấu",
+    "extra": []
+  },
+  "5210115": {
+    "ten": "Lý luận và lịch sử sân khấu",
+    "extra": []
+  },
+  "5210116": {
+    "ten": "Nghệ thuật xiếc",
+    "extra": []
+  },
+  "5210117": {
+    "ten": "Diễn xuất điện ảnh - Truyền hình",
+    "extra": []
+  },
+  "5210118": {
+    "ten": "Quay phim",
+    "extra": []
+  },
+  "5210119": {
+    "ten": "Âm thanh",
+    "extra": []
+  },
+  "5210120": {
+    "ten": "Kỹ thuật ánh sáng sân khấu điện ảnh",
+    "extra": []
+  },
+  "5210201": {
+    "ten": "Hội họa",
+    "extra": []
+  },
+  "5210202": {
+    "ten": "Điêu khắc",
+    "extra": []
+  },
+  "5210203": {
+    "ten": "Đồ họa",
+    "extra": []
+  },
+  "5210204": {
+    "ten": "Lý luận và lịch sử Mỹ thuật",
+    "extra": []
+  },
+  "5210205": {
+    "ten": "Mỹ thuật ứng dụng",
+    "extra": []
+  },
+  "5210206": {
+    "ten": "Thiết kế đồ họa",
+    "extra": []
+  },
+  "5210207": {
+    "ten": "Thiết kế thời trang",
+    "extra": []
+  },
+  "5210208": {
+    "ten": "Thiết kế nội thất",
+    "extra": []
+  },
+  "5210209": {
+    "ten": "Thiết kế công nghiệp",
+    "extra": []
+  },
+  "5210210": {
+    "ten": "Thiết kế mỹ thuật sân khấu - điện ảnh",
+    "extra": []
+  },
+  "5220101": {
+    "ten": "Ngôn ngữ Anh",
+    "extra": []
+  },
+  "5220102": {
+    "ten": "Ngôn ngữ Nga",
+    "extra": []
+  },
+  "5220103": {
+    "ten": "Ngôn ngữ Pháp",
+    "extra": []
+  },
+  "5220104": {
+    "ten": "Ngôn ngữ Trung Quốc",
+    "extra": []
+  },
+  "5220105": {
+    "ten": "Ngôn ngữ Nhật",
+    "extra": []
+  },
+  "5220106": {
+    "ten": "Ngôn ngữ Hàn Quốc",
+    "extra": []
+  },
+  "5220107": {
+    "ten": "Ngôn ngữ Đức",
+    "extra": []
+  },
+  "5220108": {
+    "ten": "Ngôn ngữ Thái",
+    "extra": []
+  },
+  "5220109": {
+    "ten": "Ngôn ngữ Khmer",
+    "extra": []
+  },
+  "5220110": {
+    "ten": "Ngôn ngữ Lào",
+    "extra": []
+  },
+  "5320101": {
+    "ten": "Báo chí",
+    "extra": []
+  },
+  "5320102": {
+    "ten": "Truyền thông đa phương tiện",
+    "extra": []
+  },
+  "5320103": {
+    "ten": "Quan hệ công chúng",
+    "extra": []
+  },
+  "5320104": {
+    "ten": "Xuất bản",
+    "extra": []
+  },
+  "5320105": {
+    "ten": "Thư viện",
+    "extra": []
+  },
+  "5340101": {
+    "ten": "Quản trị kinh doanh",
+    "extra": []
+  },
+  "5340102": {
+    "ten": "Marketing",
+    "extra": []
+  },
+  "5340103": {
+    "ten": "Kinh doanh quốc tế",
+    "extra": []
+  },
+  "5340104": {
+    "ten": "Quản trị văn phòng",
+    "extra": []
+  },
+  "5340105": {
+    "ten": "Kế toán",
+    "extra": []
+  },
+  "5340106": {
+    "ten": "Tài chính - Ngân hàng",
+    "extra": []
+  },
+  "5340107": {
+    "ten": "Bảo hiểm",
+    "extra": []
+  },
+  "5340108": {
+    "ten": "Logistics và quản lý chuỗi cung ứng",
+    "extra": []
+  },
+  "5340109": {
+    "ten": "Kinh tế",
+    "extra": []
+  },
+  "5340110": {
+    "ten": "Thương mại điện tử",
+    "extra": []
+  },
+  "5340111": {
+    "ten": "Quản trị khách sạn",
+    "extra": []
+  },
+  "5340112": {
+    "ten": "Quản trị dịch vụ du lịch và lữ hành",
+    "extra": []
+  },
+  "5340113": {
+    "ten": "Quản trị nhà hàng và dịch vụ ăn uống",
+    "extra": []
+  },
+  "5340114": {
+    "ten": "Kinh doanh bất động sản",
+    "extra": []
+  },
+  "5340115": {
+    "ten": "Bán lẻ",
+    "extra": []
+  },
+  "5380101": {
+    "ten": "Pháp luật",
+    "extra": []
+  },
+  "5380102": {
+    "ten": "Pháp luật kinh tế",
+    "extra": []
+  },
+  "5480101": {
+    "ten": "Tin học ứng dụng",
+    "extra": []
+  },
+  "5480102": {
+    "ten": "Hệ thống thông tin",
+    "extra": []
+  },
+  "5480103": {
+    "ten": "Mạng máy tính và truyền thông dữ liệu",
+    "extra": []
+  },
+  "5480104": {
+    "ten": "Lập trình máy tính",
+    "extra": []
+  },
+  "5480105": {
+    "ten": "Kỹ thuật sửa chữa, lắp ráp máy tính",
+    "extra": []
+  },
+  "5480106": {
+    "ten": "Quản trị mạng máy tính",
+    "extra": []
+  },
+  "5480107": {
+    "ten": "An toàn thông tin",
+    "extra": []
+  },
+  "5480108": {
+    "ten": "Công nghệ thông tin",
+    "extra": []
+  },
+  "5480109": {
+    "ten": "Thiết kế trang web",
+    "extra": []
+  },
+  "5480110": {
+    "ten": "Quản trị cơ sở dữ liệu",
+    "extra": []
+  },
+  "5480111": {
+    "ten": "Kỹ thuật phần mềm",
+    "extra": []
+  },
+  "5480112": {
+    "ten": "Công nghệ đa phương tiện",
+    "extra": []
+  },
+  "5510101": {
+    "ten": "Công nghệ kỹ thuật cơ khí",
+    "extra": []
+  },
+  "5510102": {
+    "ten": "Công nghệ kỹ thuật cơ điện tử",
+    "extra": []
+  },
+  "5510103": {
+    "ten": "Cắt gọt kim loại",
+    "extra": []
+  },
+  "5510104": {
+    "ten": "Hàn",
+    "extra": []
+  },
+  "5510105": {
+    "ten": "Nguội sửa chữa máy công cụ",
+    "extra": []
+  },
+  "5510106": {
+    "ten": "Công nghệ ô tô",
+    "extra": []
+  },
+  "5510107": {
+    "ten": "Sửa chữa máy thi công xây dựng",
+    "extra": []
+  },
+  "5510108": {
+    "ten": "Sửa chữa máy nông nghiệp",
+    "extra": []
+  },
+  "5510109": {
+    "ten": "Kỹ thuật máy lạnh và điều hòa không khí",
+    "extra": []
+  },
+  "5510110": {
+    "ten": "Công nghệ kỹ thuật nhiệt",
+    "extra": []
+  },
+  "5510111": {
+    "ten": "Vận hành máy thi công nền",
+    "extra": []
+  },
+  "5510112": {
+    "ten": "Vận hành cần, cầu trục",
+    "extra": []
+  },
+  "5510113": {
+    "ten": "Điều khiển tàu biển",
+    "extra": []
+  },
+  "5510114": {
+    "ten": "Máy tàu biển",
+    "extra": []
+  },
+  "5510115": {
+    "ten": "Điều khiển phương tiện thủy nội địa",
+    "extra": []
+  },
+  "5510116": {
+    "ten": "Máy và thiết bị thủy nội địa",
+    "extra": []
+  },
+  "5510117": {
+    "ten": "Khai thác máy tàu biển",
+    "extra": []
+  },
+  "5510118": {
+    "ten": "Điện tàu thủy",
+    "extra": []
+  },
+  "5510119": {
+    "ten": "Lắp đặt thiết bị cơ - điện",
+    "extra": []
+  },
+  "5510120": {
+    "ten": "Điện công nghiệp",
+    "extra": []
+  },
+  "5510121": {
+    "ten": "Điện dân dụng",
+    "extra": []
+  },
+  "5510122": {
+    "ten": "Công nghệ kỹ thuật điện, điện tử",
+    "extra": []
+  },
+  "5510123": {
+    "ten": "Điện tử công nghiệp",
+    "extra": []
+  },
+  "5510124": {
+    "ten": "Kỹ thuật điện tử, truyền thông",
+    "extra": []
+  },
+  "5510125": {
+    "ten": "Kỹ thuật máy tính",
+    "extra": []
+  },
+  "5510126": {
+    "ten": "Công nghệ kỹ thuật điều khiển và tự động hóa",
+    "extra": []
+  },
+  "5510127": {
+    "ten": "Cơ điện tử",
+    "extra": []
+  },
+  "5510128": {
+    "ten": "Hệ thống điện",
+    "extra": []
+  },
+  "5510129": {
+    "ten": "Công nghệ kỹ thuật môi trường",
+    "extra": []
+  },
+  "5510130": {
+    "ten": "Kỹ thuật xử lý chất thải",
+    "extra": []
+  },
+  "5510131": {
+    "ten": "Kỹ thuật thoát nước và xử lý nước thải",
+    "extra": []
+  },
+  "5510132": {
+    "ten": "Công nghệ kỹ thuật hóa học",
+    "extra": []
+  },
+  "5510133": {
+    "ten": "Lọc - Hóa dầu",
+    "extra": []
+  },
+  "5510134": {
+    "ten": "Khí hóa lỏng",
+    "extra": []
+  },
+  "5510135": {
+    "ten": "Kỹ thuật phân tích",
+    "extra": []
+  },
+  "5510136": {
+    "ten": "Công nghệ sơn và bảo vệ vật liệu",
+    "extra": []
+  },
+  "5510137": {
+    "ten": "Công nghệ mạ và xử lý bề mặt",
+    "extra": []
+  },
+  "5510138": {
+    "ten": "Đúc kim loại",
+    "extra": []
+  },
+  "5510139": {
+    "ten": "Rèn và dập thể tích",
+    "extra": []
+  },
+  "5510140": {
+    "ten": "Trắc địa công trình",
+    "extra": []
+  },
+  "5510141": {
+    "ten": "Kỹ thuật thiết bị xây dựng và cầu đường",
+    "extra": []
+  },
+  "5510142": {
+    "ten": "Kỹ thuật giao thông đường sắt",
+    "extra": []
+  },
+  "5510143": {
+    "ten": "Vận hành đường sắt đô thị",
+    "extra": []
+  },
+  "5510144": {
+    "ten": "Lái tàu đường sắt",
+    "extra": []
+  },
+  "5510145": {
+    "ten": "Khai thác vận tải",
+    "extra": []
+  },
+  "5510146": {
+    "ten": "Xây dựng",
+    "extra": []
+  },
+  "5510147": {
+    "ten": "Nề - Hoàn thiện",
+    "extra": []
+  },
+  "5510148": {
+    "ten": "Bê tông",
+    "extra": []
+  },
+  "5510149": {
+    "ten": "Mộc xây dựng và trang trí nội thất",
+    "extra": []
+  },
+  "5510150": {
+    "ten": "Hoàn thiện công trình xây dựng",
+    "extra": []
+  },
+  "5510151": {
+    "ten": "Lắp đặt cáp điện",
+    "extra": []
+  },
+  "5510152": {
+    "ten": "Kiến trúc",
+    "extra": []
+  },
+  "5510153": {
+    "ten": "Quản lý xây dựng",
+    "extra": []
+  },
+  "5510154": {
+    "ten": "Kỹ thuật trắc địa",
+    "extra": []
+  },
+  "5520101": {
+    "ten": "Chế biến và bảo quản thủy sản",
+    "extra": []
+  },
+  "5520102": {
+    "ten": "Chế biến thực phẩm",
+    "extra": []
+  },
+  "5520103": {
+    "ten": "Kỹ thuật chế biến món ăn",
+    "extra": []
+  },
+  "5520104": {
+    "ten": "May thời trang",
+    "extra": []
+  },
+  "5520105": {
+    "ten": "Dệt",
+    "extra": []
+  },
+  "5520106": {
+    "ten": "In",
+    "extra": []
+  },
+  "5520107": {
+    "ten": "Điêu khắc gỗ",
+    "extra": []
+  },
+  "5520108": {
+    "ten": "Mộc dân dụng và công nghiệp",
+    "extra": []
+  },
+  "5520109": {
+    "ten": "Sản xuất giày da",
+    "extra": []
+  },
+  "5520110": {
+    "ten": "Sản xuất sản phẩm từ cao su",
+    "extra": []
+  },
+  "5520111": {
+    "ten": "Kỹ thuật xây dựng dân dụng và công nghiệp",
+    "extra": []
+  },
+  "5520112": {
+    "ten": "Sản xuất vật liệu xây dựng",
+    "extra": []
+  },
+  "5520113": {
+    "ten": "Thiết kế trang phục",
+    "extra": []
+  },
+  "5620101": {
+    "ten": "Khoa học cây trồng",
+    "extra": []
+  },
+  "5620102": {
+    "ten": "Bảo vệ thực vật",
+    "extra": []
+  },
+  "5620103": {
+    "ten": "Chăn nuôi",
+    "extra": []
+  },
+  "5620104": {
+    "ten": "Thú y",
+    "extra": []
+  },
+  "5620105": {
+    "ten": "Lâm nghiệp đô thị",
+    "extra": []
+  },
+  "5620106": {
+    "ten": "Lâm sinh",
+    "extra": []
+  },
+  "5620107": {
+    "ten": "Nuôi trồng thủy sản",
+    "extra": []
+  },
+  "5620108": {
+    "ten": "Khai thác thủy sản",
+    "extra": []
+  },
+  "5620109": {
+    "ten": "Phát triển nông thôn",
+    "extra": []
+  },
+  "5620110": {
+    "ten": "Kỹ thuật nông nghiệp",
+    "extra": []
+  },
+  "5620111": {
+    "ten": "Trồng trọt và bảo vệ thực vật",
+    "extra": []
+  },
+  "5620112": {
+    "ten": "Chăn nuôi và thú y",
+    "extra": []
+  },
+  "5620113": {
+    "ten": "Nuôi trồng và khai thác thủy, hải sản",
+    "extra": []
+  },
+  "5720101": {
+    "ten": "Điều dưỡng",
+    "extra": []
+  },
+  "5720102": {
+    "ten": "Hộ sinh",
+    "extra": []
+  },
+  "5720103": {
+    "ten": "Y sĩ đa khoa",
+    "extra": []
+  },
+  "5720104": {
+    "ten": "Y tế công cộng",
+    "extra": []
+  },
+  "5720105": {
+    "ten": "Kỹ thuật phục hình răng",
+    "extra": []
+  },
+  "5720106": {
+    "ten": "Kỹ thuật xét nghiệm y học",
+    "extra": []
+  },
+  "5720107": {
+    "ten": "Kỹ thuật hình ảnh y học",
+    "extra": []
+  },
+  "5720108": {
+    "ten": "Kỹ thuật phục hồi chức năng",
+    "extra": []
+  },
+  "5720109": {
+    "ten": "Vật lý trị liệu",
+    "extra": []
+  },
+  "5720110": {
+    "ten": "Dược",
+    "extra": []
+  },
+  "5720111": {
+    "ten": "Sức khỏe răng miệng",
+    "extra": []
+  },
+  "5720112": {
+    "ten": "Kỹ thuật trang thiết bị y tế",
+    "extra": []
+  },
+  "5720113": {
+    "ten": "Kiểm soát nhiễm khuẩn",
+    "extra": []
+  },
+  "5720114": {
+    "ten": "Chăm sóc sức khỏe cộng đồng",
+    "extra": []
+  },
+  "5720115": {
+    "ten": "Dinh dưỡng",
+    "extra": []
+  },
+  "5810101": {
+    "ten": "Điều hành chạy tàu đường sắt",
+    "extra": []
+  },
+  "5810102": {
+    "ten": "An toàn lao động",
+    "extra": []
+  },
+  "5810103": {
+    "ten": "Bảo vệ",
+    "extra": []
+  },
+  "5811101": {
+    "ten": "Chăm sóc sắc đẹp",
+    "extra": []
+  },
+  "5811102": {
+    "ten": "Chăm sóc da",
+    "extra": []
+  },
+  "5811103": {
+    "ten": "Cắt tóc",
+    "extra": []
+  },
+  "5811104": {
+    "ten": "Phun xăm thẩm mỹ",
+    "extra": []
+  },
+  "5811105": {
+    "ten": "Trang điểm",
+    "extra": []
+  },
+  "5812101": {
+    "ten": "Nghiệp vụ lễ tân",
+    "extra": []
+  },
+  "5812102": {
+    "ten": "Nghiệp vụ nhà hàng",
+    "extra": []
+  },
+  "5812103": {
+    "ten": "Nghiệp vụ buồng phòng",
+    "extra": []
+  },
+  "5812104": {
+    "ten": "Nấu ăn",
+    "extra": []
+  },
+  "5812105": {
+    "ten": "Kỹ thuật làm bánh",
+    "extra": []
+  },
+  "5812106": {
+    "ten": "Pha chế đồ uống",
+    "extra": []
+  },
+  "5813101": {
+    "ten": "Huấn luyện thể thao",
+    "extra": []
+  },
+  "5813102": {
+    "ten": "Thể dục thể thao",
+    "extra": []
+  },
+  "5814101": {
+    "ten": "Giặt là công nghiệp",
+    "extra": []
+  },
+  "5890101": {
+    "ten": "Công tác xã hội",
+    "extra": []
+  },
+  "5890102": {
+    "ten": "Phát triển cộng đồng",
+    "extra": []
+  },
+  "6110101": {
+    "ten": "Sư phạm mầm non",
+    "extra": []
+  },
+  "6110201": {
+    "ten": "Giáo dục tiểu học",
+    "extra": []
+  },
+  "6110301": {
+    "ten": "Sư phạm Toán - Tin",
+    "extra": []
+  },
+  "6110302": {
+    "ten": "Sư phạm Ngữ văn",
+    "extra": []
+  },
+  "6110303": {
+    "ten": "Sư phạm Tiếng Anh",
+    "extra": []
+  },
+  "6110304": {
+    "ten": "Sư phạm Vật lý",
+    "extra": []
+  },
+  "6110305": {
+    "ten": "Sư phạm Hóa học",
+    "extra": []
+  },
+  "6110306": {
+    "ten": "Sư phạm Sinh học",
+    "extra": []
+  },
+  "6110307": {
+    "ten": "Sư phạm Lịch sử",
+    "extra": []
+  },
+  "6110308": {
+    "ten": "Sư phạm Địa lý",
+    "extra": []
+  },
+  "6110309": {
+    "ten": "Sư phạm Thể dục",
+    "extra": []
+  },
+  "6110310": {
+    "ten": "Sư phạm Mỹ thuật",
+    "extra": []
+  },
+  "6110311": {
+    "ten": "Sư phạm Âm nhạc",
+    "extra": []
+  },
+  "6140101": {
+    "ten": "Giáo dục đặc biệt",
+    "extra": []
+  },
+  "6140201": {
+    "ten": "Giáo dục Mầm non",
+    "extra": []
+  },
+  "6140202": {
+    "ten": "Sư phạm kỹ thuật công nghiệp",
+    "extra": []
+  },
+  "6140203": {
+    "ten": "Sư phạm kỹ thuật nông nghiệp",
+    "extra": []
+  },
+  "6140204": {
+    "ten": "Sư phạm kỹ thuật xây dựng",
+    "extra": []
+  },
+  "6140205": {
+    "ten": "Giáo viên huấn luyện xiếc",
+    "extra": []
+  },
+  "6140206": {
+    "ten": "Giáo dục Thể chất",
+    "extra": []
+  },
+  "6140207": {
+    "ten": "Huấn luyện thể thao",
+    "extra": []
+  },
+  "6140208": {
+    "ten": "Giáo dục Quốc phòng - An ninh",
+    "extra": []
+  },
+  "6140209": {
+    "ten": "Sư phạm Toán học",
+    "extra": []
+  },
+  "6140210": {
+    "ten": "Sư phạm Tin học",
+    "extra": []
+  },
+  "6140211": {
+    "ten": "Sư phạm Vật lý",
+    "extra": []
+  },
+  "6140212": {
+    "ten": "Sư phạm Hóa học",
+    "extra": []
+  },
+  "6140213": {
+    "ten": "Sư phạm Sinh học",
+    "extra": []
+  },
+  "6140214": {
+    "ten": "Sư phạm kĩ thuật công nghiệp",
+    "extra": []
+  },
+  "6140215": {
+    "ten": "Sư phạm Kỹ thuật nông nghiệp",
+    "extra": []
+  },
+  "6140216": {
+    "ten": "Sư phạm Kinh tế gia đình",
+    "extra": []
+  },
+  "6140217": {
+    "ten": "Sư phạm Ngữ văn",
+    "extra": []
+  },
+  "6140218": {
+    "ten": "Sư phạm Lịch sử",
+    "extra": []
+  },
+  "6140219": {
+    "ten": "Sư phạm Địa lý",
+    "extra": []
+  },
+  "6140220": {
+    "ten": "Sư phạm Công tác Đội thiếu niên Tiền phong HCM",
+    "extra": []
+  },
+  "6140221": {
+    "ten": "Sư phạm Âm nhạc",
+    "extra": []
+  },
+  "6140222": {
+    "ten": "Sư phạm Mỹ thuật",
+    "extra": []
+  },
+  "6140223": {
+    "ten": "Sư phạm Tiếng Bahna",
+    "extra": []
+  },
+  "6140224": {
+    "ten": "Sư phạm Tiếng Êđê",
+    "extra": []
+  },
+  "6140226": {
+    "ten": "Sư phạm Tiếng Khmer",
+    "extra": []
+  },
+  "6140229": {
+    "ten": "Sư phạm Tiếng M`nông",
+    "extra": []
+  },
+  "6140230": {
+    "ten": "Sư phạm Tiếng Xê đăng",
+    "extra": []
+  },
+  "6140231": {
+    "ten": "Sư phạm Tiếng Anh",
+    "extra": []
+  },
+  "6210101": {
+    "ten": "Nghệ thuật biểu diễn dân ca",
+    "extra": []
+  },
+  "6210102": {
+    "ten": "Biểu diễn nhạc cụ truyền thống",
+    "extra": []
+  },
+  "6210103": {
+    "ten": "Biểu diễn nhạc cụ phương Tây",
+    "extra": []
+  },
+  "6210104": {
+    "ten": "Sáng tác âm nhạc",
+    "extra": []
+  },
+  "6210105": {
+    "ten": "Chỉ huy âm nhạc",
+    "extra": []
+  },
+  "6210106": {
+    "ten": "Thanh nhạc",
+    "extra": []
+  },
+  "6210107": {
+    "ten": "Lý luận và lịch sử âm nhạc",
+    "extra": []
+  },
+  "6210108": {
+    "ten": "Biểu diễn múa",
+    "extra": []
+  },
+  "6210109": {
+    "ten": "Biên đạo múa",
+    "extra": []
+  },
+  "6210110": {
+    "ten": "Lý luận và lịch sử múa",
+    "extra": []
+  },
+  "6210111": {
+    "ten": "Diễn viên sân khấu kịch nói",
+    "extra": []
+  },
+  "6210112": {
+    "ten": "Diễn viên sân khấu kịch hát",
+    "extra": []
+  },
+  "6210113": {
+    "ten": "Diễn viên múa rối",
+    "extra": []
+  },
+  "6210114": {
+    "ten": "Đạo diễn sân khấu",
+    "extra": []
+  },
+  "6210115": {
+    "ten": "Lý luận và lịch sử sân khấu",
+    "extra": []
+  },
+  "6210116": {
+    "ten": "Nghệ thuật xiếc",
+    "extra": []
+  },
+  "6210117": {
+    "ten": "Diễn xuất điện ảnh - Truyền hình",
+    "extra": []
+  },
+  "6210118": {
+    "ten": "Đạo diễn điện ảnh - Truyền hình",
+    "extra": []
+  },
+  "6210119": {
+    "ten": "Quay phim",
+    "extra": []
+  },
+  "6210120": {
+    "ten": "Biên tập truyền hình",
+    "extra": []
+  },
+  "6210121": {
+    "ten": "Âm thanh",
+    "extra": []
+  },
+  "6210122": {
+    "ten": "Kỹ thuật ánh sáng sân khấu điện ảnh",
+    "extra": []
+  },
+  "6210201": {
+    "ten": "Hội họa",
+    "extra": []
+  },
+  "6210202": {
+    "ten": "Điêu khắc",
+    "extra": []
+  },
+  "6210203": {
+    "ten": "Đồ họa",
+    "extra": []
+  },
+  "6210204": {
+    "ten": "Lý luận và lịch sử Mỹ thuật",
+    "extra": []
+  },
+  "6210205": {
+    "ten": "Mỹ thuật ứng dụng",
+    "extra": []
+  },
+  "6210206": {
+    "ten": "Thiết kế đồ họa",
+    "extra": []
+  },
+  "6210207": {
+    "ten": "Thiết kế thời trang",
+    "extra": []
+  },
+  "6210208": {
+    "ten": "Thiết kế nội thất",
+    "extra": []
+  },
+  "6210209": {
+    "ten": "Thiết kế công nghiệp",
+    "extra": []
+  },
+  "6210210": {
+    "ten": "Thiết kế mỹ thuật sân khấu - điện ảnh",
+    "extra": []
+  },
+  "6220101": {
+    "ten": "Ngôn ngữ Anh",
+    "extra": []
+  },
+  "6220102": {
+    "ten": "Ngôn ngữ Nga",
+    "extra": []
+  },
+  "6220103": {
+    "ten": "Ngôn ngữ Pháp",
+    "extra": []
+  },
+  "6220104": {
+    "ten": "Ngôn ngữ Trung Quốc",
+    "extra": []
+  },
+  "6220105": {
+    "ten": "Ngôn ngữ Nhật",
+    "extra": []
+  },
+  "6220106": {
+    "ten": "Ngôn ngữ Hàn Quốc",
+    "extra": []
+  },
+  "6220107": {
+    "ten": "Ngôn ngữ Đức",
+    "extra": []
+  },
+  "6220108": {
+    "ten": "Ngôn ngữ Thái",
+    "extra": []
+  },
+  "6220109": {
+    "ten": "Ngôn ngữ Khmer",
+    "extra": []
+  },
+  "6220110": {
+    "ten": "Ngôn ngữ Lào",
+    "extra": []
+  },
+  "6220111": {
+    "ten": "Hướng dẫn du lịch",
+    "extra": []
+  },
+  "6320101": {
+    "ten": "Báo chí",
+    "extra": []
+  },
+  "6320102": {
+    "ten": "Truyền thông đa phương tiện",
+    "extra": []
+  },
+  "6320103": {
+    "ten": "Quan hệ công chúng",
+    "extra": []
+  },
+  "6320104": {
+    "ten": "Xuất bản",
+    "extra": []
+  },
+  "6320105": {
+    "ten": "Thông tin học",
+    "extra": []
+  },
+  "6320106": {
+    "ten": "Thư viện - Thông tin",
+    "extra": []
+  },
+  "6340101": {
+    "ten": "Quản trị kinh doanh",
+    "extra": []
+  },
+  "6340102": {
+    "ten": "Marketing",
+    "extra": []
+  },
+  "6340103": {
+    "ten": "Kinh doanh quốc tế",
+    "extra": []
+  },
+  "6340104": {
+    "ten": "Quản trị văn phòng",
+    "extra": []
+  },
+  "6340105": {
+    "ten": "Kế toán",
+    "extra": []
+  },
+  "6340106": {
+    "ten": "Tài chính - Ngân hàng",
+    "extra": []
+  },
+  "6340107": {
+    "ten": "Bảo hiểm",
+    "extra": []
+  },
+  "6340108": {
+    "ten": "Logistics và quản lý chuỗi cung ứng",
+    "extra": []
+  },
+  "6340109": {
+    "ten": "Kinh tế",
+    "extra": []
+  },
+  "6340110": {
+    "ten": "Thương mại điện tử",
+    "extra": []
+  },
+  "6340111": {
+    "ten": "Quản trị khách sạn",
+    "extra": []
+  },
+  "6340112": {
+    "ten": "Quản trị dịch vụ du lịch và lữ hành",
+    "extra": []
+  },
+  "6340113": {
+    "ten": "Quản trị nhà hàng và dịch vụ ăn uống",
+    "extra": []
+  },
+  "6340114": {
+    "ten": "Kinh doanh bất động sản",
+    "extra": []
+  },
+  "6340115": {
+    "ten": "Bán lẻ",
+    "extra": []
+  },
+  "6340116": {
+    "ten": "Quản lý dự án",
+    "extra": []
+  },
+  "6380101": {
+    "ten": "Pháp luật",
+    "extra": []
+  },
+  "6380102": {
+    "ten": "Pháp luật kinh tế",
+    "extra": []
+  },
+  "6480101": {
+    "ten": "Tin học ứng dụng",
+    "extra": []
+  },
+  "6480102": {
+    "ten": "Hệ thống thông tin",
+    "extra": []
+  },
+  "6480103": {
+    "ten": "Mạng máy tính và truyền thông dữ liệu",
+    "extra": []
+  },
+  "6480104": {
+    "ten": "Lập trình máy tính",
+    "extra": []
+  },
+  "6480105": {
+    "ten": "Kỹ thuật sửa chữa, lắp ráp máy tính",
+    "extra": []
+  },
+  "6480106": {
+    "ten": "Quản trị mạng máy tính",
+    "extra": []
+  },
+  "6480107": {
+    "ten": "An toàn thông tin",
+    "extra": []
+  },
+  "6480108": {
+    "ten": "Công nghệ thông tin",
+    "extra": []
+  },
+  "6480109": {
+    "ten": "Thiết kế trang web",
+    "extra": []
+  },
+  "6480110": {
+    "ten": "Quản trị cơ sở dữ liệu",
+    "extra": []
+  },
+  "6480111": {
+    "ten": "Kỹ thuật phần mềm",
+    "extra": []
+  },
+  "6480112": {
+    "ten": "Công nghệ đa phương tiện",
+    "extra": []
+  },
+  "6480113": {
+    "ten": "Khoa học máy tính",
+    "extra": []
+  },
+  "6480114": {
+    "ten": "Hệ thống nhúng",
+    "extra": []
+  },
+  "6480115": {
+    "ten": "Trí tuệ nhân tạo",
+    "extra": []
+  },
+  "6510101": {
+    "ten": "Công nghệ kỹ thuật cơ khí",
+    "extra": []
+  },
+  "6510102": {
+    "ten": "Công nghệ kỹ thuật cơ điện tử",
+    "extra": []
+  },
+  "6510103": {
+    "ten": "Cắt gọt kim loại",
+    "extra": []
+  },
+  "6510104": {
+    "ten": "Hàn",
+    "extra": []
+  },
+  "6510105": {
+    "ten": "Nguội sửa chữa máy công cụ",
+    "extra": []
+  },
+  "6510106": {
+    "ten": "Công nghệ ô tô",
+    "extra": []
+  },
+  "6510107": {
+    "ten": "Sửa chữa máy thi công xây dựng",
+    "extra": []
+  },
+  "6510108": {
+    "ten": "Sửa chữa máy nông nghiệp",
+    "extra": []
+  },
+  "6510109": {
+    "ten": "Kỹ thuật máy lạnh và điều hòa không khí",
+    "extra": []
+  },
+  "6510110": {
+    "ten": "Công nghệ kỹ thuật nhiệt",
+    "extra": []
+  },
+  "6510111": {
+    "ten": "Vận hành máy thi công nền",
+    "extra": []
+  },
+  "6510112": {
+    "ten": "Vận hành cần, cầu trục",
+    "extra": []
+  },
+  "6510113": {
+    "ten": "Điều khiển tàu biển",
+    "extra": []
+  },
+  "6510114": {
+    "ten": "Máy tàu biển",
+    "extra": []
+  },
+  "6510115": {
+    "ten": "Điều khiển phương tiện thủy nội địa",
+    "extra": []
+  },
+  "6510116": {
+    "ten": "Máy và thiết bị thủy nội địa",
+    "extra": []
+  },
+  "6510117": {
+    "ten": "Khai thác máy tàu biển",
+    "extra": []
+  },
+  "6510118": {
+    "ten": "Điện tàu thủy",
+    "extra": []
+  },
+  "6510119": {
+    "ten": "Lắp đặt thiết bị cơ - điện",
+    "extra": []
+  },
+  "6510120": {
+    "ten": "Điện công nghiệp",
+    "extra": []
+  },
+  "6510121": {
+    "ten": "Điện dân dụng",
+    "extra": []
+  },
+  "6510122": {
+    "ten": "Công nghệ kỹ thuật điện, điện tử",
+    "extra": []
+  },
+  "6510123": {
+    "ten": "Điện tử công nghiệp",
+    "extra": []
+  },
+  "6510124": {
+    "ten": "Kỹ thuật điện tử, truyền thông",
+    "extra": []
+  },
+  "6510125": {
+    "ten": "Kỹ thuật máy tính",
+    "extra": []
+  },
+  "6510126": {
+    "ten": "Công nghệ kỹ thuật điều khiển và tự động hóa",
+    "extra": []
+  },
+  "6510127": {
+    "ten": "Cơ điện tử",
+    "extra": []
+  },
+  "6510128": {
+    "ten": "Hệ thống điện",
+    "extra": []
+  },
+  "6510129": {
+    "ten": "Công nghệ kỹ thuật môi trường",
+    "extra": []
+  },
+  "6510130": {
+    "ten": "Kỹ thuật xử lý chất thải",
+    "extra": []
+  },
+  "6510131": {
+    "ten": "Kỹ thuật thoát nước và xử lý nước thải",
+    "extra": []
+  },
+  "6510132": {
+    "ten": "Công nghệ kỹ thuật hóa học",
+    "extra": []
+  },
+  "6510133": {
+    "ten": "Lọc - Hóa dầu",
+    "extra": []
+  },
+  "6510134": {
+    "ten": "Khí hóa lỏng",
+    "extra": []
+  },
+  "6510135": {
+    "ten": "Kỹ thuật phân tích",
+    "extra": []
+  },
+  "6510136": {
+    "ten": "Công nghệ sơn và bảo vệ vật liệu",
+    "extra": []
+  },
+  "6510137": {
+    "ten": "Công nghệ mạ và xử lý bề mặt",
+    "extra": []
+  },
+  "6510138": {
+    "ten": "Đúc kim loại",
+    "extra": []
+  },
+  "6510139": {
+    "ten": "Rèn và dập thể tích",
+    "extra": []
+  },
+  "6510140": {
+    "ten": "Trắc địa công trình",
+    "extra": []
+  },
+  "6510141": {
+    "ten": "Kỹ thuật thiết bị xây dựng và cầu đường",
+    "extra": []
+  },
+  "6510142": {
+    "ten": "Kỹ thuật giao thông đường sắt",
+    "extra": []
+  },
+  "6510143": {
+    "ten": "Vận hành đường sắt đô thị",
+    "extra": []
+  },
+  "6510144": {
+    "ten": "Lái tàu đường sắt",
+    "extra": []
+  },
+  "6510145": {
+    "ten": "Khai thác vận tải",
+    "extra": []
+  },
+  "6510146": {
+    "ten": "Xây dựng",
+    "extra": []
+  },
+  "6510147": {
+    "ten": "Kỹ thuật xây dựng công trình giao thông",
+    "extra": []
+  },
+  "6510148": {
+    "ten": "Xây dựng cầu đường",
+    "extra": []
+  },
+  "6510149": {
+    "ten": "Kiến trúc",
+    "extra": []
+  },
+  "6510150": {
+    "ten": "Quản lý xây dựng",
+    "extra": []
+  },
+  "6510151": {
+    "ten": "Công nghệ kỹ thuật xây dựng",
+    "extra": []
+  },
+  "6510152": {
+    "ten": "Kỹ thuật trắc địa",
+    "extra": []
+  },
+  "6510153": {
+    "ten": "Lắp đặt cáp điện",
+    "extra": []
+  },
+  "6520101": {
+    "ten": "Chế biến và bảo quản thủy sản",
+    "extra": []
+  },
+  "6520102": {
+    "ten": "Chế biến thực phẩm",
+    "extra": []
+  },
+  "6520103": {
+    "ten": "Kỹ thuật chế biến món ăn",
+    "extra": []
+  },
+  "6520104": {
+    "ten": "May thời trang",
+    "extra": []
+  },
+  "6520105": {
+    "ten": "Dệt",
+    "extra": []
+  },
+  "6520106": {
+    "ten": "In",
+    "extra": []
+  },
+  "6520107": {
+    "ten": "Điêu khắc gỗ",
+    "extra": []
+  },
+  "6520108": {
+    "ten": "Mộc dân dụng và công nghiệp",
+    "extra": []
+  },
+  "6520109": {
+    "ten": "Sản xuất giày da",
+    "extra": []
+  },
+  "6520110": {
+    "ten": "Sản xuất sản phẩm từ cao su",
+    "extra": []
+  },
+  "6520111": {
+    "ten": "Kỹ thuật xây dựng dân dụng và công nghiệp",
+    "extra": []
+  },
+  "6520112": {
+    "ten": "Sản xuất vật liệu xây dựng",
+    "extra": []
+  },
+  "6520113": {
+    "ten": "Thiết kế trang phục",
+    "extra": []
+  },
+  "6620101": {
+    "ten": "Khoa học cây trồng",
+    "extra": []
+  },
+  "6620102": {
+    "ten": "Bảo vệ thực vật",
+    "extra": []
+  },
+  "6620103": {
+    "ten": "Chăn nuôi",
+    "extra": []
+  },
+  "6620104": {
+    "ten": "Thú y",
+    "extra": []
+  },
+  "6620105": {
+    "ten": "Lâm nghiệp đô thị",
+    "extra": []
+  },
+  "6620106": {
+    "ten": "Lâm sinh",
+    "extra": []
+  },
+  "6620107": {
+    "ten": "Nuôi trồng thủy sản",
+    "extra": []
+  },
+  "6620108": {
+    "ten": "Khai thác thủy sản",
+    "extra": []
+  },
+  "6620109": {
+    "ten": "Phát triển nông thôn",
+    "extra": []
+  },
+  "6620110": {
+    "ten": "Kỹ thuật nông nghiệp",
+    "extra": []
+  },
+  "6620111": {
+    "ten": "Trồng trọt và bảo vệ thực vật",
+    "extra": []
+  },
+  "6620112": {
+    "ten": "Chăn nuôi và thú y",
+    "extra": []
+  },
+  "6620113": {
+    "ten": "Nuôi trồng và khai thác thủy, hải sản",
+    "extra": []
+  },
+  "6620114": {
+    "ten": "Kinh tế nông nghiệp",
+    "extra": []
+  },
+  "6720101": {
+    "ten": "Điều dưỡng",
+    "extra": []
+  },
+  "6720102": {
+    "ten": "Hộ sinh",
+    "extra": []
+  },
+  "6720103": {
+    "ten": "Y tế công cộng",
+    "extra": []
+  },
+  "6720104": {
+    "ten": "Kỹ thuật phục hình răng",
+    "extra": []
+  },
+  "6720105": {
+    "ten": "Kỹ thuật xét nghiệm y học",
+    "extra": []
+  },
+  "6720106": {
+    "ten": "Kỹ thuật hình ảnh y học",
+    "extra": []
+  },
+  "6720107": {
+    "ten": "Kỹ thuật phục hồi chức năng",
+    "extra": []
+  },
+  "6720108": {
+    "ten": "Vật lý trị liệu",
+    "extra": []
+  },
+  "6720109": {
+    "ten": "Dược",
+    "extra": []
+  },
+  "6720110": {
+    "ten": "Sức khỏe răng miệng",
+    "extra": []
+  },
+  "6720111": {
+    "ten": "Kỹ thuật trang thiết bị y tế",
+    "extra": []
+  },
+  "6720112": {
+    "ten": "Kiểm soát nhiễm khuẩn",
+    "extra": []
+  },
+  "6720113": {
+    "ten": "Chăm sóc sức khỏe cộng đồng",
+    "extra": []
+  },
+  "6720114": {
+    "ten": "Dinh dưỡng",
+    "extra": []
+  },
+  "6810101": {
+    "ten": "Điều hành chạy tàu đường sắt",
+    "extra": []
+  },
+  "6810102": {
+    "ten": "An toàn lao động",
+    "extra": []
+  },
+  "6810103": {
+    "ten": "Bảo vệ",
+    "extra": []
+  },
+  "6811101": {
+    "ten": "Chăm sóc sắc đẹp",
+    "extra": []
+  },
+  "6811102": {
+    "ten": "Chăm sóc da",
+    "extra": []
+  },
+  "6811103": {
+    "ten": "Cắt tóc",
+    "extra": []
+  },
+  "6812101": {
+    "ten": "Nghiệp vụ lễ tân",
+    "extra": []
+  },
+  "6812102": {
+    "ten": "Nghiệp vụ nhà hàng",
+    "extra": []
+  },
+  "6812103": {
+    "ten": "Nghiệp vụ buồng phòng",
+    "extra": []
+  },
+  "6812104": {
+    "ten": "Nấu ăn",
+    "extra": []
+  },
+  "6812105": {
+    "ten": "Kỹ thuật làm bánh",
+    "extra": []
+  },
+  "6812106": {
+    "ten": "Pha chế đồ uống",
+    "extra": []
+  },
+  "6813101": {
+    "ten": "Huấn luyện thể thao",
+    "extra": []
+  },
+  "6813102": {
+    "ten": "Thể dục thể thao",
+    "extra": []
+  },
+  "6814101": {
+    "ten": "Giặt là công nghiệp",
+    "extra": []
+  },
+  "6890101": {
+    "ten": "Công tác xã hội",
+    "extra": []
+  },
+  "6890102": {
+    "ten": "Phát triển cộng đồng",
+    "extra": []
+  },
+  "7140101": {
+    "ten": "Giáo dục học",
+    "extra": []
+  },
+  "7140102": {
+    "ten": "Khoa học giáo dục",
+    "extra": []
+  },
+  "7140103": {
+    "ten": "Công nghệ giáo dục",
+    "extra": []
+  },
+  "7140114": {
+    "ten": "Quản lý giáo dục",
+    "extra": []
+  },
+  "7140115": {
+    "ten": "Công nghệ giáo dục",
+    "extra": []
+  },
+  "7140116": {
+    "ten": "Quản trị công nghệ giáo dục",
+    "extra": []
+  },
+  "7140117": {
+    "ten": "Quản trị trường học",
+    "extra": []
+  },
+  "7140201": {
+    "ten": "Giáo dục Mầm non",
+    "extra": []
+  },
+  "7140202": {
+    "ten": "Giáo dục Tiểu học",
+    "extra": []
+  },
+  "7140203": {
+    "ten": "Giáo dục Đặc biệt",
+    "extra": []
+  },
+  "7140204": {
+    "ten": "Giáo dục Công dân",
+    "extra": []
+  },
+  "7140205": {
+    "ten": "Giáo dục Chính trị",
+    "extra": []
+  },
+  "7140206": {
+    "ten": "Giáo dục Thể chất",
+    "extra": []
+  },
+  "7140207": {
+    "ten": "Huấn luyện thể thao",
+    "extra": []
+  },
+  "7140208": {
+    "ten": "Giáo dục Quốc phòng - An ninh",
+    "extra": []
+  },
+  "7140209": {
+    "ten": "Sư phạm Toán học",
+    "extra": []
+  },
+  "7140210": {
+    "ten": "Sư phạm Tin học",
+    "extra": []
+  },
+  "7140211": {
+    "ten": "Sư phạm Vật lý",
+    "extra": []
+  },
+  "7140212": {
+    "ten": "Sư phạm Hoá học",
+    "extra": []
+  },
+  "7140213": {
+    "ten": "Sư phạm Sinh học",
+    "extra": []
+  },
+  "7140214": {
+    "ten": "Sư phạm Kỹ thuật công nghiệp",
+    "extra": []
+  },
+  "7140215": {
+    "ten": "Sư phạm Kỹ thuật nông nghiệp",
+    "extra": []
+  },
+  "7140217": {
+    "ten": "Sư phạm Ngữ văn",
+    "extra": []
+  },
+  "7140218": {
+    "ten": "Sư phạm Lịch sử",
+    "extra": []
+  },
+  "7140219": {
+    "ten": "Sư phạm Địa lý",
+    "extra": []
+  },
+  "7140221": {
+    "ten": "Sư phạm Âm nhạc",
+    "extra": []
+  },
+  "7140222": {
+    "ten": "Sư phạm Mỹ thuật",
+    "extra": []
+  },
+  "7140223": {
+    "ten": "Sư phạm Tiếng Bana",
+    "extra": []
+  },
+  "7140224": {
+    "ten": "Sư phạm Tiếng Êđê",
+    "extra": []
+  },
+  "7140225": {
+    "ten": "Sư phạm Tiếng Jrai",
+    "extra": []
+  },
+  "7140226": {
+    "ten": "Sư phạm Tiếng Khmer",
+    "extra": []
+  },
+  "7140227": {
+    "ten": "Sư phạm Tiếng H`mong",
+    "extra": []
+  },
+  "7140228": {
+    "ten": "Sư phạm Tiếng Chăm",
+    "extra": []
+  },
+  "7140229": {
+    "ten": "Sư phạm Tiếng M`nông",
+    "extra": []
+  },
+  "7140230": {
+    "ten": "Sư phạm Tiếng Xê đăng",
+    "extra": []
+  },
+  "7140231": {
+    "ten": "Sư phạm Tiếng Anh",
+    "extra": []
+  },
+  "7140232": {
+    "ten": "Sư phạm Tiếng Nga",
+    "extra": []
+  },
+  "7140233": {
+    "ten": "Sư phạm Tiếng Pháp",
+    "extra": []
+  },
+  "7140234": {
+    "ten": "Sư phạm Tiếng Trung Quốc",
+    "extra": []
+  },
+  "7140235": {
+    "ten": "Sư phạm Tiếng Đức",
+    "extra": []
+  },
+  "7140236": {
+    "ten": "Sư phạm Tiếng Nhật",
+    "extra": []
+  },
+  "7140237": {
+    "ten": "Sư phạm Tiếng Hàn Quốc",
+    "extra": []
+  },
+  "7140245": {
+    "ten": "Sư phạm nghệ thuật",
+    "extra": []
+  },
+  "7140246": {
+    "ten": "Sư phạm công nghệ",
+    "extra": []
+  },
+  "7140247": {
+    "ten": "Sư phạm khoa học tự nhiên",
+    "extra": []
+  },
+  "7140248": {
+    "ten": "Giáo dục pháp luật",
+    "extra": []
+  },
+  "7140249": {
+    "ten": "Sư phạm Lịch sử - Địa lí",
+    "extra": []
+  },
+  "7140250": {
+    "ten": "Sư phạm Tin học và Công nghệ tiểu học",
+    "extra": []
+  },
+  "7149001": {
+    "ten": "Kinh tế giáo dục",
+    "extra": []
+  },
+  "7210101": {
+    "ten": "Lý luận, lịch sử và phê bình mỹ thuật",
+    "extra": []
+  },
+  "7210103": {
+    "ten": "Hội hoạ",
+    "extra": []
+  },
+  "7210104": {
+    "ten": "Đồ hoạ",
+    "extra": []
+  },
+  "7210105": {
+    "ten": "Điêu khắc",
+    "extra": []
+  },
+  "7210107": {
+    "ten": "Gốm",
+    "extra": []
+  },
+  "7210110": {
+    "ten": "Mỹ thuật đô thị",
+    "extra": []
+  },
+  "7210201": {
+    "ten": "Âm nhạc học",
+    "extra": []
+  },
+  "7210203": {
+    "ten": "Sáng tác âm nhạc",
+    "extra": []
+  },
+  "7210204": {
+    "ten": "Chỉ huy âm nhạc",
+    "extra": []
+  },
+  "7210205": {
+    "ten": "Thanh nhạc",
+    "extra": []
+  },
+  "7210207": {
+    "ten": "Biểu diễn nhạc cụ phương tây",
+    "extra": []
+  },
+  "7210208": {
+    "ten": "Piano",
+    "extra": []
+  },
+  "7210209": {
+    "ten": "Nhạc Jazz",
+    "extra": []
+  },
+  "7210210": {
+    "ten": "Biểu diễn nhạc cụ truyền thống",
+    "extra": []
+  },
+  "7210221": {
+    "ten": "Lý luận, lịch sử và phê bình sân khấu",
+    "extra": []
+  },
+  "7210225": {
+    "ten": "Biên kịch sân khấu",
+    "extra": []
+  },
+  "7210226": {
+    "ten": "Diễn viên sân khấu kịch hát",
+    "extra": []
+  },
+  "7210227": {
+    "ten": "Đạo diễn sân khấu",
+    "extra": []
+  },
+  "7210231": {
+    "ten": "Lý luận, lịch sử và phê bình điện ảnh, truyền hình",
+    "extra": []
+  },
+  "7210233": {
+    "ten": "Biên kịch điện ảnh, truyền hình",
+    "extra": []
+  },
+  "7210234": {
+    "ten": "Diễn viên kịch, điện ảnh - truyền hình",
+    "extra": []
+  },
+  "7210235": {
+    "ten": "Đạo diễn điện ảnh, truyền hình",
+    "extra": []
+  },
+  "7210236": {
+    "ten": "Quay phim",
+    "extra": []
+  },
+  "7210241": {
+    "ten": "Lý luận, lịch sử và phê bình múa",
+    "extra": []
+  },
+  "7210242": {
+    "ten": "Diễn viên múa",
+    "extra": []
+  },
+  "7210243": {
+    "ten": "Biên đạo múa",
+    "extra": []
+  },
+  "7210244": {
+    "ten": "Huấn luyện múa",
+    "extra": []
+  },
+  "7210301": {
+    "ten": "Nhiếp ảnh",
+    "extra": []
+  },
+  "7210302": {
+    "ten": "Công nghệ điện ảnh, truyền hình",
+    "extra": []
+  },
+  "7210303": {
+    "ten": "Thiết kế âm thanh, ánh sáng",
+    "extra": []
+  },
+  "7210304": {
+    "ten": "Phim",
+    "extra": []
+  },
+  "7210402": {
+    "ten": "Thiết kế công nghiệp",
+    "extra": []
+  },
+  "7210403": {
+    "ten": "Thiết kế đồ họa",
+    "extra": []
+  },
+  "7210404": {
+    "ten": "Thiết kế thời trang",
+    "extra": []
+  },
+  "7210405": {
+    "ten": "Âm nhạc",
+    "extra": []
+  },
+  "7210406": {
+    "ten": "Thiết kế mỹ thuật sân khấu, điện ảnh",
+    "extra": []
+  },
+  "7210407": {
+    "ten": "Thiết kế kỹ thuật số",
+    "extra": []
+  },
+  "7210408": {
+    "ten": "Nghệ thuật số",
+    "extra": []
+  },
+  "7210409": {
+    "ten": "Thiết kế Mỹ thuật số",
+    "extra": []
+  },
+  "7220101": {
+    "ten": "Tiếng Việt và văn hoá Việt Nam",
+    "extra": []
+  },
+  "7220104": {
+    "ten": "Hán Nôm",
+    "extra": []
+  },
+  "7220105": {
+    "ten": "Ngôn ngữ Jrai",
+    "extra": []
+  },
+  "7220106": {
+    "ten": "Ngôn ngữ Khmer",
+    "extra": []
+  },
+  "7220107": {
+    "ten": "Ngôn ngữ H`mong",
+    "extra": []
+  },
+  "7220108": {
+    "ten": "Ngôn ngữ Chăm",
+    "extra": []
+  },
+  "7220110": {
+    "ten": "Sáng tác văn học",
+    "extra": []
+  },
+  "7220112": {
+    "ten": "Văn hoá các dân tộc thiểu số Việt Nam",
+    "extra": []
+  },
+  "7220201": {
+    "ten": "Ngôn ngữ Anh",
+    "extra": []
+  },
+  "7220202": {
+    "ten": "Ngôn ngữ Nga",
+    "extra": []
+  },
+  "7220203": {
+    "ten": "Ngôn ngữ Pháp",
+    "extra": []
+  },
+  "7220204": {
+    "ten": "Ngôn ngữ Trung Quốc",
+    "extra": []
+  },
+  "7220205": {
+    "ten": "Ngôn ngữ Đức",
+    "extra": []
+  },
+  "7220206": {
+    "ten": "Ngôn ngữ Tây Ban Nha",
+    "extra": []
+  },
+  "7220207": {
+    "ten": "Ngôn ngữ Bồ Đào Nha",
+    "extra": []
+  },
+  "7220208": {
+    "ten": "Ngôn ngữ Italia",
+    "extra": []
+  },
+  "7220209": {
+    "ten": "Ngôn ngữ Nhật",
+    "extra": []
+  },
+  "7220210": {
+    "ten": "Ngôn ngữ Hàn Quốc",
+    "extra": []
+  },
+  "7220211": {
+    "ten": "Ngôn ngữ Ảrập",
+    "extra": []
+  },
+  "7220212QTD": {
+    "ten": "Văn hóa và truyền thông xuyên quốc gia",
+    "extra": []
+  },
+  "7220214": {
+    "ten": "Ngôn ngữ Thái Lan",
+    "extra": []
+  },
+  "7229001": {
+    "ten": "Triết học",
+    "extra": []
+  },
+  "7229008": {
+    "ten": "Chủ nghĩa xã hội khoa học",
+    "extra": []
+  },
+  "7229009": {
+    "ten": "Tôn giáo học",
+    "extra": []
+  },
+  "7229010": {
+    "ten": "Lịch sử",
+    "extra": []
+  },
+  "7229020": {
+    "ten": "Ngôn ngữ học",
+    "extra": []
+  },
+  "7229030": {
+    "ten": "Văn học",
+    "extra": []
+  },
+  "7229040": {
+    "ten": "Văn hoá học",
+    "extra": []
+  },
+  "7229042": {
+    "ten": "Quản lý văn hoá",
+    "extra": []
+  },
+  "7229045": {
+    "ten": "Gia đình học",
+    "extra": []
+  },
+  "7310101": {
+    "ten": "Kinh tế",
+    "extra": []
+  },
+  "7310102": {
+    "ten": "Kinh tế chính trị",
+    "extra": []
+  },
+  "7310104": {
+    "ten": "Kinh tế đầu tư",
+    "extra": []
+  },
+  "7310105": {
+    "ten": "Kinh tế phát triển",
+    "extra": []
+  },
+  "7310106": {
+    "ten": "Kinh tế quốc tế",
+    "extra": []
+  },
+  "7310107": {
+    "ten": "Thống kê kinh tế",
+    "extra": []
+  },
+  "7310108": {
+    "ten": "Toán kinh tế",
+    "extra": []
+  },
+  "7310109": {
+    "ten": "Kinh tế số",
+    "extra": []
+  },
+  "7310110": {
+    "ten": "Quản lý kinh tế",
+    "extra": []
+  },
+  "7310111": {
+    "ten": "Nghiên cứu phát triển",
+    "extra": []
+  },
+  "7310201": {
+    "ten": "Chính trị học",
+    "extra": []
+  },
+  "7310202": {
+    "ten": "Xây dựng Đảng và chính quyền nhà nước",
+    "extra": []
+  },
+  "7310205": {
+    "ten": "Quản lý nhà nước",
+    "extra": []
+  },
+  "7310206": {
+    "ten": "Quan hệ quốc tế",
+    "extra": []
+  },
+  "7310301": {
+    "ten": "Xã hội học",
+    "extra": []
+  },
+  "7310302": {
+    "ten": "Nhân học",
+    "extra": []
+  },
+  "7310401": {
+    "ten": "Tâm lý học",
+    "extra": []
+  },
+  "7310402": {
+    "ten": "Tham vấn học đường",
+    "extra": []
+  },
+  "7310403": {
+    "ten": "Tâm lý học giáo dục",
+    "extra": []
+  },
+  "7310501": {
+    "ten": "Địa lý học",
+    "extra": []
+  },
+  "7310601": {
+    "ten": "Quốc tế học",
+    "extra": []
+  },
+  "7310602": {
+    "ten": "Châu Á học",
+    "extra": []
+  },
+  "7310607": {
+    "ten": "Thái Bình Dương học",
+    "extra": []
+  },
+  "7310608": {
+    "ten": "Đông phương học",
+    "extra": []
+  },
+  "7310612": {
+    "ten": "Trung Quốc học",
+    "extra": []
+  },
+  "7310613": {
+    "ten": "Nhật Bản học",
+    "extra": []
+  },
+  "7310614": {
+    "ten": "Hàn Quốc học",
+    "extra": []
+  },
+  "7310620": {
+    "ten": "Đông Nam Á học",
+    "extra": []
+  },
+  "7310630": {
+    "ten": "Việt Nam học",
+    "extra": []
+  },
+  "7310631": {
+    "ten": "Châu Á - Thái Bình Dương học",
+    "extra": []
+  },
+  "7320101": {
+    "ten": "Báo chí",
+    "extra": []
+  },
+  "7320104": {
+    "ten": "Truyền thông đa phương tiện",
+    "extra": []
+  },
+  "7320105": {
+    "ten": "Truyền thông đại chúng",
+    "extra": []
+  },
+  "7320106": {
+    "ten": "Công nghệ truyền thông",
+    "extra": []
+  },
+  "7320107": {
+    "ten": "Truyền thông quốc tế",
+    "extra": []
+  },
+  "7320108": {
+    "ten": "Quan hệ công chúng",
+    "extra": []
+  },
+  "7320109": {
+    "ten": "Truyền thông doanh nghiệp",
+    "extra": []
+  },
+  "7320110": {
+    "ten": "Quảng cáo",
+    "extra": []
+  },
+  "7320111": {
+    "ten": "Truyền thông số",
+    "extra": []
+  },
+  "7320201": {
+    "ten": "Thông tin - thư viện",
+    "extra": []
+  },
+  "7320205": {
+    "ten": "Quản lý thông tin",
+    "extra": []
+  },
+  "7320303": {
+    "ten": "Lưu trữ học",
+    "extra": []
+  },
+  "7320305": {
+    "ten": "Bảo tàng học",
+    "extra": []
+  },
+  "7320401": {
+    "ten": "Xuất bản",
+    "extra": []
+  },
+  "7320402": {
+    "ten": "Kinh doanh xuất bản phẩm",
+    "extra": []
+  },
+  "7329001": {
+    "ten": "Công nghệ đa phương tiện",
+    "extra": []
+  },
+  "7340101": {
+    "ten": "Quản trị kinh doanh",
+    "extra": []
+  },
+  "7340102": {
+    "ten": "Quản trị - Luật",
+    "extra": []
+  },
+  "7340108": {
+    "ten": "Quản lý",
+    "extra": []
+  },
+  "7340114": {
+    "ten": "Digital Marketing",
+    "extra": []
+  },
+  "7340115": {
+    "ten": "Marketing",
+    "extra": []
+  },
+  "7340116": {
+    "ten": "Bất động sản",
+    "extra": []
+  },
+  "7340120": {
+    "ten": "Kinh doanh quốc tế",
+    "extra": []
+  },
+  "7340121": {
+    "ten": "Kinh doanh thương mại",
+    "extra": []
+  },
+  "7340122": {
+    "ten": "Thương mại điện tử",
+    "extra": []
+  },
+  "7340123": {
+    "ten": "Kinh doanh thời trang và dệt may",
+    "extra": []
+  },
+  "7340124": {
+    "ten": "Quản trị và Kinh doanh quốc tế",
+    "extra": []
+  },
+  "7340125": {
+    "ten": "Phân tích dữ liệu kinh doanh",
+    "extra": []
+  },
+  "7340129": {
+    "ten": "Quản trị kinh doanh thực phầm",
+    "extra": []
+  },
+  "7340129_td": {
+    "ten": "Quản trị bệnh viện",
+    "extra": []
+  },
+  "7340201": {
+    "ten": "Tài chính - Ngân hàng",
+    "extra": []
+  },
+  "7340202": {
+    "ten": "Tài chính và Kế toán",
+    "extra": []
+  },
+  "7340204": {
+    "ten": "Bảo hiểm",
+    "extra": []
+  },
+  "7340205": {
+    "ten": "Công nghệ tài chính",
+    "extra": []
+  },
+  "7340206": {
+    "ten": "Tài chính quốc tế",
+    "extra": []
+  },
+  "7340207": {
+    "ten": "Bảo hiểm - tài chính",
+    "extra": []
+  },
+  "7340301": {
+    "ten": "Kế toán",
+    "extra": []
+  },
+  "7340302": {
+    "ten": "Kiểm toán",
+    "extra": []
+  },
+  "7340303": {
+    "ten": "Kế toán, Phân tích và Kiểm toán",
+    "extra": []
+  },
+  "7340401": {
+    "ten": "Khoa học quản lý",
+    "extra": []
+  },
+  "7340403": {
+    "ten": "Quản lý công",
+    "extra": []
+  },
+  "7340404": {
+    "ten": "Quản trị nhân lực",
+    "extra": []
+  },
+  "7340405": {
+    "ten": "Hệ thống thông tin quản lý",
+    "extra": []
+  },
+  "7340406": {
+    "ten": "Quản trị văn phòng",
+    "extra": []
+  },
+  "7340408": {
+    "ten": "Quan hệ lao động",
+    "extra": []
+  },
+  "7340409": {
+    "ten": "Quản lý dự án",
+    "extra": []
+  },
+  "7340410": {
+    "ten": "Quản trị công nghệ truyền thông",
+    "extra": []
+  },
+  "7340411": {
+    "ten": "Quản lý và phát triển nguồn nhân lực",
+    "extra": []
+  },
+  "7340412": {
+    "ten": "Quản trị sự kiện",
+    "extra": []
+  },
+  "7340415_td": {
+    "ten": "Kinh doanh số",
+    "extra": []
+  },
+  "7340418": {
+    "ten": "Quản lý và phát triển du lịch",
+    "extra": []
+  },
+  "7340420": {
+    "ten": "Khoa học dữ liệu và phân tích kinh doanh",
+    "extra": []
+  },
+  "7349001": {
+    "ten": "Quản trị thương hiệu",
+    "extra": []
+  },
+  "7349002": {
+    "ten": "Quản lý giải trí và sự kiện",
+    "extra": []
+  },
+  "7380101": {
+    "ten": "Luật",
+    "extra": []
+  },
+  "7380102": {
+    "ten": "Luật hiến pháp và luật hành chính",
+    "extra": []
+  },
+  "7380103": {
+    "ten": "Luật dân sự và tố tụng dân sự",
+    "extra": []
+  },
+  "7380104": {
+    "ten": "Luật hình sự và tố tụng hình sự",
+    "extra": []
+  },
+  "7380107": {
+    "ten": "Luật kinh tế",
+    "extra": []
+  },
+  "7380108": {
+    "ten": "Luật quốc tế",
+    "extra": []
+  },
+  "7380109": {
+    "ten": "Luật Thương mại Quốc tế",
+    "extra": []
+  },
+  "7380110": {
+    "ten": "Luật Kinh doanh",
+    "extra": []
+  },
+  "7420101": {
+    "ten": "Sinh học",
+    "extra": []
+  },
+  "7420201": {
+    "ten": "Công nghệ sinh học",
+    "extra": []
+  },
+  "7420202": {
+    "ten": "Kỹ thuật sinh học",
+    "extra": []
+  },
+  "7420203": {
+    "ten": "Sinh học ứng dụng",
+    "extra": []
+  },
+  "7420204": {
+    "ten": "Khoa học Y Sinh",
+    "extra": []
+  },
+  "7420205": {
+    "ten": "Công nghệ sinh học y dược",
+    "extra": []
+  },
+  "7420207": {
+    "ten": "Công nghệ thẩm mỹ",
+    "extra": []
+  },
+  "7420215": {
+    "ten": "Công nghệ sinh dược",
+    "extra": []
+  },
+  "7420216": {
+    "ten": "Môi trường, Sức khỏe và An toàn",
+    "extra": []
+  },
+  "7429001": {
+    "ten": "Sinh dược học",
+    "extra": []
+  },
+  "7440101": {
+    "ten": "Thiên văn học",
+    "extra": []
+  },
+  "7440102": {
+    "ten": "Vật lý học",
+    "extra": []
+  },
+  "7440106": {
+    "ten": "Vật lý nguyên tử và hạt nhân",
+    "extra": []
+  },
+  "7440107": {
+    "ten": "Công nghệ vật lý điện tử tin học",
+    "extra": []
+  },
+  "7440110": {
+    "ten": "Cơ học",
+    "extra": []
+  },
+  "7440112": {
+    "ten": "Hoá học",
+    "extra": []
+  },
+  "7440122": {
+    "ten": "Khoa học vật liệu",
+    "extra": []
+  },
+  "7440201": {
+    "ten": "Địa chất học",
+    "extra": []
+  },
+  "7440212": {
+    "ten": "Bản đồ học",
+    "extra": []
+  },
+  "7440217": {
+    "ten": "Địa lý tự nhiên",
+    "extra": []
+  },
+  "7440222": {
+    "ten": "Khí tượng và khí hậu học",
+    "extra": []
+  },
+  "7440224": {
+    "ten": "Thuỷ văn học",
+    "extra": []
+  },
+  "7440225": {
+    "ten": "Tài nguyên và môi trường nước",
+    "extra": []
+  },
+  "7440228": {
+    "ten": "Hải dương học",
+    "extra": []
+  },
+  "7440229": {
+    "ten": "Quản lý và phân tích dữ liệu khoa học",
+    "extra": []
+  },
+  "7440230": {
+    "ten": "Khoa học thông tin địa không gian",
+    "extra": []
+  },
+  "7440298": {
+    "ten": "Biến đổi khí hậu và phát triển bền vững",
+    "extra": []
+  },
+  "7440299": {
+    "ten": "Khí tượng thủy văn biển",
+    "extra": []
+  },
+  "7440301": {
+    "ten": "Khoa học môi trường",
+    "extra": []
+  },
+  "7460101": {
+    "ten": "Toán học",
+    "extra": []
+  },
+  "7460107": {
+    "ten": "Khoa học tính toán",
+    "extra": []
+  },
+  "7460108": {
+    "ten": "Khoa học dữ liệu",
+    "extra": []
+  },
+  "7460112": {
+    "ten": "Toán ứng dụng",
+    "extra": []
+  },
+  "7460115": {
+    "ten": "Toán cơ",
+    "extra": []
+  },
+  "7460117": {
+    "ten": "Toán tin",
+    "extra": []
+  },
+  "7460201": {
+    "ten": "Thống kê",
+    "extra": []
+  },
+  "7480101": {
+    "ten": "Khoa học máy tính",
+    "extra": []
+  },
+  "7480102": {
+    "ten": "Mạng máy tính và truyền thông dữ liệu",
+    "extra": []
+  },
+  "7480103": {
+    "ten": "Kỹ thuật phần mềm",
+    "extra": []
+  },
+  "7480104": {
+    "ten": "Hệ thống thông tin",
+    "extra": []
+  },
+  "7480106": {
+    "ten": "Kỹ thuật máy tính",
+    "extra": []
+  },
+  "7480107": {
+    "ten": "Trí tuệ nhân tạo",
+    "extra": []
+  },
+  "7480108": {
+    "ten": "Công nghệ kỹ thuật máy tính",
+    "extra": []
+  },
+  "7480111": {
+    "ten": "Tin học và kỹ thuật máy tính",
+    "extra": []
+  },
+  "7480112": {
+    "ten": "Khoa học dữ liệu và trí tuệ nhân tạo",
+    "extra": []
+  },
+  "7480113": {
+    "ten": "Khoa học máy tính và thông tin",
+    "extra": []
+  },
+  "7480118": {
+    "ten": "Hệ thống nhúng và IoT",
+    "extra": []
+  },
+  "7480201": {
+    "ten": "Công nghệ thông tin",
+    "extra": []
+  },
+  "7480202": {
+    "ten": "An toàn thông tin",
+    "extra": []
+  },
+  "7480203": {
+    "ten": "Kỹ thuật dữ liệu",
+    "extra": []
+  },
+  "7480204": {
+    "ten": "Khoa học và Kỹ thuật Máy tính",
+    "extra": []
+  },
+  "7480205": {
+    "ten": "Trí tuệ nhân tạo và Khoa học dữ liệu",
+    "extra": []
+  },
+  "7480206": {
+    "ten": "Địa tin học",
+    "extra": []
+  },
+  "7480207": {
+    "ten": "Trí tuệ nhân tạo",
+    "extra": []
+  },
+  "7480209": {
+    "ten": "Công nghệ tài chính và kinh doanh số",
+    "extra": []
+  },
+  "7480210": {
+    "ten": "Công nghệ thông tin ứng dụng",
+    "extra": []
+  },
+  "7480298": {
+    "ten": "Khoa học dữ liệu",
+    "extra": []
+  },
+  "7489001": {
+    "ten": "Công nghệ đổi mới sáng tạo",
+    "extra": []
+  },
+  "7510101": {
+    "ten": "Công nghệ kỹ thuật kiến trúc",
+    "extra": []
+  },
+  "7510102": {
+    "ten": "Công nghệ kỹ thuật công trình xây dựng",
+    "extra": []
+  },
+  "7510103": {
+    "ten": "Công nghệ kỹ thuật xây dựng",
+    "extra": []
+  },
+  "7510104": {
+    "ten": "Công nghệ kỹ thuật giao thông",
+    "extra": []
+  },
+  "7510105": {
+    "ten": "Công nghệ kỹ thuật vật liệu xây dựng",
+    "extra": []
+  },
+  "7510106": {
+    "ten": "Hệ thống kỹ thuật công trình xây dựng",
+    "extra": []
+  },
+  "7510201": {
+    "ten": "Công nghệ kỹ thuật cơ khí",
+    "extra": []
+  },
+  "7510202": {
+    "ten": "Công nghệ chế tạo máy",
+    "extra": []
+  },
+  "7510203": {
+    "ten": "Công nghệ kỹ thuật cơ - điện tử",
+    "extra": []
+  },
+  "7510205": {
+    "ten": "Công nghệ kỹ thuật ô tô",
+    "extra": []
+  },
+  "7510206": {
+    "ten": "Công nghệ kỹ thuật nhiệt",
+    "extra": []
+  },
+  "7510207": {
+    "ten": "Công nghệ kỹ thuật tàu thủy",
+    "extra": []
+  },
+  "7510208": {
+    "ten": "Năng lượng tái tạo",
+    "extra": []
+  },
+  "7510209": {
+    "ten": "Robot và trí tuệ nhân tạo",
+    "extra": []
+  },
+  "7510210": {
+    "ten": "Điện lạnh và điều hòa không khí",
+    "extra": []
+  },
+  "7510211": {
+    "ten": "Bảo dưỡng công nghiệp",
+    "extra": []
+  },
+  "7510212": {
+    "ten": "Công nghệ ô tô và giao thông thông minh",
+    "extra": []
+  },
+  "7510301": {
+    "ten": "Công nghệ kỹ thuật điện, điện tử",
+    "extra": []
+  },
+  "7510302": {
+    "ten": "Công nghệ kỹ thuật điện tử – viễn thông",
+    "extra": []
+  },
+  "7510303": {
+    "ten": "Công nghệ kỹ thuật điều khiển và tự động hoá",
+    "extra": []
+  },
+  "7510304": {
+    "ten": "IOT và Trí tuệ nhân tạo ứng dụng",
+    "extra": []
+  },
+  "7510306": {
+    "ten": "Tự động hóa và tin học",
+    "extra": []
+  },
+  "7510401": {
+    "ten": "Công nghệ kỹ thuật hóa học",
+    "extra": []
+  },
+  "7510402": {
+    "ten": "Công nghệ vật liệu",
+    "extra": []
+  },
+  "7510403": {
+    "ten": "Công nghệ kỹ thuật năng lượng",
+    "extra": []
+  },
+  "7510404": {
+    "ten": "Kỹ thuật hoá phân tích",
+    "extra": []
+  },
+  "7510406": {
+    "ten": "Công nghệ kỹ thuật môi trường",
+    "extra": []
+  },
+  "7510407": {
+    "ten": "Công nghệ kỹ thuật hạt nhân",
+    "extra": []
+  },
+  "7510410": {
+    "ten": "Công nghệ quan trắc và giám sát tài nguyên môi trường",
+    "extra": []
+  },
+  "7510601": {
+    "ten": "Quản lý công nghiệp",
+    "extra": []
+  },
+  "7510602": {
+    "ten": "Quản lý năng lượng",
+    "extra": []
+  },
+  "7510604": {
+    "ten": "Kinh tế công nghiệp",
+    "extra": []
+  },
+  "7510605": {
+    "ten": "Logistics và quản lý chuỗi cung ứng",
+    "extra": []
+  },
+  "7510606": {
+    "ten": "Quản trị môi trường Doanh nghiệp",
+    "extra": []
+  },
+  "7510701": {
+    "ten": "Công nghệ dầu khí và khai thác dầu",
+    "extra": []
+  },
+  "7510801": {
+    "ten": "Công nghệ Kỹ thuật In",
+    "extra": []
+  },
+  "7519001": {
+    "ten": "Công nghệ hàng không vũ trụ",
+    "extra": []
+  },
+  "7519002": {
+    "ten": "Công nghệ nông nghiệp",
+    "extra": []
+  },
+  "7519003": {
+    "ten": "Công nghệ kỹ thuật khuôn mẫu",
+    "extra": []
+  },
+  "7519004": {
+    "ten": "Thiết kế cơ khí và kiểu dáng công nghiệp",
+    "extra": []
+  },
+  "7519005": {
+    "ten": "Công nghệ kỹ thuật cơ điện tử ô tô",
+    "extra": []
+  },
+  "7519007": {
+    "ten": "Công nghệ Kỹ thuật năng lượng tái tạo",
+    "extra": []
+  },
+  "7520101": {
+    "ten": "Cơ kỹ thuật",
+    "extra": []
+  },
+  "7520103": {
+    "ten": "Kỹ thuật cơ khí",
+    "extra": []
+  },
+  "7520114": {
+    "ten": "Kỹ thuật cơ điện tử",
+    "extra": []
+  },
+  "7520115": {
+    "ten": "Kỹ thuật nhiệt",
+    "extra": []
+  },
+  "7520116": {
+    "ten": "Kỹ thuật cơ khí động lực",
+    "extra": []
+  },
+  "7520117": {
+    "ten": "Kỹ thuật công nghiệp",
+    "extra": []
+  },
+  "7520118": {
+    "ten": "Kỹ thuật hệ thống công nghiệp",
+    "extra": []
+  },
+  "7520119": {
+    "ten": "Kỹ thuật cơ điện tử thông minh và robot",
+    "extra": []
+  },
+  "7520120": {
+    "ten": "Kỹ thuật hàng không",
+    "extra": []
+  },
+  "7520121": {
+    "ten": "Kỹ thuật không gian",
+    "extra": []
+  },
+  "7520122": {
+    "ten": "Kỹ thuật tàu thuỷ",
+    "extra": []
+  },
+  "7520130": {
+    "ten": "Kỹ thuật ô tô",
+    "extra": []
+  },
+  "7520137": {
+    "ten": "Kỹ thuật In",
+    "extra": []
+  },
+  "7520138": {
+    "ten": "Kỹ thuật hàng hải",
+    "extra": []
+  },
+  "7520139": {
+    "ten": "Kĩ thuật hệ thống công nghiệp và logistics",
+    "extra": []
+  },
+  "7520141": {
+    "ten": "Công nghệ ô tô điện",
+    "extra": []
+  },
+  "7520201": {
+    "ten": "Kỹ thuật điện",
+    "extra": []
+  },
+  "7520204": {
+    "ten": "Kỹ thuật ra đa - dẫn đường",
+    "extra": []
+  },
+  "7520205": {
+    "ten": "Kỹ thuật thuỷ âm",
+    "extra": []
+  },
+  "7520206": {
+    "ten": "Kỹ thuật biển",
+    "extra": []
+  },
+  "7520207": {
+    "ten": "Kỹ thuật điện tử - viễn thông",
+    "extra": []
+  },
+  "7520208": {
+    "ten": "Công nghệ internet vạn vật (IoT)",
+    "extra": []
+  },
+  "7520210": {
+    "ten": "Kỹ thuật điện tử và tin học",
+    "extra": []
+  },
+  "7520212": {
+    "ten": "Kỹ thuật y sinh",
+    "extra": []
+  },
+  "7520216": {
+    "ten": "Kỹ thuật điều khiển và tự động hoá",
+    "extra": []
+  },
+  "7520217": {
+    "ten": "Kỹ thuật Robot",
+    "extra": []
+  },
+  "7520218": {
+    "ten": "Kỹ thuật Robot và Trí tuệ nhân tạo",
+    "extra": []
+  },
+  "7520219": {
+    "ten": "Hệ thống giao thông thông minh",
+    "extra": []
+  },
+  "7520301": {
+    "ten": "Kỹ thuật hoá học",
+    "extra": []
+  },
+  "7520309": {
+    "ten": "Kỹ thuật vật liệu",
+    "extra": []
+  },
+  "7520310": {
+    "ten": "Kỹ thuật vật liệu kim loại",
+    "extra": []
+  },
+  "7520312": {
+    "ten": "Kỹ thuật dệt",
+    "extra": []
+  },
+  "7520320": {
+    "ten": "Kỹ thuật môi trường",
+    "extra": []
+  },
+  "7520401": {
+    "ten": "Vật lý kỹ thuật",
+    "extra": []
+  },
+  "7520402": {
+    "ten": "Kỹ thuật hạt nhân",
+    "extra": []
+  },
+  "7520403": {
+    "ten": "Vật lý y khoa, khối ngành",
+    "extra": []
+  },
+  "7520406": {
+    "ten": "Kỹ thuật năng lượng",
+    "extra": []
+  },
+  "7520501": {
+    "ten": "Kỹ thuật địa chất",
+    "extra": []
+  },
+  "7520502": {
+    "ten": "Kỹ thuật địa vật lý",
+    "extra": []
+  },
+  "7520503": {
+    "ten": "Kỹ thuật trắc địa - bản đồ",
+    "extra": []
+  },
+  "7520505": {
+    "ten": "Đá quý Đá mỹ nghệ",
+    "extra": []
+  },
+  "7520601": {
+    "ten": "Kỹ thuật mỏ",
+    "extra": []
+  },
+  "7520602": {
+    "ten": "Kỹ thuật thăm dò và khảo sát",
+    "extra": []
+  },
+  "7520604": {
+    "ten": "Kỹ thuật dầu khí",
+    "extra": []
+  },
+  "7520605": {
+    "ten": "Kỹ thuật khí thiên nhiên",
+    "extra": []
+  },
+  "7520606": {
+    "ten": "Công nghệ số trong thăm dò và khai thác tài nguyên thiên nhiên",
+    "extra": []
+  },
+  "7520607": {
+    "ten": "Kỹ thuật tuyển khoáng",
+    "extra": []
+  },
+  "7540101": {
+    "ten": "Công nghệ thực phẩm",
+    "extra": []
+  },
+  "7540102": {
+    "ten": "Kỹ thuật thực phẩm",
+    "extra": []
+  },
+  "7540103": {
+    "ten": "Công nghệ hóa thực phẩm",
+    "extra": []
+  },
+  "7540104": {
+    "ten": "Công nghệ sau thu hoạch",
+    "extra": []
+  },
+  "7540105": {
+    "ten": "Công nghệ chế biến thuỷ sản",
+    "extra": []
+  },
+  "7540106": {
+    "ten": "Đảm bảo chất lượng và an toàn thực phẩm",
+    "extra": []
+  },
+  "7540108": {
+    "ten": "Công nghệ và kinh doanh thực phẩm",
+    "extra": []
+  },
+  "7540110": {
+    "ten": "Khoa học và công nghệ thực phẩm",
+    "extra": []
+  },
+  "7540202": {
+    "ten": "Công nghệ sợi, dệt",
+    "extra": []
+  },
+  "7540203": {
+    "ten": "Công nghệ vật liệu dệt, may",
+    "extra": []
+  },
+  "7540204": {
+    "ten": "Công nghệ may",
+    "extra": []
+  },
+  "7540206": {
+    "ten": "Công nghệ da giày",
+    "extra": []
+  },
+  "7540209": {
+    "ten": "Công nghệ may",
+    "extra": []
+  },
+  "7549001": {
+    "ten": "Công nghệ chế biến lâm sản",
+    "extra": []
+  },
+  "7549002": {
+    "ten": "Kỹ nghệ gỗ và nội thất",
+    "extra": []
+  },
+  "7580101": {
+    "ten": "Kiến trúc",
+    "extra": []
+  },
+  "7580102": {
+    "ten": "Kiến trúc cảnh quan",
+    "extra": []
+  },
+  "7580103": {
+    "ten": "Kiến trúc nội thất",
+    "extra": []
+  },
+  "7580104": {
+    "ten": "Kiến trúc đô thị",
+    "extra": []
+  },
+  "7580105": {
+    "ten": "Quy hoạch vùng và đô thị",
+    "extra": []
+  },
+  "7580106": {
+    "ten": "Quản lý đô thị và công trình",
+    "extra": []
+  },
+  "7580107": {
+    "ten": "Quản lý đô thị",
+    "extra": []
+  },
+  "7580108": {
+    "ten": "Thiết kế nội thất",
+    "extra": []
+  },
+  "7580109": {
+    "ten": "Quản lý phát triển đô thị và bất động sản",
+    "extra": []
+  },
+  "7580111": {
+    "ten": "Bảo tồn di sản kiến trúc - đô thị",
+    "extra": []
+  },
+  "7580112": {
+    "ten": "Đô thị học",
+    "extra": []
+  },
+  "7580199": {
+    "ten": "Thiết kế đô thị",
+    "extra": []
+  },
+  "7580201": {
+    "ten": "Kỹ thuật xây dựng",
+    "extra": []
+  },
+  "7580202": {
+    "ten": "Kỹ thuật xây dựng công trình thủy",
+    "extra": []
+  },
+  "7580203": {
+    "ten": "Kỹ thuật xây dựng công trình biển",
+    "extra": []
+  },
+  "7580204": {
+    "ten": "Xây dựng công trình ngầm thành phố và Hệ thống tàu điện ngầm",
+    "extra": []
+  },
+  "7580205": {
+    "ten": "Kỹ thuật xây dựng công trình giao thông",
+    "extra": []
+  },
+  "7580210": {
+    "ten": "Kỹ thuật cơ sở hạ tầng",
+    "extra": []
+  },
+  "7580211": {
+    "ten": "Địa kỹ thuật xây dựng",
+    "extra": []
+  },
+  "7580212": {
+    "ten": "Kỹ thuật tài nguyên nước",
+    "extra": []
+  },
+  "7580213": {
+    "ten": "Kỹ thuật cấp thoát nước",
+    "extra": []
+  },
+  "7580301": {
+    "ten": "Kinh tế xây dựng",
+    "extra": []
+  },
+  "7580302": {
+    "ten": "Quản lý xây dựng",
+    "extra": []
+  },
+  "7589001": {
+    "ten": "Thiết kế xanh",
+    "extra": []
+  },
+  "7620101": {
+    "ten": "Nông nghiệp",
+    "extra": []
+  },
+  "7620102": {
+    "ten": "Khuyến nông",
+    "extra": []
+  },
+  "7620103": {
+    "ten": "Khoa học đất",
+    "extra": []
+  },
+  "7620105": {
+    "ten": "Chăn nuôi",
+    "extra": []
+  },
+  "7620106": {
+    "ten": "Chăn nuôi thú y",
+    "extra": []
+  },
+  "7620108": {
+    "ten": "Phân bón và dinh dưỡng cây trồng",
+    "extra": []
+  },
+  "7620109": {
+    "ten": "Nông học",
+    "extra": []
+  },
+  "7620110": {
+    "ten": "Khoa học cây trồng",
+    "extra": []
+  },
+  "7620112": {
+    "ten": "Bảo vệ thực vật",
+    "extra": []
+  },
+  "7620113": {
+    "ten": "Công nghệ rau hoa quả và cảnh quan",
+    "extra": []
+  },
+  "7620114": {
+    "ten": "Kinh doanh nông nghiệp",
+    "extra": []
+  },
+  "7620115": {
+    "ten": "Kinh tế nông nghiệp",
+    "extra": []
+  },
+  "7620116": {
+    "ten": "Phát triển nông thôn",
+    "extra": []
+  },
+  "7620118": {
+    "ten": "Nông nghiệp công nghệ cao",
+    "extra": []
+  },
+  "7620119": {
+    "ten": "Chăn nuôi thú y",
+    "extra": []
+  },
+  "7620201": {
+    "ten": "Lâm học",
+    "extra": []
+  },
+  "7620202": {
+    "ten": "Lâm nghiệp đô thị",
+    "extra": []
+  },
+  "7620205": {
+    "ten": "Lâm sinh",
+    "extra": []
+  },
+  "7620210": {
+    "ten": "Lâm nghiệp",
+    "extra": []
+  },
+  "7620211": {
+    "ten": "Quản lý tài nguyên rừng",
+    "extra": []
+  },
+  "7620301": {
+    "ten": "Nuôi trồng thuỷ sản",
+    "extra": []
+  },
+  "7620302": {
+    "ten": "Bệnh học thủy sản",
+    "extra": []
+  },
+  "7620303": {
+    "ten": "Khoa học thủy sản",
+    "extra": []
+  },
+  "7620304": {
+    "ten": "Khai thác thuỷ sản",
+    "extra": []
+  },
+  "7620305": {
+    "ten": "Quản lý thủy sản",
+    "extra": []
+  },
+  "7640101": {
+    "ten": "Thú y",
+    "extra": []
+  },
+  "7720101": {
+    "ten": "Y khoa",
+    "extra": []
+  },
+  "7720110": {
+    "ten": "Y học dự phòng",
+    "extra": []
+  },
+  "7720115": {
+    "ten": "Y học cổ truyền",
+    "extra": []
+  },
+  "7720201": {
+    "ten": "Dược học",
+    "extra": []
+  },
+  "7720203": {
+    "ten": "Hoá dược",
+    "extra": []
+  },
+  "7720301": {
+    "ten": "Điều dưỡng",
+    "extra": []
+  },
+  "7720302": {
+    "ten": "Hộ sinh",
+    "extra": []
+  },
+  "7720401": {
+    "ten": "Dinh dưỡng",
+    "extra": []
+  },
+  "7720497": {
+    "ten": "Dinh dưỡng và khoa học thực phẩm",
+    "extra": []
+  },
+  "7720501": {
+    "ten": "Răng - Hàm - Mặt",
+    "extra": []
+  },
+  "7720502": {
+    "ten": "Kỹ thuật phục hình răng",
+    "extra": []
+  },
+  "7720601": {
+    "ten": "Kỹ thuật xét nghiệm y học",
+    "extra": []
+  },
+  "7720602": {
+    "ten": "Kỹ thuật hình ảnh y học",
+    "extra": []
+  },
+  "7720603": {
+    "ten": "Kỹ thuật phục hồi chức năng",
+    "extra": []
+  },
+  "7720699": {
+    "ten": "Khúc xạ nhãn khoa",
+    "extra": []
+  },
+  "7720701": {
+    "ten": "Y tế công cộng",
+    "extra": []
+  },
+  "7720801": {
+    "ten": "Tổ chức và quản lý y tế",
+    "extra": []
+  },
+  "7720802": {
+    "ten": "Quản lý bệnh viện",
+    "extra": []
+  },
+  "7729001": {
+    "ten": "Y sinh học thể dục thể thao",
+    "extra": []
+  },
+  "7760101": {
+    "ten": "Công tác xã hội",
+    "extra": []
+  },
+  "7760102": {
+    "ten": "Công tác thanh thiếu niên",
+    "extra": []
+  },
+  "7760103": {
+    "ten": "Hỗ trợ giáo dục người khuyết tật",
+    "extra": []
+  },
+  "7760104": {
+    "ten": "Dân số và phát triển",
+    "extra": []
+  },
+  "7810101": {
+    "ten": "Du lịch",
+    "extra": []
+  },
+  "7810102": {
+    "ten": "Du lịch điện tử",
+    "extra": []
+  },
+  "7810103": {
+    "ten": "Quản trị dịch vụ du lịch và lữ hành",
+    "extra": []
+  },
+  "7810104": {
+    "ten": "Quản trị du lịch và khách sạn",
+    "extra": []
+  },
+  "7810105": {
+    "ten": "Du lịch địa chất",
+    "extra": []
+  },
+  "7810106": {
+    "ten": "Văn hóa Du lịch",
+    "extra": []
+  },
+  "7810201": {
+    "ten": "Quản trị khách sạn",
+    "extra": []
+  },
+  "7810202": {
+    "ten": "Quản trị nhà hàng và Dịch vụ ăn uống",
+    "extra": []
+  },
+  "7810203": {
+    "ten": "Quản trị Khách sạn - Nhà hàng",
+    "extra": []
+  },
+  "7810204": {
+    "ten": "Quản lý Du lịch Quốc tế (CTTT)",
+    "extra": []
+  },
+  "7810301": {
+    "ten": "Quản lý thể dục thể thao",
+    "extra": []
+  },
+  "7810302": {
+    "ten": "Huấn luyện thể thao",
+    "extra": []
+  },
+  "7810501": {
+    "ten": "Kinh tế gia đình",
+    "extra": []
+  },
+  "7810502": {
+    "ten": "Kỹ thuật nữ công",
+    "extra": []
+  },
+  "7819009": {
+    "ten": "Khoa học dinh dưỡng và thực phẩm",
+    "extra": []
+  },
+  "7819010": {
+    "ten": "Khoa học chế biến món ăn",
+    "extra": []
+  },
+  "7840101": {
+    "ten": "Khai thác vận tải",
+    "extra": []
+  },
+  "7840102": {
+    "ten": "Quản lý hoạt động bay",
+    "extra": []
+  },
+  "7840104": {
+    "ten": "Kinh tế vận tải",
+    "extra": []
+  },
+  "7840106": {
+    "ten": "Khoa học hàng hải",
+    "extra": []
+  },
+  "7840110": {
+    "ten": "Quản lý và vận hành hạ tầng",
+    "extra": []
+  },
+  "7850101": {
+    "ten": "Quản lý tài nguyên và môi trường",
+    "extra": []
+  },
+  "7850102": {
+    "ten": "Kinh tế tài nguyên thiên nhiên",
+    "extra": []
+  },
+  "7850103": {
+    "ten": "Quản lý đất đai",
+    "extra": []
+  },
+  "7850104": {
+    "ten": "Du lịch sinh thái",
+    "extra": []
+  },
+  "7850105": {
+    "ten": "Quản lý an toàn, sức khỏe và môi trường",
+    "extra": []
+  },
+  "7850106": {
+    "ten": "Quản lý tài nguyên thiên nhiên",
+    "extra": []
+  },
+  "7850110": {
+    "ten": "Quản lý phát triển đô thị và bất động sản",
+    "extra": []
+  },
+  "7850118": {
+    "ten": "Quản lý bất động sản",
+    "extra": []
+  },
+  "7850195": {
+    "ten": "Quản lý tổng hợp tài nguyên nước",
+    "extra": []
+  },
+  "7850197": {
+    "ten": "Quản lý tài nguyên và môi trường biển đảo",
+    "extra": []
+  },
+  "7850198": {
+    "ten": "Quản lý tài nguyên nước",
+    "extra": []
+  },
+  "7850199": {
+    "ten": "Quản lý biển",
+    "extra": []
+  },
+  "7850201": {
+    "ten": "Bảo hộ lao động",
+    "extra": []
+  },
+  "7850202": {
+    "ten": "An toàn, Vệ sinh lao động",
+    "extra": []
+  },
+  "7859002": {
+    "ten": "Tài nguyên và du lịch sinh thái",
+    "extra": []
+  },
+  "7859003": {
+    "ten": "Môi trường, Sức khỏe và An toàn",
+    "extra": []
+  },
+  "7859007": {
+    "ten": "Cảnh quan và kỹ thuật hoa viên",
+    "extra": []
+  },
+  "7860101": {
+    "ten": "Trinh sát an ninh",
+    "extra": []
+  },
+  "7860102": {
+    "ten": "Trinh sát cảnh sát",
+    "extra": []
+  },
+  "7860103": {
+    "ten": "Trinh sát kỹ thuật",
+    "extra": []
+  },
+  "7860104": {
+    "ten": "Điều tra hình sự",
+    "extra": []
+  },
+  "7860107": {
+    "ten": "Kỹ thuật Công an nhân dân",
+    "extra": []
+  },
+  "7860108": {
+    "ten": "Kỹ thuật hình sự",
+    "extra": []
+  },
+  "7860109": {
+    "ten": "Quản lý nhà nước về an ninh trật tự",
+    "extra": []
+  },
+  "7860110": {
+    "ten": "Quản lý trật tự an toàn giao thông",
+    "extra": []
+  },
+  "7860111": {
+    "ten": "Thi hành án hình sự và hỗ trợ tư pháp",
+    "extra": []
+  },
+  "7860112": {
+    "ten": "Tham mưu, chỉ huy công an nhân dân",
+    "extra": []
+  },
+  "7860113": {
+    "ten": "Phòng cháy chữa cháy và cứu nạn cứu hộ",
+    "extra": []
+  },
+  "7860116": {
+    "ten": "Hậu cần công an nhân dân",
+    "extra": []
+  },
+  "7860117": {
+    "ten": "Tình báo an ninh",
+    "extra": []
+  },
+  "7860201": {
+    "ten": "Chỉ huy tham mưu Lục quân",
+    "extra": []
+  },
+  "7860202": {
+    "ten": "Chỉ huy tham mưu Hải quân",
+    "extra": []
+  },
+  "7860203": {
+    "ten": "Chỉ huy tham mưu Không quân",
+    "extra": []
+  },
+  "7860204": {
+    "ten": "Chỉ huy tham mưu Phòng không",
+    "extra": []
+  },
+  "7860205": {
+    "ten": "Chỉ huy tham mưu Pháo binh",
+    "extra": []
+  },
+  "7860206": {
+    "ten": "Chỉ huy tham mưu Tăng - thiết giáp",
+    "extra": []
+  },
+  "7860207": {
+    "ten": "Chỉ huy tham mưu Đặc công",
+    "extra": []
+  },
+  "7860214": {
+    "ten": "Biên phòng",
+    "extra": []
+  },
+  "7860217": {
+    "ten": "Tình báo quân sự",
+    "extra": []
+  },
+  "7860218": {
+    "ten": "Hậu cần quân sự",
+    "extra": []
+  },
+  "7860219": {
+    "ten": "Chỉ huy, tham mưu thông tin",
+    "extra": []
+  },
+  "7860220": {
+    "ten": "Chỉ huy, quản lý kỹ thuật",
+    "extra": []
+  },
+  "7860221": {
+    "ten": "Chỉ huy, quản lý kỹ thuật",
+    "extra": []
+  },
+  "7860222": {
+    "ten": "Quân sự cơ sở",
+    "extra": []
+  },
+  "7860226": {
+    "ten": "Chỉ huy kỹ thuật Phòng không",
+    "extra": []
+  },
+  "7860227": {
+    "ten": "Chỉ huy kỹ thuật Tăng - thiết giáp",
+    "extra": []
+  },
+  "7860228": {
+    "ten": "Chỉ huy kỹ thuật Công binh",
+    "extra": []
+  },
+  "7860229": {
+    "ten": "Chỉ huy kỹ thuật Hoá học",
+    "extra": []
+  },
+  "7860231": {
+    "ten": "Trinh sát kỹ thuật",
+    "extra": []
+  },
+  "7860232": {
+    "ten": "Chỉ huy kỹ thuật Hải quân",
+    "extra": []
+  },
+  "7860233": {
+    "ten": "Chỉ huy kỹ thuật tác chiến điện tử",
+    "extra": []
+  },
+  "7900101": {
+    "ten": "Quản trị doanh nghiệp và công nghệ",
+    "extra": []
+  },
+  "7900102": {
+    "ten": "Marketing và truyền thông",
+    "extra": []
+  },
+  "7900103": {
+    "ten": "Quản trị nhân lực và nhân tài",
+    "extra": []
+  },
+  "7900104": {
+    "ten": "Kinh tế tài chính",
+    "extra": []
+  },
+  "7900189": {
+    "ten": "Quản trị và An ninh",
+    "extra": []
+  },
+  "7900204": {
+    "ten": "Quản trị đô thị thông minh và bền vững",
+    "extra": []
+  },
+  "7900205": {
+    "ten": "Quản trị tài nguyên di sản",
+    "extra": []
+  },
+  "7904492": {
+    "ten": "Khoa học & Quản lí môi trường (CTTT)",
+    "extra": []
+  },
+  "7905419": {
+    "ten": "Công nghệ thực phẩm (CTTT)",
+    "extra": []
+  },
+  "7906425": {
+    "ten": "Kinh tế nông nghiệp (CTTT)",
+    "extra": []
+  },
+  "8140101": {
+    "ten": "Giáo dục học",
+    "extra": []
+  },
+  "8140108": {
+    "ten": "Giáo dục và Phát triển cộng đồng",
+    "extra": []
+  },
+  "8140110": {
+    "ten": "Lý luận và phương pháp dạy học",
+    "extra": []
+  },
+  "8140111": {
+    "ten": "Lý luận và phương pháp dạy học bộ môn",
+    "extra": []
+  },
+  "8140113": {
+    "ten": "Giáo dục và Phát triển cộng đồng",
+    "extra": []
+  },
+  "8140114": {
+    "ten": "Quản lý giáo dục",
+    "extra": []
+  },
+  "8140115": {
+    "ten": "Đo lường và đánh giá trong giáo dục",
+    "extra": []
+  },
+  "8140116": {
+    "ten": "Thiết kế phương tiện giáo dục, giảng dạy",
+    "extra": []
+  },
+  "8140117": {
+    "ten": "Giáo dục quốc tế và so sánh",
+    "extra": []
+  },
+  "8140118": {
+    "ten": "Giáo dục đặc biệt",
+    "extra": []
+  },
+  "8140119": {
+    "ten": "Sư phạm Kỹ thuật Điện",
+    "extra": []
+  },
+  "8140120": {
+    "ten": "Sư phạm Kỹ thuật Ô tô",
+    "extra": []
+  },
+  "8140121": {
+    "ten": "Quản trị trường phổ thông",
+    "extra": []
+  },
+  "8140202": {
+    "ten": "Lý luận và phương pháp dạy học âm nhạc",
+    "extra": []
+  },
+  "8210101": {
+    "ten": "Lý luận và lịch sử mỹ thuật",
+    "extra": []
+  },
+  "8210102": {
+    "ten": "Mỹ thuật tạo hình",
+    "extra": []
+  },
+  "8210201": {
+    "ten": "Âm nhạc học",
+    "extra": []
+  },
+  "8210202": {
+    "ten": "Nghệ thuật âm nhạc",
+    "extra": []
+  },
+  "8210221": {
+    "ten": "Lý luận và lịch sử sân khấu",
+    "extra": []
+  },
+  "8210222": {
+    "ten": "Nghệ thuật sân khấu",
+    "extra": []
+  },
+  "8210231": {
+    "ten": "Lý luận và lịch sử điện ảnh, truyền hình",
+    "extra": []
+  },
+  "8210232": {
+    "ten": "Nghệ thuật điện ảnh, truyền hình",
+    "extra": []
+  },
+  "8210401": {
+    "ten": "Lý luận và lịch sử mỹ thuật ứng dụng",
+    "extra": []
+  },
+  "8210402": {
+    "ten": "Thiết kế công nghiệp",
+    "extra": []
+  },
+  "8210403": {
+    "ten": "Thiết kế đồ họa",
+    "extra": []
+  },
+  "8210404": {
+    "ten": "Thiết kế thời trang",
+    "extra": []
+  },
+  "8210406": {
+    "ten": "Thiết kế mỹ thuật sân khấu, điện ảnh",
+    "extra": []
+  },
+  "8210410": {
+    "ten": "Mỹ thuật ứng dụng",
+    "extra": []
+  },
+  "8220102": {
+    "ten": "Ngôn ngữ Việt Nam",
+    "extra": []
+  },
+  "8220104": {
+    "ten": "Hán Nôm",
+    "extra": []
+  },
+  "8220109": {
+    "ten": "Ngôn ngữ các dân tộc thiểu số Việt Nam",
+    "extra": []
+  },
+  "8220120": {
+    "ten": "Lý luận văn học",
+    "extra": []
+  },
+  "8220121": {
+    "ten": "Văn học Việt Nam",
+    "extra": []
+  },
+  "8220125": {
+    "ten": "Văn học dân gian",
+    "extra": []
+  },
+  "8220201": {
+    "ten": "Ngôn ngữ Anh",
+    "extra": []
+  },
+  "8220202": {
+    "ten": "Ngôn ngữ Nga",
+    "extra": []
+  },
+  "8220203": {
+    "ten": "Ngôn ngữ Pháp",
+    "extra": []
+  },
+  "8220204": {
+    "ten": "Ngôn ngữ Trung Quốc",
+    "extra": []
+  },
+  "8220205": {
+    "ten": "Ngôn ngữ Đức",
+    "extra": []
+  },
+  "8220209": {
+    "ten": "Ngôn ngữ Nhật",
+    "extra": []
+  },
+  "8220210": {
+    "ten": "Ngôn ngữ Hàn Quốc",
+    "extra": []
+  },
+  "8220214.01QTD": {
+    "ten": "Ngôn ngữ học ứng dụng tiếng Anh",
+    "extra": []
+  },
+  "8220241": {
+    "ten": "Ngôn ngữ học so sánh, đối chiếu",
+    "extra": []
+  },
+  "8220242": {
+    "ten": "Văn học nước ngoài",
+    "extra": []
+  },
+  "8222024": {
+    "ten": "\"Nhân vănVIINgôn ngữ học so sánh, đối chiếu\"",
+    "extra": []
+  },
+  "8229001": {
+    "ten": "Triết học",
+    "extra": []
+  },
+  "8229008": {
+    "ten": "Chủ nghĩa xã hội khoa học",
+    "extra": []
+  },
+  "8229009": {
+    "ten": "Tôn giáo học",
+    "extra": []
+  },
+  "8229011": {
+    "ten": "Lịch sử thế giới",
+    "extra": []
+  },
+  "8229012": {
+    "ten": "Lịch sử phong trào cộng sản, công nhân quốc tế và giải phóng dân tộc",
+    "extra": []
+  },
+  "8229013": {
+    "ten": "Lịch sử Việt Nam",
+    "extra": []
+  },
+  "8229015": {
+    "ten": "Lịch sử Đảng Cộng sản Việt Nam",
+    "extra": []
+  },
+  "8229017": {
+    "ten": "Khảo cổ học",
+    "extra": []
+  },
+  "8229020": {
+    "ten": "Ngôn ngữ học",
+    "extra": []
+  },
+  "8229030": {
+    "ten": "Văn học",
+    "extra": []
+  },
+  "8229031": {
+    "ten": "Văn học so sánh",
+    "extra": []
+  },
+  "8229040": {
+    "ten": "Văn hoá học",
+    "extra": []
+  },
+  "8229041": {
+    "ten": "Văn hoá dân gian",
+    "extra": []
+  },
+  "8229042": {
+    "ten": "Quản lý văn hoá",
+    "extra": []
+  },
+  "8229043": {
+    "ten": "Văn hóa so sánh",
+    "extra": []
+  },
+  "8310101": {
+    "ten": "Kinh tế học",
+    "extra": []
+  },
+  "8310102": {
+    "ten": "Kinh tế chính trị",
+    "extra": []
+  },
+  "8310104": {
+    "ten": "Kinh tế đầu tư",
+    "extra": []
+  },
+  "8310105": {
+    "ten": "Kinh tế phát triển",
+    "extra": []
+  },
+  "8310106": {
+    "ten": "Kinh tế quốc tế",
+    "extra": []
+  },
+  "8310107": {
+    "ten": "Thống kê kinh tế",
+    "extra": []
+  },
+  "8310108": {
+    "ten": "Toán kinh tế",
+    "extra": []
+  },
+  "8310110": {
+    "ten": "Quản lý kinh tế",
+    "extra": []
+  },
+  "8310201": {
+    "ten": "Chính trị học",
+    "extra": []
+  },
+  "8310202": {
+    "ten": "Xây dựng Đảng và Chính quyền nhà nước",
+    "extra": []
+  },
+  "8310204": {
+    "ten": "Hồ Chí Minh học",
+    "extra": []
+  },
+  "8310206": {
+    "ten": "Quan hệ quốc tế",
+    "extra": []
+  },
+  "8310301": {
+    "ten": "Xã hội học",
+    "extra": []
+  },
+  "8310302": {
+    "ten": "Nhân học",
+    "extra": []
+  },
+  "8310310": {
+    "ten": "Dân tộc học",
+    "extra": []
+  },
+  "8310313": {
+    "ten": "Phát triển bền vững",
+    "extra": []
+  },
+  "8310315": {
+    "ten": "Phát triển con người",
+    "extra": []
+  },
+  "8310317": {
+    "ten": "Quyền con người",
+    "extra": []
+  },
+  "8310401": {
+    "ten": "Tâm lý học",
+    "extra": []
+  },
+  "8310402": {
+    "ten": "Tâm lý học lâm sàng",
+    "extra": []
+  },
+  "8310501": {
+    "ten": "Địa lý học",
+    "extra": []
+  },
+  "8310601": {
+    "ten": "Quốc tế học",
+    "extra": []
+  },
+  "8310602": {
+    "ten": "Châu Á học",
+    "extra": []
+  },
+  "8310608": {
+    "ten": "Đông phương học",
+    "extra": []
+  },
+  "8310612": {
+    "ten": "Trung Quốc học",
+    "extra": []
+  },
+  "8310613": {
+    "ten": "Nhật Bản học",
+    "extra": []
+  },
+  "8310614": {
+    "ten": "Hàn quốc học",
+    "extra": []
+  },
+  "8310620": {
+    "ten": "Đông Nam Á học",
+    "extra": []
+  },
+  "8310630": {
+    "ten": "Việt Nam học",
+    "extra": []
+  },
+  "8320101": {
+    "ten": "Báo chí học",
+    "extra": []
+  },
+  "8320105": {
+    "ten": "Truyền thông đại chúng",
+    "extra": []
+  },
+  "8320107": {
+    "ten": "Truyền thông quốc tế",
+    "extra": []
+  },
+  "8320108": {
+    "ten": "Quan hệ công chúng",
+    "extra": []
+  },
+  "8320202": {
+    "ten": "Thông tin học",
+    "extra": []
+  },
+  "8320203": {
+    "ten": "Khoa học thư viện",
+    "extra": []
+  },
+  "8320303": {
+    "ten": "Lưu trữ học",
+    "extra": []
+  },
+  "8320305": {
+    "ten": "Bảo tàng học",
+    "extra": []
+  },
+  "8320401": {
+    "ten": "Xuất bản",
+    "extra": []
+  },
+  "8340101": {
+    "ten": "Quản trị kinh doanh",
+    "extra": []
+  },
+  "8340115": {
+    "ten": "Marketing",
+    "extra": []
+  },
+  "8340120": {
+    "ten": "Kinh doanh quốc tế",
+    "extra": []
+  },
+  "8340121": {
+    "ten": "Kinh doanh thương mại",
+    "extra": []
+  },
+  "8340129_td": {
+    "ten": "Quản trị bệnh viện",
+    "extra": []
+  },
+  "8340201": {
+    "ten": "Tài chính - Ngân hàng",
+    "extra": []
+  },
+  "8340202": {
+    "ten": "Quản trị tài chính",
+    "extra": []
+  },
+  "8340204": {
+    "ten": "Bảo hiểm",
+    "extra": []
+  },
+  "8340205": {
+    "ten": "8340205",
+    "extra": []
+  },
+  "8340301": {
+    "ten": "Kế toán",
+    "extra": []
+  },
+  "8340401": {
+    "ten": "Khoa học quản lý",
+    "extra": []
+  },
+  "8340402": {
+    "ten": "Chính sách công",
+    "extra": []
+  },
+  "8340403": {
+    "ten": "Quản lý công",
+    "extra": []
+  },
+  "8340404": {
+    "ten": "Quản trị nhân lực",
+    "extra": []
+  },
+  "8340405": {
+    "ten": "Hệ thống thông tin quản lý",
+    "extra": []
+  },
+  "8340406": {
+    "ten": "Quản trị văn phòng",
+    "extra": []
+  },
+  "8340410": {
+    "ten": "Quản lý kinh tế trình độ thạc sĩ",
+    "extra": []
+  },
+  "8340412": {
+    "ten": "Quản lý khoa học và công nghệ",
+    "extra": []
+  },
+  "8340417": {
+    "ten": "Quản lý an toàn và sức khoẻ nghề nghiệp",
+    "extra": []
+  },
+  "8340418": {
+    "ten": "Quản lý du lịch bền vững",
+    "extra": []
+  },
+  "8349010": {
+    "ten": "Quản lý đô thị",
+    "extra": []
+  },
+  "8380101": {
+    "ten": "Luật",
+    "extra": []
+  },
+  "8380102": {
+    "ten": "Luật hiến pháp và luật hành chính",
+    "extra": []
+  },
+  "8380103": {
+    "ten": "Luật dân sự và tố tụng dân sự",
+    "extra": []
+  },
+  "8380104": {
+    "ten": "Luật hình sự và tố tụng hình sự",
+    "extra": []
+  },
+  "8380105": {
+    "ten": "Tội phạm học và phòng ngừa tội phạm",
+    "extra": []
+  },
+  "8380106": {
+    "ten": "Lý luận và lịch sử nhà nước và pháp luật",
+    "extra": []
+  },
+  "8380107": {
+    "ten": "Luật kinh tế",
+    "extra": []
+  },
+  "8380108": {
+    "ten": "Luật quốc tế",
+    "extra": []
+  },
+  "8420101": {
+    "ten": "Sinh học",
+    "extra": []
+  },
+  "8420102": {
+    "ten": "Nhân chủng học",
+    "extra": []
+  },
+  "8420103": {
+    "ten": "Động vật học",
+    "extra": []
+  },
+  "8420107": {
+    "ten": "Vi sinh vật học",
+    "extra": []
+  },
+  "8420108": {
+    "ten": "Thuỷ sinh vật học",
+    "extra": []
+  },
+  "8420111": {
+    "ten": "Thực vật học",
+    "extra": []
+  },
+  "8420114": {
+    "ten": "Sinh học thực nghiệm",
+    "extra": []
+  },
+  "8420116": {
+    "ten": "Hoá sinh học",
+    "extra": []
+  },
+  "8420120": {
+    "ten": "Sinh thái học",
+    "extra": []
+  },
+  "8420121": {
+    "ten": "Di truyền học",
+    "extra": []
+  },
+  "8420201": {
+    "ten": "Công nghệ sinh học",
+    "extra": []
+  },
+  "8440101": {
+    "ten": "Thiên văn học",
+    "extra": []
+  },
+  "8440103": {
+    "ten": "Vật lý lý thuyết và vật lý toán",
+    "extra": []
+  },
+  "8440104": {
+    "ten": "Vật lý chất rắn",
+    "extra": []
+  },
+  "8440105": {
+    "ten": "Vật lý vô tuyến và điện tử",
+    "extra": []
+  },
+  "8440106": {
+    "ten": "Vật lý nguyên tử và hạt nhân",
+    "extra": []
+  },
+  "8440107": {
+    "ten": "Cơ học vật rắn",
+    "extra": []
+  },
+  "8440108": {
+    "ten": "Cơ học chất lỏng và chất khí",
+    "extra": []
+  },
+  "8440109": {
+    "ten": "Cơ học",
+    "extra": []
+  },
+  "8440110": {
+    "ten": "Quang học",
+    "extra": []
+  },
+  "8440111": {
+    "ten": "Vật lý địa cầu",
+    "extra": []
+  },
+  "8440112": {
+    "ten": "Hoá học",
+    "extra": []
+  },
+  "8440113": {
+    "ten": "Hoá vô cơ",
+    "extra": []
+  },
+  "8440114": {
+    "ten": "Hoá hữu cơ",
+    "extra": []
+  },
+  "8440118": {
+    "ten": "Hoá phân tích",
+    "extra": []
+  },
+  "8440119": {
+    "ten": "Hoá lí thuyết và hoá lí",
+    "extra": []
+  },
+  "8440120": {
+    "ten": "Hóa môi trường",
+    "extra": []
+  },
+  "8440122": {
+    "ten": "Khoa học vật liệu",
+    "extra": []
+  },
+  "8440130.07": {
+    "ten": "Vật lí nhiệt",
+    "extra": []
+  },
+  "8440201": {
+    "ten": "Địa chất học",
+    "extra": []
+  },
+  "8440201.03": {
+    "ten": "Địa chất môi trường",
+    "extra": []
+  },
+  "8440202": {
+    "ten": "Địa tin học",
+    "extra": []
+  },
+  "8440205": {
+    "ten": "Khoáng vật học và địa hóa học",
+    "extra": []
+  },
+  "8440210": {
+    "ten": "Địa vật lí",
+    "extra": []
+  },
+  "8440212": {
+    "ten": "Bản đồ học",
+    "extra": []
+  },
+  "8440214": {
+    "ten": "Bản đồ, viễn thám và hệ thông tin địa lý",
+    "extra": []
+  },
+  "8440217": {
+    "ten": "Địa lí tự nhiên",
+    "extra": []
+  },
+  "8440218": {
+    "ten": "Địa mạo và cổ địa lý",
+    "extra": []
+  },
+  "8440220": {
+    "ten": "Địa lý tài nguyên và môi trường",
+    "extra": []
+  },
+  "8440222": {
+    "ten": "Khí tượng và khí hậu học",
+    "extra": []
+  },
+  "8440224": {
+    "ten": "Thuỷ văn học",
+    "extra": []
+  },
+  "8440228": {
+    "ten": "Hải dương học",
+    "extra": []
+  },
+  "8440301": {
+    "ten": "Khoa học môi trường",
+    "extra": []
+  },
+  "8440301.04": {
+    "ten": "Môi trường và PTBV",
+    "extra": []
+  },
+  "8440302": {
+    "ten": "Quản lý an toàn, sức khoẻ và môi trường",
+    "extra": []
+  },
+  "8460101": {
+    "ten": "Toán học",
+    "extra": []
+  },
+  "8460102": {
+    "ten": "Toán giải tích",
+    "extra": []
+  },
+  "8460103": {
+    "ten": "Phương trình vi phân và tích phân",
+    "extra": []
+  },
+  "8460104": {
+    "ten": "Đại số và lí thuyết số",
+    "extra": []
+  },
+  "8460105": {
+    "ten": "Hình học và tôpô",
+    "extra": []
+  },
+  "8460106": {
+    "ten": "Lí thuyết xác suất và thống kê toán học",
+    "extra": []
+  },
+  "8460107": {
+    "ten": "Khoa học tính toán",
+    "extra": []
+  },
+  "8460108": {
+    "ten": "Khoa học dữ liệu",
+    "extra": []
+  },
+  "8460110": {
+    "ten": "Cơ sở toán học cho tin học",
+    "extra": []
+  },
+  "8460112": {
+    "ten": "Toán ứng dụng",
+    "extra": []
+  },
+  "8460113": {
+    "ten": "Phương pháp toán sơ cấp",
+    "extra": []
+  },
+  "8460117": {
+    "ten": "Toán tin",
+    "extra": []
+  },
+  "8460201": {
+    "ten": "Thống kê",
+    "extra": []
+  },
+  "8480101": {
+    "ten": "Khoa học máy tính",
+    "extra": []
+  },
+  "8480102": {
+    "ten": "Mạng máy tính và truyền thông dữ liệu",
+    "extra": []
+  },
+  "8480103": {
+    "ten": "Kỹ thuật phần mềm",
+    "extra": []
+  },
+  "8480104": {
+    "ten": "Hệ thống thông tin",
+    "extra": []
+  },
+  "8480106": {
+    "ten": "Kỹ thuật máy tính",
+    "extra": []
+  },
+  "8480107": {
+    "ten": "Trí tuệ nhân tạo",
+    "extra": []
+  },
+  "8480201": {
+    "ten": "Công nghệ thông tin",
+    "extra": []
+  },
+  "8480202": {
+    "ten": "An toàn thông tin",
+    "extra": []
+  },
+  "8480204": {
+    "ten": "Quản lý công nghệ thông tin",
+    "extra": []
+  },
+  "8480205": {
+    "ten": "Quản lý Hệ thống thông tin",
+    "extra": []
+  },
+  "8480206": {
+    "ten": "Địa tin học",
+    "extra": []
+  },
+  "8510601": {
+    "ten": "Quản lý công nghiệp",
+    "extra": []
+  },
+  "8510602": {
+    "ten": "Quản lý năng lượng",
+    "extra": []
+  },
+  "8510605": {
+    "ten": "Logistics và quản lý chuỗi cung ứng",
+    "extra": []
+  },
+  "8520101": {
+    "ten": "Cơ kỹ thuật",
+    "extra": []
+  },
+  "8520103": {
+    "ten": "Kỹ thuật cơ khí",
+    "extra": []
+  },
+  "8520114": {
+    "ten": "Kỹ thuật cơ điện tử",
+    "extra": []
+  },
+  "8520115": {
+    "ten": "Kỹ thuật nhiệt",
+    "extra": []
+  },
+  "8520116": {
+    "ten": "Kỹ thuật cơ khí động lực",
+    "extra": []
+  },
+  "8520117": {
+    "ten": "Kỹ thuật công nghiệp",
+    "extra": []
+  },
+  "8520118": {
+    "ten": "Kỹ thuật hệ thống công nghiệp",
+    "extra": []
+  },
+  "8520120": {
+    "ten": "Kỹ thuật hàng không",
+    "extra": []
+  },
+  "8520121": {
+    "ten": "Kỹ thuật không gian",
+    "extra": []
+  },
+  "8520122": {
+    "ten": "Kỹ thuật tàu thuỷ",
+    "extra": []
+  },
+  "8520130": {
+    "ten": "Kỹ thuật ô tô",
+    "extra": []
+  },
+  "8520135": {
+    "ten": "Kỹ thuật năng lượng",
+    "extra": []
+  },
+  "8520137": {
+    "ten": "Kỹ thuật hàng hải",
+    "extra": []
+  },
+  "8520138": {
+    "ten": "Kỹ thuật in",
+    "extra": []
+  },
+  "8520201": {
+    "ten": "Kỹ thuật điện",
+    "extra": []
+  },
+  "8520203": {
+    "ten": "Kỹ thuật điện tử",
+    "extra": []
+  },
+  "8520204": {
+    "ten": "Kỹ thuật rađa - dẫn đường",
+    "extra": []
+  },
+  "8520208": {
+    "ten": "Kỹ thuật viễn thông",
+    "extra": []
+  },
+  "8520209": {
+    "ten": "Kỹ thuật mật mã",
+    "extra": []
+  },
+  "8520212": {
+    "ten": "Kỹ thuật y sinh",
+    "extra": []
+  },
+  "8520216": {
+    "ten": "Kỹ thuật điều khiển và tự động hóa",
+    "extra": []
+  },
+  "8520301": {
+    "ten": "Kỹ thuật hoá học",
+    "extra": []
+  },
+  "8520301.02": {
+    "ten": "Hóa dầu",
+    "extra": []
+  },
+  "8520305": {
+    "ten": "Kỹ thuật hóa dầu và lọc dầu",
+    "extra": []
+  },
+  "8520309": {
+    "ten": "Kỹ thuật vật liệu",
+    "extra": []
+  },
+  "8520320": {
+    "ten": "Kỹ thuật môi trường",
+    "extra": []
+  },
+  "8520401": {
+    "ten": "Vật lý kỹ thuật",
+    "extra": []
+  },
+  "8520402": {
+    "ten": "Kỹ thuật hạt nhân",
+    "extra": []
+  },
+  "8520501": {
+    "ten": "Kỹ thuật địa chất",
+    "extra": []
+  },
+  "8520502": {
+    "ten": "Kỹ thuật địa vật lý",
+    "extra": []
+  },
+  "8520503": {
+    "ten": "Kỹ thuật trắc địa - bản đồ",
+    "extra": []
+  },
+  "8520602": {
+    "ten": "Kỹ thuật thăm dò và khảo sát",
+    "extra": []
+  },
+  "8520603": {
+    "ten": "Khai thác mỏ",
+    "extra": []
+  },
+  "8520604": {
+    "ten": "Kỹ thuật dầu khí",
+    "extra": []
+  },
+  "8520607": {
+    "ten": "Kỹ thuật tuyển khoáng",
+    "extra": []
+  },
+  "8520608": {
+    "ten": "Công trình biển",
+    "extra": []
+  },
+  "8540101": {
+    "ten": "Công nghệ thực phẩm",
+    "extra": []
+  },
+  "8540104": {
+    "ten": "Công nghệ sau thu hoạch",
+    "extra": []
+  },
+  "8540105": {
+    "ten": "Công nghệ chế biến thuỷ sản",
+    "extra": []
+  },
+  "8540106": {
+    "ten": "Đảm bảo chất lượng và an toàn thực phẩm",
+    "extra": []
+  },
+  "8540203": {
+    "ten": "Công nghệ vật liệu dệt, may",
+    "extra": []
+  },
+  "8540204": {
+    "ten": "Công nghệ dệt, may",
+    "extra": []
+  },
+  "8549001": {
+    "ten": "Kỹ thuật chế biến lâm sản",
+    "extra": []
+  },
+  "8580101": {
+    "ten": "Kiến trúc",
+    "extra": []
+  },
+  "8580103": {
+    "ten": "Kiến trúc nội thất",
+    "extra": []
+  },
+  "8580105": {
+    "ten": "Quy hoạch vùng và đô thị",
+    "extra": []
+  },
+  "8580106": {
+    "ten": "Quản lý đô thị và công trình",
+    "extra": []
+  },
+  "8580112": {
+    "ten": "Đô thị học",
+    "extra": []
+  },
+  "8580201": {
+    "ten": "Kỹ thuật xây dựng",
+    "extra": []
+  },
+  "8580202": {
+    "ten": "Kỹ thuật xây dựng công trình thuỷ",
+    "extra": []
+  },
+  "8580203": {
+    "ten": "Kỹ thuật xây dựng công trình biển",
+    "extra": []
+  },
+  "8580204": {
+    "ten": "Kỹ thuật xây dựng công trình ngầm",
+    "extra": []
+  },
+  "8580205": {
+    "ten": "Kỹ thuật xây dựng công trình giao thông",
+    "extra": []
+  },
+  "8580206": {
+    "ten": "Kỹ thuật xây dựng công trình đặc biệt",
+    "extra": []
+  },
+  "8580210": {
+    "ten": "Kỹ thuật cơ sở hạ tầng",
+    "extra": []
+  },
+  "8580211": {
+    "ten": "Địa kỹ thuật xây dựng",
+    "extra": []
+  },
+  "8580212": {
+    "ten": "Kỹ thuật tài nguyên nước",
+    "extra": []
+  },
+  "8580213": {
+    "ten": "Kỹ thuật cấp thoát nước",
+    "extra": []
+  },
+  "8580301": {
+    "ten": "Kinh tế xây dựng",
+    "extra": []
+  },
+  "8580302": {
+    "ten": "Quản lý xây dựng",
+    "extra": []
+  },
+  "8580408": {
+    "ten": "Thiết kế nội thất",
+    "extra": []
+  },
+  "8620103": {
+    "ten": "Khoa học đất",
+    "extra": []
+  },
+  "8620105": {
+    "ten": "Chăn nuôi",
+    "extra": []
+  },
+  "8620106": {
+    "ten": "Chăn nuôi – thú y",
+    "extra": []
+  },
+  "8620110": {
+    "ten": "Khoa học cây trồng",
+    "extra": []
+  },
+  "8620111": {
+    "ten": "Di truyền và chọn giống cây trồng",
+    "extra": []
+  },
+  "8620112": {
+    "ten": "Bảo vệ thực vật",
+    "extra": []
+  },
+  "8620115": {
+    "ten": "Kinh tế nông nghiệp",
+    "extra": []
+  },
+  "8620116": {
+    "ten": "Phát triển nông thôn",
+    "extra": []
+  },
+  "8620118": {
+    "ten": "Hệ thống nông nghiệp",
+    "extra": []
+  },
+  "8620201": {
+    "ten": "Lâm học",
+    "extra": []
+  },
+  "8620205": {
+    "ten": "Lâm sinh",
+    "extra": []
+  },
+  "8620211": {
+    "ten": "Quản lý tài nguyên rừng",
+    "extra": []
+  },
+  "8620301": {
+    "ten": "Nuôi trồng thuỷ sản",
+    "extra": []
+  },
+  "8620302": {
+    "ten": "Bệnh học thủy sản",
+    "extra": []
+  },
+  "8620304": {
+    "ten": "Khai thác thuỷ sản",
+    "extra": []
+  },
+  "8620305": {
+    "ten": "Quản lý thủy sản",
+    "extra": []
+  },
+  "8620306": {
+    "ten": "Quản lý tổng hợp vùng ven biển",
+    "extra": []
+  },
+  "8640101": {
+    "ten": "Thú y",
+    "extra": []
+  },
+  "8720101": {
+    "ten": "Khoa học y sinh",
+    "extra": []
+  },
+  "8720102": {
+    "ten": "Gây mê hồi sức",
+    "extra": []
+  },
+  "8720103": {
+    "ten": "Hồi sức cấp cứu và chống độc",
+    "extra": []
+  },
+  "8720104": {
+    "ten": "Ngoại khoa",
+    "extra": []
+  },
+  "8720105": {
+    "ten": "Sản phụ khoa",
+    "extra": []
+  },
+  "8720106": {
+    "ten": "Nhi khoa",
+    "extra": []
+  },
+  "8720107": {
+    "ten": "Nội khoa",
+    "extra": []
+  },
+  "8720108": {
+    "ten": "Ung thư",
+    "extra": []
+  },
+  "8720109": {
+    "ten": "Bệnh truyền nhiễm và các bệnh nhiệt đới",
+    "extra": []
+  },
+  "8720110": {
+    "ten": "Y học dự phòng",
+    "extra": []
+  },
+  "8720111": {
+    "ten": "Điện quang và y học hạt nhân",
+    "extra": []
+  },
+  "8720115": {
+    "ten": "Y học cổ truyền",
+    "extra": []
+  },
+  "8720117": {
+    "ten": "Dịch tễ học",
+    "extra": []
+  },
+  "8720118": {
+    "ten": "Dược lý và độc chất",
+    "extra": []
+  },
+  "8720119": {
+    "ten": "Phẫu thuật tạo hình, tái tạo và thẩm mỹ",
+    "extra": []
+  },
+  "8720155": {
+    "ten": "Tai - Mũi - Họng",
+    "extra": []
+  },
+  "8720157": {
+    "ten": "Mắt (Nhãn khoa)",
+    "extra": []
+  },
+  "8720158": {
+    "ten": "Khoa học thần kinh",
+    "extra": []
+  },
+  "8720163": {
+    "ten": "Y học dự phòng",
+    "extra": []
+  },
+  "8720202": {
+    "ten": "Công nghệ dược phẩm và bào chế thuốc",
+    "extra": []
+  },
+  "8720203": {
+    "ten": "Hóa dược",
+    "extra": []
+  },
+  "8720205": {
+    "ten": "Dược lý và dược lâm sàng",
+    "extra": []
+  },
+  "8720206": {
+    "ten": "Dược liệu - Dược học cổ truyền",
+    "extra": []
+  },
+  "8720208": {
+    "ten": "Hóa sinh dược",
+    "extra": []
+  },
+  "8720210": {
+    "ten": "Kiểm nghiệm thuốc và độc chất",
+    "extra": []
+  },
+  "8720212": {
+    "ten": "Tổ chức quản lý dược",
+    "extra": []
+  },
+  "8720301": {
+    "ten": "Điều dưỡng",
+    "extra": []
+  },
+  "8720302": {
+    "ten": "Hộ sinh",
+    "extra": []
+  },
+  "8720401": {
+    "ten": "Dinh dưỡng",
+    "extra": []
+  },
+  "8720501": {
+    "ten": "Răng - Hàm - Mặt",
+    "extra": []
+  },
+  "8720601": {
+    "ten": "Kỹ thuật xét nghiệm y học",
+    "extra": []
+  },
+  "8720602": {
+    "ten": "Kỹ thuật hình ảnh y học",
+    "extra": []
+  },
+  "8720603": {
+    "ten": "Kỹ thuật phục hồi chức năng",
+    "extra": []
+  },
+  "8720701": {
+    "ten": "Y tế công cộng",
+    "extra": []
+  },
+  "8720801": {
+    "ten": "Quản lý Y tế",
+    "extra": []
+  },
+  "8720802": {
+    "ten": "Quản lý bệnh viện",
+    "extra": []
+  },
+  "8729001": {
+    "ten": "Y học gia đình",
+    "extra": []
+  },
+  "8729002": {
+    "ten": "Giáo dục y học",
+    "extra": []
+  },
+  "8729003": {
+    "ten": "Y học Quân sự",
+    "extra": []
+  },
+  "8729004": {
+    "ten": "Y học biển",
+    "extra": []
+  },
+  "8760101": {
+    "ten": "Công tác xã hội",
+    "extra": []
+  },
+  "8810101": {
+    "ten": "Du lịch",
+    "extra": []
+  },
+  "8810103": {
+    "ten": "Quản trị dịch vụ du lịch và lữ hành",
+    "extra": []
+  },
+  "8810104": {
+    "ten": "Quản trị khách sạn nhà hàng - Dịch vụ ăn uống",
+    "extra": []
+  },
+  "8810201": {
+    "ten": "Quản trị khách sạn",
+    "extra": []
+  },
+  "8810301": {
+    "ten": "Quản lý thể dục thể thao",
+    "extra": []
+  },
+  "8840103": {
+    "ten": "Tổ chức và quản lý vận tải",
+    "extra": []
+  },
+  "8840106": {
+    "ten": "Khoa học hàng hải",
+    "extra": []
+  },
+  "8850101": {
+    "ten": "Quản lý tài nguyên và môi trường",
+    "extra": []
+  },
+  "8850102": {
+    "ten": "Kinh tế tài nguyên",
+    "extra": []
+  },
+  "8850103": {
+    "ten": "Quản lý đất đai",
+    "extra": []
+  },
+  "8850104": {
+    "ten": "Quản lý biển đảo và đới bờ",
+    "extra": []
+  },
+  "8860101": {
+    "ten": "Trinh sát an ninh",
+    "extra": []
+  },
+  "8860102": {
+    "ten": "Trinh sát cảnh sát",
+    "extra": []
+  },
+  "8860103": {
+    "ten": "Trinh sát kỹ thuật",
+    "extra": []
+  },
+  "8860104": {
+    "ten": "Điều tra hình sự",
+    "extra": []
+  },
+  "8860107": {
+    "ten": "Kỹ thuật Công an nhân dân",
+    "extra": []
+  },
+  "8860108": {
+    "ten": "Kỹ thuật hình sự",
+    "extra": []
+  },
+  "8860109": {
+    "ten": "Quản lý nhà nước về an ninh trật tự",
+    "extra": []
+  },
+  "8860110": {
+    "ten": "Quản lý trật tự an toàn giao thông",
+    "extra": []
+  },
+  "8860111": {
+    "ten": "Thi hành án hình sự và hỗ trợ tư pháp",
+    "extra": []
+  },
+  "8860112": {
+    "ten": "Tham mưu, chỉ huy công an nhân dân",
+    "extra": []
+  },
+  "8860113": {
+    "ten": "Phòng cháy chữa cháy và cứu nạn cứu hộ",
+    "extra": []
+  },
+  "8860116": {
+    "ten": "Hậu cần công an nhân dân",
+    "extra": []
+  },
+  "8860117": {
+    "ten": "Tình báo an ninh",
+    "extra": []
+  },
+  "8860118": {
+    "ten": "An ninh phi truyền thống",
+    "extra": []
+  },
+  "8860208": {
+    "ten": "Nghệ thuật quân sự",
+    "extra": []
+  },
+  "8860209": {
+    "ten": "Lịch sử nghệ thuật quân sự",
+    "extra": []
+  },
+  "8860210": {
+    "ten": "Chiến lược quân sự",
+    "extra": []
+  },
+  "8860211": {
+    "ten": "Chiến lược quốc phòng",
+    "extra": []
+  },
+  "8860212": {
+    "ten": "Nghệ thuật chiến dịch",
+    "extra": []
+  },
+  "8860213": {
+    "ten": "Chiến thuật",
+    "extra": []
+  },
+  "8860215": {
+    "ten": "Biên phòng",
+    "extra": []
+  },
+  "8860216": {
+    "ten": "Quản lý biên giới và cửa khẩu",
+    "extra": []
+  },
+  "8860217": {
+    "ten": "Tình báo quân sự",
+    "extra": []
+  },
+  "8860218": {
+    "ten": "Hậu cần quân sự",
+    "extra": []
+  },
+  "8860220": {
+    "ten": "Chỉ huy, quản lý kỹ thuật",
+    "extra": []
+  },
+  "8860221": {
+    "ten": "Trinh sát quân sự",
+    "extra": []
+  },
+  "8900103": {
+    "ten": "Bảo hộ lao động",
+    "extra": []
+  },
+  "8900201": {
+    "ten": "Quản trị An ninh phi truyền thống",
+    "extra": []
+  },
+  "8900202": {
+    "ten": "Biến đổi khí hậu",
+    "extra": []
+  },
+  "8900203": {
+    "ten": "Khoa học bền vững",
+    "extra": []
+  },
+  "8900204": {
+    "ten": "Quản lý phát triển đô thị",
+    "extra": []
+  },
+  "8900205": {
+    "ten": "Di sản học",
+    "extra": []
+  },
+  "8900301": {
+    "ten": "Quản trị công nghệ và phát triển doanh nghiệp",
+    "extra": []
+  },
+  "9140101": {
+    "ten": "Giáo dục học",
+    "extra": []
+  },
+  "9140102": {
+    "ten": "Lý luận và lịch sử giáo dục",
+    "extra": []
+  },
+  "9140110": {
+    "ten": "Lý luận và phương pháp dạy học",
+    "extra": []
+  },
+  "9140111": {
+    "ten": "Lý luận và phương pháp dạy học bộ môn",
+    "extra": []
+  },
+  "9140114": {
+    "ten": "Quản lý giáo dục",
+    "extra": []
+  },
+  "9140115": {
+    "ten": "Đo lường và đánh giá trong giáo dục",
+    "extra": []
+  },
+  "9140116": {
+    "ten": "Thiết kế phương tiện giáo dục, giảng dạy",
+    "extra": []
+  },
+  "9140117": {
+    "ten": "Giáo dục quốc tế và so sánh",
+    "extra": []
+  },
+  "9140118": {
+    "ten": "Giáo dục đặc biệt",
+    "extra": []
+  },
+  "9210101": {
+    "ten": "Lý luận và lịch sử mỹ thuật",
+    "extra": []
+  },
+  "9210201": {
+    "ten": "Âm nhạc học",
+    "extra": []
+  },
+  "9210221": {
+    "ten": "Lý luận và lịch sử sân khấu",
+    "extra": []
+  },
+  "9210231": {
+    "ten": "Lý luận và lịch sử điện ảnh, truyền hình",
+    "extra": []
+  },
+  "9220102": {
+    "ten": "Ngôn ngữ Việt Nam",
+    "extra": []
+  },
+  "9220104": {
+    "ten": "Hán Nôm",
+    "extra": []
+  },
+  "9220109": {
+    "ten": "Ngôn ngữ các dân tộc thiểu số Việt Nam",
+    "extra": []
+  },
+  "9220120": {
+    "ten": "Lý luận văn học",
+    "extra": []
+  },
+  "9220121": {
+    "ten": "Văn học Việt Nam",
+    "extra": []
+  },
+  "9220125": {
+    "ten": "Văn học dân gian",
+    "extra": []
+  },
+  "9220201": {
+    "ten": "Ngôn ngữ Anh",
+    "extra": []
+  },
+  "9220202": {
+    "ten": "Ngôn ngữ Nga",
+    "extra": []
+  },
+  "9220203": {
+    "ten": "Ngôn ngữ Pháp",
+    "extra": []
+  },
+  "9220204": {
+    "ten": "Ngôn ngữ Trung Quốc",
+    "extra": []
+  },
+  "9220205": {
+    "ten": "Ngôn ngữ Đức",
+    "extra": []
+  },
+  "9220209": {
+    "ten": "Ngôn ngữ Nhật",
+    "extra": []
+  },
+  "9220210": {
+    "ten": "Ngôn ngữ Hàn Quốc",
+    "extra": []
+  },
+  "9220241": {
+    "ten": "Ngôn ngữ học so sánh, đối chiếu",
+    "extra": []
+  },
+  "9220242": {
+    "ten": "Văn học nước ngoài",
+    "extra": []
+  },
+  "9229001": {
+    "ten": "Triết học",
+    "extra": []
+  },
+  "9229002": {
+    "ten": "Chủ nghĩa duy vật biện chứng và duy vật lịch sử",
+    "extra": []
+  },
+  "9229004": {
+    "ten": "Logic học",
+    "extra": []
+  },
+  "9229006": {
+    "ten": "Đạo đức học",
+    "extra": []
+  },
+  "9229007": {
+    "ten": "Mỹ học",
+    "extra": []
+  },
+  "9229008": {
+    "ten": "Chủ nghĩa xã hội khoa học",
+    "extra": []
+  },
+  "9229009": {
+    "ten": "Tôn giáo học",
+    "extra": []
+  },
+  "9229011": {
+    "ten": "Lịch sử thế giới",
+    "extra": []
+  },
+  "9229012": {
+    "ten": "Lịch sử phong trào cộng sản, công nhân quốc tế và giải phóng dân tộc",
+    "extra": []
+  },
+  "9229013": {
+    "ten": "Lịch sử Việt Nam",
+    "extra": []
+  },
+  "9229015": {
+    "ten": "Lịch sử Đảng Cộng sản Việt Nam",
+    "extra": []
+  },
+  "9229017": {
+    "ten": "Khảo cổ học",
+    "extra": []
+  },
+  "9229020": {
+    "ten": "Ngôn ngữ học",
+    "extra": []
+  },
+  "9229030": {
+    "ten": "Văn học",
+    "extra": []
+  },
+  "9229040": {
+    "ten": "Văn hoá học",
+    "extra": []
+  },
+  "9229041": {
+    "ten": "Văn hoá dân gian",
+    "extra": []
+  },
+  "9229042": {
+    "ten": "Quản lý văn hoá",
+    "extra": []
+  },
+  "9310101": {
+    "ten": "Kinh tế học",
+    "extra": []
+  },
+  "9310102": {
+    "ten": "Kinh tế chính trị",
+    "extra": []
+  },
+  "9310104": {
+    "ten": "Kinh tế đầu tư",
+    "extra": []
+  },
+  "9310105": {
+    "ten": "Kinh tế phát triển",
+    "extra": []
+  },
+  "9310106": {
+    "ten": "Kinh tế quốc tế",
+    "extra": []
+  },
+  "9310107": {
+    "ten": "Thống kê kinh tế",
+    "extra": []
+  },
+  "9310108": {
+    "ten": "Toán kinh tế",
+    "extra": []
+  },
+  "9310110": {
+    "ten": "Quản lý kinh tế",
+    "extra": []
+  },
+  "9310116": {
+    "ten": "Kinh tế và Quản lí",
+    "extra": []
+  },
+  "9310201": {
+    "ten": "Chính trị học",
+    "extra": []
+  },
+  "9310202": {
+    "ten": "Xây dựng Đảng và Chính quyền nhà nước",
+    "extra": []
+  },
+  "9310204": {
+    "ten": "Hồ Chí Minh học",
+    "extra": []
+  },
+  "9310206": {
+    "ten": "Quan hệ quốc tế",
+    "extra": []
+  },
+  "9310301": {
+    "ten": "Xã hội học",
+    "extra": []
+  },
+  "9310302": {
+    "ten": "Nhân học",
+    "extra": []
+  },
+  "9310310": {
+    "ten": "Dân tộc học",
+    "extra": []
+  },
+  "9310401": {
+    "ten": "Tâm lý học",
+    "extra": []
+  },
+  "9310501": {
+    "ten": "Địa lý học",
+    "extra": []
+  },
+  "9310601": {
+    "ten": "Quốc tế học",
+    "extra": []
+  },
+  "9310608": {
+    "ten": "Đông phương học",
+    "extra": []
+  },
+  "9310612": {
+    "ten": "Trung Quốc học",
+    "extra": []
+  },
+  "9310613": {
+    "ten": "Nhật Bản học",
+    "extra": []
+  },
+  "9310620": {
+    "ten": "Đông Nam Á học",
+    "extra": []
+  },
+  "9310630": {
+    "ten": "Việt Nam học",
+    "extra": []
+  },
+  "9320101": {
+    "ten": "Báo chí học",
+    "extra": []
+  },
+  "9320105": {
+    "ten": "Truyền thông đại chúng",
+    "extra": []
+  },
+  "9320202": {
+    "ten": "Thông tin học",
+    "extra": []
+  },
+  "9320203": {
+    "ten": "Khoa học thư viện",
+    "extra": []
+  },
+  "9320303": {
+    "ten": "Lưu trữ học",
+    "extra": []
+  },
+  "9320305": {
+    "ten": "Bảo tàng học",
+    "extra": []
+  },
+  "9320401": {
+    "ten": "Xuất bản",
+    "extra": []
+  },
+  "9340101": {
+    "ten": "Quản trị kinh doanh",
+    "extra": []
+  },
+  "9340121": {
+    "ten": "Kinh doanh thương mại",
+    "extra": []
+  },
+  "9340201": {
+    "ten": "Tài chính - Ngân hàng",
+    "extra": []
+  },
+  "9340204": {
+    "ten": "Bảo hiểm",
+    "extra": []
+  },
+  "9340301": {
+    "ten": "Kế toán",
+    "extra": []
+  },
+  "9340401": {
+    "ten": "Khoa học quản lý",
+    "extra": []
+  },
+  "9340402": {
+    "ten": "Chính sách công",
+    "extra": []
+  },
+  "9340403": {
+    "ten": "Quản lý công",
+    "extra": []
+  },
+  "9340404": {
+    "ten": "Quản trị nhân lực",
+    "extra": []
+  },
+  "9340405": {
+    "ten": "Hệ thống thông tin quản lý",
+    "extra": []
+  },
+  "9340407": {
+    "ten": "Quản trị và phát triển bền vững",
+    "extra": []
+  },
+  "9340412": {
+    "ten": "Quản lý khoa học và công nghệ",
+    "extra": []
+  },
+  "9380101": {
+    "ten": "Luật",
+    "extra": []
+  },
+  "9380102": {
+    "ten": "Luật hiến pháp và luật hành chính",
+    "extra": []
+  },
+  "9380103": {
+    "ten": "Luật dân sự và tố tụng dân sự",
+    "extra": []
+  },
+  "9380104": {
+    "ten": "Luật hình sự và tố tụng hình sự",
+    "extra": []
+  },
+  "9380105": {
+    "ten": "Tội phạm học và phòng ngừa tội phạm",
+    "extra": []
+  },
+  "9380106": {
+    "ten": "Lý luận và lịch sử nhà nước và pháp luật",
+    "extra": []
+  },
+  "9380107": {
+    "ten": "Luật kinh tế",
+    "extra": []
+  },
+  "9380108": {
+    "ten": "Luật quốc tế",
+    "extra": []
+  },
+  "9420101": {
+    "ten": "Sinh học",
+    "extra": []
+  },
+  "9420102": {
+    "ten": "Nhân chủng học",
+    "extra": []
+  },
+  "9420103": {
+    "ten": "Động vật học",
+    "extra": []
+  },
+  "9420104": {
+    "ten": "Sinh lý học người và động vật",
+    "extra": []
+  },
+  "9420105": {
+    "ten": "Ký sinh trùng học",
+    "extra": []
+  },
+  "9420106": {
+    "ten": "Côn trùng học",
+    "extra": []
+  },
+  "9420107": {
+    "ten": "Vi sinh vật học",
+    "extra": []
+  },
+  "9420108": {
+    "ten": "Thuỷ sinh vật học",
+    "extra": []
+  },
+  "9420111": {
+    "ten": "Thực vật học",
+    "extra": []
+  },
+  "9420112": {
+    "ten": "Sinh lý học thực vật",
+    "extra": []
+  },
+  "9420113": {
+    "ten": "Tuyến trùng học",
+    "extra": []
+  },
+  "9420115": {
+    "ten": "Lý sinh học",
+    "extra": []
+  },
+  "9420116": {
+    "ten": "Hoá sinh học",
+    "extra": []
+  },
+  "9420120": {
+    "ten": "Sinh thái học",
+    "extra": []
+  },
+  "9420121": {
+    "ten": "Di truyền học",
+    "extra": []
+  },
+  "9420201": {
+    "ten": "Công nghệ sinh học",
+    "extra": []
+  },
+  "9440101": {
+    "ten": "Thiên văn học",
+    "extra": []
+  },
+  "9440103": {
+    "ten": "Vật lý lý thuyết và vật lý toán",
+    "extra": []
+  },
+  "9440104": {
+    "ten": "Vật lý chất rắn",
+    "extra": []
+  },
+  "9440105": {
+    "ten": "Vật lý vô tuyến và điện tử",
+    "extra": []
+  },
+  "9440106": {
+    "ten": "Vật lý nguyên tử và hạt nhân",
+    "extra": []
+  },
+  "9440107": {
+    "ten": "Cơ học vật rắn",
+    "extra": []
+  },
+  "9440108": {
+    "ten": "Cơ học chất lỏng và chất khí",
+    "extra": []
+  },
+  "9440109": {
+    "ten": "Cơ học",
+    "extra": []
+  },
+  "9440110": {
+    "ten": "Quang học",
+    "extra": []
+  },
+  "9440111": {
+    "ten": "Vật lý địa cầu",
+    "extra": []
+  },
+  "9440112": {
+    "ten": "Hoá học",
+    "extra": []
+  },
+  "9440113": {
+    "ten": "Hoá vô cơ",
+    "extra": []
+  },
+  "9440114": {
+    "ten": "Hoá hữu cơ",
+    "extra": []
+  },
+  "9440117": {
+    "ten": "Hoá học các hợp chất thiên nhiên",
+    "extra": []
+  },
+  "9440118": {
+    "ten": "Hoá phân tích",
+    "extra": []
+  },
+  "9440119": {
+    "ten": "Hoá lí thuyết và hoá lí",
+    "extra": []
+  },
+  "9440120": {
+    "ten": "Hóa môi trường",
+    "extra": []
+  },
+  "9440122": {
+    "ten": "Khoa học vật liệu",
+    "extra": []
+  },
+  "9440123": {
+    "ten": "Vật liệu điện tử",
+    "extra": []
+  },
+  "9440125": {
+    "ten": "Vật liệu cao phân tử và tổ hợp",
+    "extra": []
+  },
+  "9440127": {
+    "ten": "Vật liệu quang học, quang điện tử và quang tử",
+    "extra": []
+  },
+  "9440129": {
+    "ten": "Kim loại học",
+    "extra": []
+  },
+  "9440130.07": {
+    "ten": "Vật lí nhiệt",
+    "extra": []
+  },
+  "9440201": {
+    "ten": "Địa chất học",
+    "extra": []
+  },
+  "9440205": {
+    "ten": "Khoáng vật học và địa hóa học",
+    "extra": []
+  },
+  "9440210": {
+    "ten": "Địa vật lí",
+    "extra": []
+  },
+  "9440212": {
+    "ten": "Bản đồ học",
+    "extra": []
+  },
+  "9440214": {
+    "ten": "Bản đồ, viễn thám và hệ thông tin địa lý",
+    "extra": []
+  },
+  "9440217": {
+    "ten": "Địa lí tự nhiên",
+    "extra": []
+  },
+  "9440218": {
+    "ten": "Địa mạo và cổ địa lý",
+    "extra": []
+  },
+  "9440220": {
+    "ten": "Địa lý tài nguyên và môi trường",
+    "extra": []
+  },
+  "9440221": {
+    "ten": "Biến đổi khí hậu",
+    "extra": []
+  },
+  "9440222": {
+    "ten": "Khí tượng và khí hậu học",
+    "extra": []
+  },
+  "9440224": {
+    "ten": "Thuỷ văn học",
+    "extra": []
+  },
+  "9440228": {
+    "ten": "Hải dương học",
+    "extra": []
+  },
+  "9440301": {
+    "ten": "Khoa học môi trường",
+    "extra": []
+  },
+  "9440303": {
+    "ten": "Môi trường đất và nước",
+    "extra": []
+  },
+  "9440305": {
+    "ten": "Độc học môi trường",
+    "extra": []
+  },
+  "9460101": {
+    "ten": "Toán học",
+    "extra": []
+  },
+  "9460102": {
+    "ten": "Toán giải tích",
+    "extra": []
+  },
+  "9460103": {
+    "ten": "Phương trình vi phân và tích phân",
+    "extra": []
+  },
+  "9460104": {
+    "ten": "Đại số và lí thuyết số",
+    "extra": []
+  },
+  "9460105": {
+    "ten": "Hình học và tôpô",
+    "extra": []
+  },
+  "9460106": {
+    "ten": "Lí thuyết xác suất và thống kê toán học",
+    "extra": []
+  },
+  "9460107": {
+    "ten": "Khoa học tính toán",
+    "extra": []
+  },
+  "9460110": {
+    "ten": "Cơ sở toán học cho tin học",
+    "extra": []
+  },
+  "9460112": {
+    "ten": "Toán ứng dụng",
+    "extra": []
+  },
+  "9460117": {
+    "ten": "Toán tin",
+    "extra": []
+  },
+  "9460201": {
+    "ten": "Thống kê",
+    "extra": []
+  },
+  "9480101": {
+    "ten": "Khoa học máy tính",
+    "extra": []
+  },
+  "9480102": {
+    "ten": "Mạng máy tính và truyền thông dữ liệu",
+    "extra": []
+  },
+  "9480103": {
+    "ten": "Kỹ thuật phần mềm",
+    "extra": []
+  },
+  "9480104": {
+    "ten": "Hệ thống thông tin",
+    "extra": []
+  },
+  "9480106": {
+    "ten": "Kỹ thuật máy tính",
+    "extra": []
+  },
+  "9480107": {
+    "ten": "Trí tuệ nhân tạo",
+    "extra": []
+  },
+  "9480111": {
+    "ten": "Tin học và Kĩ thuật máy tính",
+    "extra": []
+  },
+  "9480201": {
+    "ten": "Công nghệ thông tin",
+    "extra": []
+  },
+  "9480202": {
+    "ten": "An toàn thông tin",
+    "extra": []
+  },
+  "9510601": {
+    "ten": "Quản lý công nghiệp",
+    "extra": []
+  },
+  "9510602": {
+    "ten": "Quản lý Năng lượng",
+    "extra": []
+  },
+  "9510605": {
+    "ten": "Logistics và quản lý chuỗi cung ứng",
+    "extra": []
+  },
+  "9520101": {
+    "ten": "Cơ kỹ thuật",
+    "extra": []
+  },
+  "9520103": {
+    "ten": "Kỹ thuật cơ khí",
+    "extra": []
+  },
+  "9520114": {
+    "ten": "Kỹ thuật cơ điện tử",
+    "extra": []
+  },
+  "9520115": {
+    "ten": "Kỹ thuật nhiệt",
+    "extra": []
+  },
+  "9520116": {
+    "ten": "Kỹ thuật cơ khí động lực",
+    "extra": []
+  },
+  "9520118": {
+    "ten": "Kỹ thuật hệ thống công nghiệp",
+    "extra": []
+  },
+  "9520121": {
+    "ten": "Kỹ thuật không gian",
+    "extra": []
+  },
+  "9520122": {
+    "ten": "Kỹ thuật tàu thuỷ",
+    "extra": []
+  },
+  "9520130": {
+    "ten": "Kỹ thuật ô tô",
+    "extra": []
+  },
+  "9520135": {
+    "ten": "Kỹ thuật năng lượng",
+    "extra": []
+  },
+  "9520137": {
+    "ten": "Kỹ thuật in",
+    "extra": []
+  },
+  "9520138": {
+    "ten": "Kỹ thuật hàng hải",
+    "extra": []
+  },
+  "9520201": {
+    "ten": "Kỹ thuật điện",
+    "extra": []
+  },
+  "9520203": {
+    "ten": "Kỹ thuật điện tử",
+    "extra": []
+  },
+  "9520204": {
+    "ten": "Kỹ thuật rađa - dẫn đường",
+    "extra": []
+  },
+  "9520208": {
+    "ten": "Kỹ thuật viễn thông",
+    "extra": []
+  },
+  "9520209": {
+    "ten": "Kỹ thuật mật mã",
+    "extra": []
+  },
+  "9520212": {
+    "ten": "Kỹ thuật y sinh",
+    "extra": []
+  },
+  "9520216": {
+    "ten": "Kỹ thuật điều khiển và tự động hóa",
+    "extra": []
+  },
+  "9520301": {
+    "ten": "Kỹ thuật hoá học",
+    "extra": []
+  },
+  "9520301.02": {
+    "ten": "Hóa dầu",
+    "extra": []
+  },
+  "9520305": {
+    "ten": "Kỹ thuật hóa dầu và lọc dầu",
+    "extra": []
+  },
+  "9520309": {
+    "ten": "Kỹ thuật vật liệu",
+    "extra": []
+  },
+  "9520320": {
+    "ten": "Kỹ thuật môi trường",
+    "extra": []
+  },
+  "9520401": {
+    "ten": "Vật lý kỹ thuật",
+    "extra": []
+  },
+  "9520402": {
+    "ten": "Kỹ thuật hạt nhân",
+    "extra": []
+  },
+  "9520501": {
+    "ten": "Kỹ thuật địa chất",
+    "extra": []
+  },
+  "9520502": {
+    "ten": "Kỹ thuật địa vật lý",
+    "extra": []
+  },
+  "9520503": {
+    "ten": "Kỹ thuật trắc địa - bản đồ",
+    "extra": []
+  },
+  "9520602": {
+    "ten": "Kỹ thuật thăm dò và khảo sát",
+    "extra": []
+  },
+  "9520603": {
+    "ten": "Khai thác mỏ",
+    "extra": []
+  },
+  "9520604": {
+    "ten": "Kỹ thuật dầu khí",
+    "extra": []
+  },
+  "9520607": {
+    "ten": "Kỹ thuật tuyển khoáng",
+    "extra": []
+  },
+  "9540101": {
+    "ten": "Công nghệ thực phẩm",
+    "extra": []
+  },
+  "9540104": {
+    "ten": "Công nghệ sau thu hoạch",
+    "extra": []
+  },
+  "9540105": {
+    "ten": "Công nghệ chế biến thuỷ sản",
+    "extra": []
+  },
+  "9540203": {
+    "ten": "Công nghệ vật liệu dệt, may",
+    "extra": []
+  },
+  "9540204": {
+    "ten": "Công nghệ dệt, may",
+    "extra": []
+  },
+  "9549001": {
+    "ten": "Kỹ thuật chế biến lâm sản",
+    "extra": []
+  },
+  "9580101": {
+    "ten": "Kiến trúc",
+    "extra": []
+  },
+  "9580105": {
+    "ten": "Quy hoạch vùng và đô thị",
+    "extra": []
+  },
+  "9580106": {
+    "ten": "Quản lý đô thị và công trình",
+    "extra": []
+  },
+  "9580201": {
+    "ten": "Kỹ thuật xây dựng",
+    "extra": []
+  },
+  "9580202": {
+    "ten": "Kỹ thuật xây dựng công trình thuỷ",
+    "extra": []
+  },
+  "9580203": {
+    "ten": "Kỹ thuật xây dựng công trình biển",
+    "extra": []
+  },
+  "9580204": {
+    "ten": "Kỹ thuật xây dựng công trình ngầm",
+    "extra": []
+  },
+  "9580205": {
+    "ten": "Kỹ thuật xây dựng công trình giao thông",
+    "extra": []
+  },
+  "9580206": {
+    "ten": "Kỹ thuật xây dựng công trình đặc biệt",
+    "extra": []
+  },
+  "9580210": {
+    "ten": "Kỹ thuật cơ sở hạ tầng",
+    "extra": []
+  },
+  "9580211": {
+    "ten": "Địa kỹ thuật xây dựng",
+    "extra": []
+  },
+  "9580212": {
+    "ten": "Kỹ thuật tài nguyên nước",
+    "extra": []
+  },
+  "9580213": {
+    "ten": "Kỹ thuật cấp thoát nước",
+    "extra": []
+  },
+  "9580302": {
+    "ten": "Quản lý xây dựng",
+    "extra": []
+  },
+  "9620103": {
+    "ten": "Khoa học đất",
+    "extra": []
+  },
+  "9620105": {
+    "ten": "Chăn nuôi",
+    "extra": []
+  },
+  "9620107": {
+    "ten": "Dinh dưỡng và thức ăn chăn nuôi",
+    "extra": []
+  },
+  "9620108": {
+    "ten": "Di truyền và chọn giống vật nuôi",
+    "extra": []
+  },
+  "9620110": {
+    "ten": "Khoa học cây trồng",
+    "extra": []
+  },
+  "9620111": {
+    "ten": "Di truyền và chọn giống cây trồng",
+    "extra": []
+  },
+  "9620112": {
+    "ten": "Bảo vệ thực vật",
+    "extra": []
+  },
+  "9620115": {
+    "ten": "Kinh tế nông nghiệp",
+    "extra": []
+  },
+  "9620116": {
+    "ten": "Phát triển nông thôn",
+    "extra": []
+  },
+  "9620205": {
+    "ten": "Lâm sinh",
+    "extra": []
+  },
+  "9620207": {
+    "ten": "Di truyền và chọn giống cây lâm nghiệp",
+    "extra": []
+  },
+  "9620208": {
+    "ten": "Điều tra và quy hoạch rừng",
+    "extra": []
+  },
+  "9620211": {
+    "ten": "Quản lý tài nguyên rừng",
+    "extra": []
+  },
+  "9620301": {
+    "ten": "Nuôi trồng thuỷ sản",
+    "extra": []
+  },
+  "9620302": {
+    "ten": "Bệnh học thủy sản",
+    "extra": []
+  },
+  "9620304": {
+    "ten": "Khai thác thuỷ sản",
+    "extra": []
+  },
+  "9620305": {
+    "ten": "Quản lý thủy sản",
+    "extra": []
+  },
+  "9640101": {
+    "ten": "Thú y",
+    "extra": []
+  },
+  "9640102": {
+    "ten": "Bệnh lý học và chữa bệnh vật nuôi",
+    "extra": []
+  },
+  "9640104": {
+    "ten": "Ký sinh trùng và vi sinh vật học thú y",
+    "extra": []
+  },
+  "9640106": {
+    "ten": "Sinh sản và bệnh sinh sản gia súc",
+    "extra": []
+  },
+  "9640108": {
+    "ten": "Dịch tễ học thú y",
+    "extra": []
+  },
+  "9720101": {
+    "ten": "Khoa học y sinh",
+    "extra": []
+  },
+  "9720102": {
+    "ten": "Gây mê hồi sức",
+    "extra": []
+  },
+  "9720103": {
+    "ten": "Hồi sức cấp cứu và chống độc",
+    "extra": []
+  },
+  "9720104": {
+    "ten": "Ngoại khoa",
+    "extra": []
+  },
+  "9720105": {
+    "ten": "Sản phụ khoa",
+    "extra": []
+  },
+  "9720106": {
+    "ten": "Nhi khoa",
+    "extra": []
+  },
+  "9720107": {
+    "ten": "Nội khoa",
+    "extra": []
+  },
+  "9720108": {
+    "ten": "Ung thư",
+    "extra": []
+  },
+  "9720109": {
+    "ten": "Bệnh truyền nhiễm và các bệnh nhiệt đới",
+    "extra": []
+  },
+  "9720110": {
+    "ten": "Y học dự phòng",
+    "extra": []
+  },
+  "9720111": {
+    "ten": "Điện quang và y học hạt nhân",
+    "extra": []
+  },
+  "9720115": {
+    "ten": "Y học cổ truyền",
+    "extra": []
+  },
+  "9720117": {
+    "ten": "Dịch tễ học",
+    "extra": []
+  },
+  "9720118": {
+    "ten": "Dược lý và độc chất",
+    "extra": []
+  },
+  "9720119": {
+    "ten": "Phẫu thuật tạo hình, tái tạo và thẩm mỹ",
+    "extra": []
+  },
+  "9720155": {
+    "ten": "Tai - Mũi - Họng",
+    "extra": []
+  },
+  "9720157": {
+    "ten": "Mắt (Nhãn khoa)",
+    "extra": []
+  },
+  "9720158": {
+    "ten": "Khoa học thần kinh",
+    "extra": []
+  },
+  "9720202": {
+    "ten": "Công nghệ dược phẩm và bào chế thuốc",
+    "extra": []
+  },
+  "9720203": {
+    "ten": "Hóa dược",
+    "extra": []
+  },
+  "9720205": {
+    "ten": "Dược lý và dược lâm sàng",
+    "extra": []
+  },
+  "9720206": {
+    "ten": "Dược liệu - Dược học cổ truyền",
+    "extra": []
+  },
+  "9720208": {
+    "ten": "Hóa sinh dược",
+    "extra": []
+  },
+  "9720210": {
+    "ten": "Kiểm nghiệm thuốc và độc chất",
+    "extra": []
+  },
+  "9720212": {
+    "ten": "Tổ chức quản lý dược",
+    "extra": []
+  },
+  "9720301": {
+    "ten": "Điều dưỡng",
+    "extra": []
+  },
+  "9720302": {
+    "ten": "Hộ sinh",
+    "extra": []
+  },
+  "9720401": {
+    "ten": "Dinh dưỡng",
+    "extra": []
+  },
+  "9720501": {
+    "ten": "Răng - Hàm - Mặt",
+    "extra": []
+  },
+  "9720601": {
+    "ten": "Kỹ thuật xét nghiệm y học",
+    "extra": []
+  },
+  "9720602": {
+    "ten": "Kỹ thuật hình ảnh y học",
+    "extra": []
+  },
+  "9720603": {
+    "ten": "Kỹ thuật phục hồi chức năng",
+    "extra": []
+  },
+  "9720701": {
+    "ten": "Y tế công cộng",
+    "extra": []
+  },
+  "9720801": {
+    "ten": "Quản lý Y tế",
+    "extra": []
+  },
+  "9720802": {
+    "ten": "Quản lý bệnh viện",
+    "extra": []
+  },
+  "9760101": {
+    "ten": "Công tác xã hội",
+    "extra": []
+  },
+  "9810101": {
+    "ten": "Du lịch",
+    "extra": []
+  },
+  "9840103": {
+    "ten": "Tổ chức và quản lý vận tải",
+    "extra": []
+  },
+  "9840106": {
+    "ten": "Khoa học hàng hải",
+    "extra": []
+  },
+  "9850101": {
+    "ten": "Quản lý tài nguyên và môi trường",
+    "extra": []
+  },
+  "9850103": {
+    "ten": "Quản lý đất đai",
+    "extra": []
+  },
+  "9860101": {
+    "ten": "Trinh sát an ninh",
+    "extra": []
+  },
+  "9860102": {
+    "ten": "Trinh sát cảnh sát",
+    "extra": []
+  },
+  "9860103": {
+    "ten": "Trinh sát kỹ thuật",
+    "extra": []
+  },
+  "9860104": {
+    "ten": "Điều tra hình sự",
+    "extra": []
+  },
+  "9860107": {
+    "ten": "Kỹ thuật Công an nhân dân",
+    "extra": []
+  },
+  "9860108": {
+    "ten": "Kỹ thuật hình sự",
+    "extra": []
+  },
+  "9860109": {
+    "ten": "Quản lý nhà nước về an ninh trật tự",
+    "extra": []
+  },
+  "9860110": {
+    "ten": "Quản lý trật tự an toàn giao thông",
+    "extra": []
+  },
+  "9860111": {
+    "ten": "Thi hành án hình sự và hỗ trợ tư pháp",
+    "extra": []
+  },
+  "9860112": {
+    "ten": "Tham mưu, chỉ huy công an nhân dân",
+    "extra": []
+  },
+  "9860113": {
+    "ten": "Phòng cháy chữa cháy và cứu nạn cứu hộ",
+    "extra": []
+  },
+  "9860116": {
+    "ten": "Hậu cần công an nhân dân",
+    "extra": []
+  },
+  "9860117": {
+    "ten": "Tình báo an ninh",
+    "extra": []
+  },
+  "9860209": {
+    "ten": "Lịch sử nghệ thuật quân sự",
+    "extra": []
+  },
+  "9860210": {
+    "ten": "Chiến lược quân sự",
+    "extra": []
+  },
+  "9860211": {
+    "ten": "Chiến lược quốc phòng",
+    "extra": []
+  },
+  "9860212": {
+    "ten": "Nghệ thuật chiến dịch",
+    "extra": []
+  },
+  "9860213": {
+    "ten": "Chiến thuật",
+    "extra": []
+  },
+  "9860214": {
+    "ten": "Biên phòng",
+    "extra": []
+  },
+  "9860215": {
+    "ten": "Biên phòng",
+    "extra": []
+  },
+  "9860216": {
+    "ten": "Quản lý biên giới và cửa khẩu",
+    "extra": []
+  },
+  "9860217": {
+    "ten": "Tình báo quân sự",
+    "extra": []
+  },
+  "9860218": {
+    "ten": "Hậu cần quân sự",
+    "extra": []
+  },
+  "9860220": {
+    "ten": "Chỉ huy, quản lý kỹ thuật",
+    "extra": []
+  },
+  "9860221": {
+    "ten": "Trinh sát quân sự",
+    "extra": []
+  },
+  "9900202": {
+    "ten": "Biến đổi khí hậu và phát triển bền vững",
+    "extra": []
+  },
+  "9900205": {
+    "ten": "Di sản học",
+    "extra": []
+  },
+  "DHT154": {
+    "ten": "Quản trị và phân tích dữ liệu",
+    "extra": []
+  },
+  "HTC1207": {
+    "ten": "Kế toán - Kiểm soát - Kiểm toán",
+    "extra": []
+  },
+  "HTC737": {
+    "ten": "Tài chính doanh nghiệp và và kiểm soát quản trị",
+    "extra": []
+  },
+  "HTC753": {
+    "ten": "Bảo hiểm -  Ngân hàng - Tài chính",
+    "extra": []
+  },
+  "HTC758": {
+    "ten": "Bảo hiểm - Ngân hàng - Tài chính",
+    "extra": []
+  },
+  "khac": {
+    "ten": "Khác",
+    "extra": []
+  }
+}

@@ -1,0 +1,12 @@
+Danh mục ngoại ngữ	
+	
+Mã	Tên
+1	Tiếng Trung Quốc
+2	Tiếng Nhật
+3	Tiếng Đức
+4	Tiếng Việt
+5	Tiếng Nga
+6	Tiếng Anh
+7	Tiếng Hàn Quốc
+8	Ngoại ngữ khác
+9	Tiếng Pháp

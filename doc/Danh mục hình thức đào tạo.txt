@@ -1,0 +1,6 @@
+Danh mục hình thức đào tạo	
+	
+Mã	Tên
+1	Đào tạo từ xa
+2	Chính quy
+3	Vừa  làm vừa học

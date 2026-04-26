@@ -20,8 +20,8 @@ def default_ui_config() -> Dict[str, Any]:
                 "model": "LightOnOCR-2-1B",
                 "base_url": "http://127.0.0.1:7861/extract",
                 "api_key": "",
-                "output_format": "markdown",
-                "save_to_file": False,
+                "output_format": "json",
+                "save_to_file": True,
                 "description": "Preset chạy LightOnOCR như một API local_http.",
             },
             {

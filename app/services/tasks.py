@@ -67,6 +67,8 @@ def process_image_task(
         try:
             ai_provider = AIProviderFactory.get_provider(agent, agent_config)
         except ValueError as e:
+            from app.core.db import update_task_status
+            update_task_status(task_id, "failed", error=str(e))
             return {"error": str(e), "status": "failed"}
 
         # 2. Get Prompt
@@ -80,7 +82,10 @@ def process_image_task(
         try:
             content_result = ai_provider.generate_content(image_path, prompt)
         except Exception as e:
-            return {"error": f"AI generation failed: {str(e)}", "status": "failed"}
+            err_msg = f"AI generation failed: {str(e)}"
+            from app.core.db import update_task_status
+            update_task_status(task_id, "failed", error=err_msg)
+            return {"error": err_msg, "status": "failed"}
 
         api_base_url = None
         api_json_path = None
@@ -147,6 +152,9 @@ def process_image_task(
                     if parsed is not None:
                         saved_excel = _save_excel_from_json(parsed, saved_path)
 
+        from app.core.db import update_task_status
+        update_task_status(task_id, "success", json_path=saved_path, excel_path=saved_excel)
+
         return {
             "status": "success",
             "agent": agent,
@@ -163,6 +171,8 @@ def process_image_task(
 
     except Exception as e:
         self.update_state(state="FAILURE", meta={"error": str(e)})
+        from app.core.db import update_task_status
+        update_task_status(task_id, "failed", error=str(e))
         raise e
     finally:
         # Cleanup uploaded file if needed?

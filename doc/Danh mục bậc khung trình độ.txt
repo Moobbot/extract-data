@@ -1,0 +1,12 @@
+Danh mục bậc khung trình độ	
+	
+Mã	Tên
+1	Bậc 5
+2	Bậc 2
+3	Bậc 9
+4	Bậc 8
+5	Bậc 7
+6	Bậc 1
+7	Bậc 4
+8	Bậc 6
+9	Bậc 3

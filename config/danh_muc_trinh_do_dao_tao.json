@@ -1,0 +1,34 @@
+{
+  "1": {
+    "ten": "THCS",
+    "extra": []
+  },
+  "2": {
+    "ten": "Sơ cấp",
+    "extra": []
+  },
+  "3": {
+    "ten": "Thạc sĩ",
+    "extra": []
+  },
+  "4": {
+    "ten": "Trung cấp",
+    "extra": []
+  },
+  "5": {
+    "ten": "Cao đẳng",
+    "extra": []
+  },
+  "6": {
+    "ten": "Tiến sĩ",
+    "extra": []
+  },
+  "7": {
+    "ten": "THPT",
+    "extra": []
+  },
+  "8": {
+    "ten": "Đại học",
+    "extra": []
+  }
+}

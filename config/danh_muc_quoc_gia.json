@@ -1,0 +1,638 @@
+{
+  "1": {
+    "ten": "Lit-va",
+    "extra": []
+  },
+  "2": {
+    "ten": "Kê-nia",
+    "extra": []
+  },
+  "3": {
+    "ten": "Hy Lạp",
+    "extra": []
+  },
+  "4": {
+    "ten": "Dăm-bia",
+    "extra": []
+  },
+  "5": {
+    "ten": "Vê-nê-xu-ê-la",
+    "extra": []
+  },
+  "6": {
+    "ten": "CH Trung Phi",
+    "extra": []
+  },
+  "7": {
+    "ten": "Cô-lôm-bi-a",
+    "extra": []
+  },
+  "8": {
+    "ten": "Nam-mi-bia",
+    "extra": []
+  },
+  "9": {
+    "ten": "Thụy Sỹ",
+    "extra": []
+  },
+  "10": {
+    "ten": "Et-to-ni",
+    "extra": []
+  },
+  "11": {
+    "ten": "Giooc-đa-ni",
+    "extra": []
+  },
+  "12": {
+    "ten": "Cooxxta Rica",
+    "extra": []
+  },
+  "13": {
+    "ten": "Na Uy",
+    "extra": []
+  },
+  "14": {
+    "ten": "I-ra-li-a",
+    "extra": []
+  },
+  "15": {
+    "ten": "Xu-đăng",
+    "extra": []
+  },
+  "16": {
+    "ten": "Dominica",
+    "extra": []
+  },
+  "17": {
+    "ten": "Pa-Ki-xtan",
+    "extra": []
+  },
+  "18": {
+    "ten": "Ka-dắc-xtan",
+    "extra": []
+  },
+  "19": {
+    "ten": "Li Băng",
+    "extra": []
+  },
+  "20": {
+    "ten": "Áp-ga-ni-xtan",
+    "extra": []
+  },
+  "21": {
+    "ten": "Turkmênistan",
+    "extra": []
+  },
+  "22": {
+    "ten": "Phần Lan",
+    "extra": []
+  },
+  "23": {
+    "ten": "Quatar",
+    "extra": []
+  },
+  "24": {
+    "ten": "Vương Quốc Anh",
+    "extra": []
+  },
+  "25": {
+    "ten": "Sri-lan-ka",
+    "extra": []
+  },
+  "26": {
+    "ten": "Ê-cu-a-đo",
+    "extra": []
+  },
+  "27": {
+    "ten": "Goa-tê-ma-la",
+    "extra": []
+  },
+  "28": {
+    "ten": "Công-Kinshasa",
+    "extra": []
+  },
+  "29": {
+    "ten": "Ả rập Xê út",
+    "extra": []
+  },
+  "30": {
+    "ten": "Pa-na-ma",
+    "extra": []
+  },
+  "31": {
+    "ten": "Hà Lan",
+    "extra": []
+  },
+  "32": {
+    "ten": "CHDCND Lào",
+    "extra": []
+  },
+  "33": {
+    "ten": "Ma-la0uy",
+    "extra": []
+  },
+  "34": {
+    "ten": "Ma-na-cô",
+    "extra": []
+  },
+  "35": {
+    "ten": "Guy-a-na",
+    "extra": []
+  },
+  "36": {
+    "ten": "Pa-pua Niu Ghi - nê",
+    "extra": []
+  },
+  "37": {
+    "ten": "Gam-bi-a",
+    "extra": []
+  },
+  "38": {
+    "ten": "Ha-i-ti",
+    "extra": []
+  },
+  "39": {
+    "ten": "Libi",
+    "extra": []
+  },
+  "40": {
+    "ten": "Thái Lan",
+    "extra": []
+  },
+  "41": {
+    "ten": "Môn-đô-va",
+    "extra": []
+  },
+  "42": {
+    "ten": "Căm-Pu-Chia",
+    "extra": []
+  },
+  "43": {
+    "ten": "Úc",
+    "extra": []
+  },
+  "44": {
+    "ten": "Đài Loan",
+    "extra": []
+  },
+  "45": {
+    "ten": "Tây Ban Nha",
+    "extra": []
+  },
+  "46": {
+    "ten": "Nam phi",
+    "extra": []
+  },
+  "47": {
+    "ten": "Bồ Đào Nha",
+    "extra": []
+  },
+  "48": {
+    "ten": "No-giê",
+    "extra": []
+  },
+  "49": {
+    "ten": "Gha-na",
+    "extra": []
+  },
+  "50": {
+    "ten": "I-rắc",
+    "extra": []
+  },
+  "51": {
+    "ten": "Ni Di Lân",
+    "extra": []
+  },
+  "52": {
+    "ten": "Ca-na-đa",
+    "extra": []
+  },
+  "53": {
+    "ten": "Bu-run-đi",
+    "extra": []
+  },
+  "54": {
+    "ten": "CHND Trung Hoa",
+    "extra": []
+  },
+  "55": {
+    "ten": "Tat-gi-ki-xtan",
+    "extra": []
+  },
+  "56": {
+    "ten": "Dim-ba-buê",
+    "extra": []
+  },
+  "57": {
+    "ten": "Mi-cờ-rô-nê-xia-a",
+    "extra": []
+  },
+  "58": {
+    "ten": "Ru-ma-no",
+    "extra": []
+  },
+  "59": {
+    "ten": "Nga",
+    "extra": []
+  },
+  "60": {
+    "ten": "Phi-li-pin",
+    "extra": []
+  },
+  "61": {
+    "ten": "Croát-chia-a",
+    "extra": []
+  },
+  "62": {
+    "ten": "Be-lo-rut-xia",
+    "extra": []
+  },
+  "63": {
+    "ten": "Sat",
+    "extra": []
+  },
+  "64": {
+    "ten": "Ba-ranh",
+    "extra": []
+  },
+  "65": {
+    "ten": "U-krai-na",
+    "extra": []
+  },
+  "66": {
+    "ten": "En Xan-va-đo",
+    "extra": []
+  },
+  "67": {
+    "ten": "Buốc-ki-na-pha-xô",
+    "extra": []
+  },
+  "68": {
+    "ten": "Ma Rốc",
+    "extra": []
+  },
+  "69": {
+    "ten": "Liên Bang Nga",
+    "extra": []
+  },
+  "70": {
+    "ten": "Cư-rơ-gư-dơ-xtan",
+    "extra": []
+  },
+  "71": {
+    "ten": "I-ran",
+    "extra": []
+  },
+  "72": {
+    "ten": "Pu-ec-to Ri-cô",
+    "extra": []
+  },
+  "73": {
+    "ten": "Nê-Pan",
+    "extra": []
+  },
+  "74": {
+    "ten": "My-an-ma",
+    "extra": []
+  },
+  "75": {
+    "ten": "Quần đảo Sô-lô-môn",
+    "extra": []
+  },
+  "76": {
+    "ten": "Cô-oét",
+    "extra": []
+  },
+  "77": {
+    "ten": "Ôn-đu-rát",
+    "extra": []
+  },
+  "78": {
+    "ten": "Hàn Quốc",
+    "extra": []
+  },
+  "79": {
+    "ten": "U-dơ-bê-ki-xtan",
+    "extra": []
+  },
+  "80": {
+    "ten": "Tôn-ga",
+    "extra": []
+  },
+  "81": {
+    "ten": "Sec-bi-a",
+    "extra": []
+  },
+  "82": {
+    "ten": "Ma-đa-gát-xka",
+    "extra": []
+  },
+  "83": {
+    "ten": "Việt Nam",
+    "extra": []
+  },
+  "84": {
+    "ten": "Ma-lai-xi-a",
+    "extra": []
+  },
+  "85": {
+    "ten": "Man-đi-vơ",
+    "extra": []
+  },
+  "86": {
+    "ten": "Hung-ga-ri",
+    "extra": []
+  },
+  "87": {
+    "ten": "Tan-da-nia",
+    "extra": []
+  },
+  "88": {
+    "ten": "Thụy Điển",
+    "extra": []
+  },
+  "89": {
+    "ten": "Việt Nam",
+    "extra": []
+  },
+  "90": {
+    "ten": "Ma Cao",
+    "extra": []
+  },
+  "91": {
+    "ten": "Mỹ",
+    "extra": []
+  },
+  "92": {
+    "ten": "Ma-li",
+    "extra": []
+  },
+  "93": {
+    "ten": "Các Tiểu vương quốc Ả Rập Thống Nhất",
+    "extra": []
+  },
+  "94": {
+    "ten": "Tu-va-lu",
+    "extra": []
+  },
+  "95": {
+    "ten": "Li-bê-ri-a",
+    "extra": []
+  },
+  "96": {
+    "ten": "B-ru-nây",
+    "extra": []
+  },
+  "97": {
+    "ten": "I-xra-en",
+    "extra": []
+  },
+  "98": {
+    "ten": "U-ru-goay",
+    "extra": []
+  },
+  "99": {
+    "ten": "Phi-Ghi",
+    "extra": []
+  },
+  "100": {
+    "ten": "Cuba",
+    "extra": []
+  },
+  "101": {
+    "ten": "Ai-xlen",
+    "extra": []
+  },
+  "102": {
+    "ten": "Latvia",
+    "extra": []
+  },
+  "103": {
+    "ten": "Hồng Công",
+    "extra": []
+  },
+  "104": {
+    "ten": "Xê nê gan",
+    "extra": []
+  },
+  "105": {
+    "ten": "Man-ta",
+    "extra": []
+  },
+  "106": {
+    "ten": "Pa-ra-goay",
+    "extra": []
+  },
+  "107": {
+    "ten": "Mông-tê-nê-groo",
+    "extra": []
+  },
+  "108": {
+    "ten": "Thổ Nhĩ Kỳ",
+    "extra": []
+  },
+  "109": {
+    "ten": "Mông Cổ",
+    "extra": []
+  },
+  "110": {
+    "ten": "Mê hi cô",
+    "extra": []
+  },
+  "111": {
+    "ten": "Đông -ti-mo",
+    "extra": []
+  },
+  "112": {
+    "ten": "Quần đảo Ma-rơ-san",
+    "extra": []
+  },
+  "113": {
+    "ten": "Slô-vac-ki-a",
+    "extra": []
+  },
+  "114": {
+    "ten": "Ô man",
+    "extra": []
+  },
+  "115": {
+    "ten": "Gru-dia",
+    "extra": []
+  },
+  "116": {
+    "ten": "An giê ri",
+    "extra": []
+  },
+  "117": {
+    "ten": "Ki-ri-ba-ti",
+    "extra": []
+  },
+  "118": {
+    "ten": "Ấn Độ",
+    "extra": []
+  },
+  "119": {
+    "ten": "Ni-ca-ra-goa",
+    "extra": []
+  },
+  "120": {
+    "ten": "Pê - ru",
+    "extra": []
+  },
+  "121": {
+    "ten": "Ruanđa",
+    "extra": []
+  },
+  "122": {
+    "ten": "Gia-mai-ca",
+    "extra": []
+  },
+  "123": {
+    "ten": "Bun-ga-ri",
+    "extra": []
+  },
+  "124": {
+    "ten": "Luc-xem-bua",
+    "extra": []
+  },
+  "125": {
+    "ten": "Ba Lan",
+    "extra": []
+  },
+  "126": {
+    "ten": "Nam Xu-đăng",
+    "extra": []
+  },
+  "127": {
+    "ten": "Chi lê",
+    "extra": []
+  },
+  "128": {
+    "ten": "Xi-ga-po",
+    "extra": []
+  },
+  "129": {
+    "ten": "U-gan-da",
+    "extra": []
+  },
+  "130": {
+    "ten": "Nhật Bản",
+    "extra": []
+  },
+  "131": {
+    "ten": "Si-ri-a",
+    "extra": []
+  },
+  "132": {
+    "ten": "A-rơ-len",
+    "extra": []
+  },
+  "133": {
+    "ten": "Ghi nê",
+    "extra": []
+  },
+  "134": {
+    "ten": "Tuy-ni-di",
+    "extra": []
+  },
+  "135": {
+    "ten": "Áo",
+    "extra": []
+  },
+  "136": {
+    "ten": "Đan Mạch",
+    "extra": []
+  },
+  "137": {
+    "ten": "Sô-ma-li",
+    "extra": []
+  },
+  "138": {
+    "ten": "Mau-ri-ti-út",
+    "extra": []
+  },
+  "139": {
+    "ten": "Cộng hòa Séc",
+    "extra": []
+  },
+  "140": {
+    "ten": "Đức",
+    "extra": []
+  },
+  "141": {
+    "ten": "To-go",
+    "extra": []
+  },
+  "142": {
+    "ten": "Pháp",
+    "extra": []
+  },
+  "143": {
+    "ten": "Va-nu-a-tu",
+    "extra": []
+  },
+  "144": {
+    "ten": "Palestine",
+    "extra": []
+  },
+  "145": {
+    "ten": "A-déc-bai-gian",
+    "extra": []
+  },
+  "146": {
+    "ten": "Ăng -gô-la",
+    "extra": []
+  },
+  "147": {
+    "ten": "Can-mơ-run",
+    "extra": []
+  },
+  "148": {
+    "ten": "Lit-ten-xten",
+    "extra": []
+  },
+  "149": {
+    "ten": "Tây Sa-moa",
+    "extra": []
+  },
+  "150": {
+    "ten": "Ma-xê-đô-ni-a",
+    "extra": []
+  },
+  "151": {
+    "ten": "Ni-giê-ri-a",
+    "extra": []
+  },
+  "152": {
+    "ten": "Y-ê-men",
+    "extra": []
+  },
+  "153": {
+    "ten": "In-đô-nê-xi-a",
+    "extra": []
+  },
+  "154": {
+    "ten": "Mô-dăm-bich",
+    "extra": []
+  },
+  "155": {
+    "ten": "Ac-hen-ti-na",
+    "extra": []
+  },
+  "156": {
+    "ten": "Xi-ê-a Lê- ôn",
+    "extra": []
+  },
+  "157": {
+    "ten": "Slô-ven-ni-a",
+    "extra": []
+  },
+  "158": {
+    "ten": "Triều Tiên",
+    "extra": []
+  },
+  "159": {
+    "ten": "Ai cập",
+    "extra": []
+  }
+}

@@ -1,0 +1,78 @@
+Danh mục tỉnh thành cũ	
+	
+Mã	Tên
+1	Tỉnh Bắc Ninh
+2	Tỉnh Bà Rịa - Vũng Tàu
+3	Thành phố Hải Phòng
+4	Tỉnh Lâm Đồng
+5	Tỉnh Phú Yên
+6	Tỉnh Thái Nguyên
+7	Tỉnh Đắk Lắk
+8	Tỉnh Kon Tum
+9	Tỉnh Nghệ Tĩnh
+10	Tỉnh Long An
+11	Tỉnh Vĩnh Phúc
+12	Tỉnh Yên Bái
+13	Tỉnh Thừa Thiên Huế
+14	Tỉnh Quảng Nam
+15	Tỉnh Hà Tây
+16	Tỉnh Bình Trị Thiên
+17	Tỉnh Trà Vinh
+18	Tỉnh Hà Nam Ninh
+19	Tỉnh Ninh Bình
+20	Tỉnh Lạng Sơn
+21	Tỉnh Quảng Ninh
+22	Tỉnh Quảng Bình
+23	Tỉnh Gia Lai
+24	Tỉnh Đồng Tháp
+25	Tỉnh Tiền Giang
+26	Thành phố Hà Nội
+27	Tỉnh Phú Khánh
+28	Tỉnh Bình Dương
+29	Tỉnh Bắc Giang
+30	Tỉnh Bắc Kạn
+31	Tỉnh Phú Thọ
+32	Tỉnh Hà Giang
+33	Tỉnh Minh Hải
+34	Tỉnh Hà Bắc
+35	Tỉnh Quảng Ngãi
+36	Tỉnh Đồng Nai
+37	Tỉnh Hoà Bình
+38	Tỉnh Thái Bình
+39	Tỉnh Điện Biên
+40	Tỉnh Bình Định
+41	Tỉnh Lào Cai
+42	Tỉnh Hải Hưng
+43	Tỉnh Đắk Nông
+44	Tỉnh Hải Dương
+45	Tỉnh Hưng Yên
+46	Tỉnh Kiên Giang
+47	Thành phố Cần Thơ
+48	Thành phố Hồ Chí Minh
+49	Tỉnh Bạc Liêu
+50	Tỉnh Lai Châu
+51	Tỉnh Cà Mau
+52	Tỉnh Hà Sơn Bình
+53	Tỉnh Quảng Trị
+54	Tỉnh An Giang
+55	Thành phố Đà Nẵng
+56	Tỉnh Cao Bằng
+57	Tỉnh Tuyên Quang
+58	Tỉnh Nghệ An
+59	Tỉnh Bình Thuận
+60	Tỉnh Sơn La
+61	Tỉnh Bến Tre
+62	Tỉnh Khánh Hòa
+63	Tỉnh Vĩnh Phú
+64	Tỉnh Ninh Thuận
+65	Tỉnh Hà Nam
+66	Tỉnh Bình Phước
+67	Tỉnh Tây Ninh
+68	Tỉnh Nam Định
+69	Tỉnh Sông Bé
+70	Tỉnh Hà Tĩnh
+71	Tỉnh Thanh Hóa
+72	Tỉnh Bắc Thái
+73	Tỉnh Vĩnh Long
+74	Tỉnh Sóc Trăng
+75	Tỉnh Hậu Giang

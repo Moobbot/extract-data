@@ -397,6 +397,10 @@
             local_http, nhưng bạn có thể đổi model hoặc agent từ settings.</p>
         </div>
         <div class="hero-actions">
+          <a class="chip" href="/ui/history" target="_blank" rel="noreferrer">
+            Lịch sử & Quản lý
+            <small>view results</small>
+          </a>
           <a class="chip" href="/ui/settings" target="_blank" rel="noreferrer">
             Settings
             <small>manage config</small>
@@ -423,9 +427,8 @@
               <label for="templateSelect">Template Trích Xuất</label>
               <select id="templateSelect">
                 <option value="default">Không dùng Template (Chỉ xuất Text thô)</option>
-                <option value="invoice">Hoá Đơn Bán Hàng</option>
-                <option value="id_card">Căn Cước Công Dân</option>
-                <option value="medical_record">Hồ Sơ Bệnh Án</option>
+                <option value="chung_chi_so">Chứng Chỉ Số</option>
+                <option value="van_bang_dai_hoc">Văn Bằng Đại Học</option>
               </select>
             </div>
 
@@ -522,7 +525,6 @@
       copyContentBtn.disabled = true;
 
       const maxAttempts = 120;
-      const pendingWarningAfter = 12;
       let attempts = 0;
 
       while (attempts < maxAttempts) {
@@ -557,16 +559,15 @@
           return;
         }
 
-        if (data.status === "PENDING" && attempts >= pendingWarningAfter) {
-          setStatus("Task is still PENDING. Worker/Redis may not be running. Start Redis and Celery worker, then submit again.", "err");
-          return;
+        if (data.status === "PENDING" || data.status === "STARTED") {
+          setStatus("Task is processing in background... (" + attempts + "/" + maxAttempts + ")", "");
+        } else {
+          setStatus("Task status: " + data.status + " ...", "");
         }
-
-        setStatus("Task status: " + data.status + " ...", "");
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
 
-      setStatus("Polling timeout. Please check Worker/Redis status.", "err");
+      setStatus("Đã hết thời gian chờ tự động tải trên giao diện. Tác vụ vẫn đang chạy ngầm, bạn có thể kiểm tra kết quả trong trang Quản lý sau.", "ok");
     }
 
     function triggerDownload(url) {

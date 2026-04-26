@@ -1,0 +1,302 @@
+{
+  "1": {
+    "ten": "Tỉnh Bắc Ninh",
+    "extra": []
+  },
+  "2": {
+    "ten": "Tỉnh Bà Rịa - Vũng Tàu",
+    "extra": []
+  },
+  "3": {
+    "ten": "Thành phố Hải Phòng",
+    "extra": []
+  },
+  "4": {
+    "ten": "Tỉnh Lâm Đồng",
+    "extra": []
+  },
+  "5": {
+    "ten": "Tỉnh Phú Yên",
+    "extra": []
+  },
+  "6": {
+    "ten": "Tỉnh Thái Nguyên",
+    "extra": []
+  },
+  "7": {
+    "ten": "Tỉnh Đắk Lắk",
+    "extra": []
+  },
+  "8": {
+    "ten": "Tỉnh Kon Tum",
+    "extra": []
+  },
+  "9": {
+    "ten": "Tỉnh Nghệ Tĩnh",
+    "extra": []
+  },
+  "10": {
+    "ten": "Tỉnh Long An",
+    "extra": []
+  },
+  "11": {
+    "ten": "Tỉnh Vĩnh Phúc",
+    "extra": []
+  },
+  "12": {
+    "ten": "Tỉnh Yên Bái",
+    "extra": []
+  },
+  "13": {
+    "ten": "Tỉnh Thừa Thiên Huế",
+    "extra": []
+  },
+  "14": {
+    "ten": "Tỉnh Quảng Nam",
+    "extra": []
+  },
+  "15": {
+    "ten": "Tỉnh Hà Tây",
+    "extra": []
+  },
+  "16": {
+    "ten": "Tỉnh Bình Trị Thiên",
+    "extra": []
+  },
+  "17": {
+    "ten": "Tỉnh Trà Vinh",
+    "extra": []
+  },
+  "18": {
+    "ten": "Tỉnh Hà Nam Ninh",
+    "extra": []
+  },
+  "19": {
+    "ten": "Tỉnh Ninh Bình",
+    "extra": []
+  },
+  "20": {
+    "ten": "Tỉnh Lạng Sơn",
+    "extra": []
+  },
+  "21": {
+    "ten": "Tỉnh Quảng Ninh",
+    "extra": []
+  },
+  "22": {
+    "ten": "Tỉnh Quảng Bình",
+    "extra": []
+  },
+  "23": {
+    "ten": "Tỉnh Gia Lai",
+    "extra": []
+  },
+  "24": {
+    "ten": "Tỉnh Đồng Tháp",
+    "extra": []
+  },
+  "25": {
+    "ten": "Tỉnh Tiền Giang",
+    "extra": []
+  },
+  "26": {
+    "ten": "Thành phố Hà Nội",
+    "extra": []
+  },
+  "27": {
+    "ten": "Tỉnh Phú Khánh",
+    "extra": []
+  },
+  "28": {
+    "ten": "Tỉnh Bình Dương",
+    "extra": []
+  },
+  "29": {
+    "ten": "Tỉnh Bắc Giang",
+    "extra": []
+  },
+  "30": {
+    "ten": "Tỉnh Bắc Kạn",
+    "extra": []
+  },
+  "31": {
+    "ten": "Tỉnh Phú Thọ",
+    "extra": []
+  },
+  "32": {
+    "ten": "Tỉnh Hà Giang",
+    "extra": []
+  },
+  "33": {
+    "ten": "Tỉnh Minh Hải",
+    "extra": []
+  },
+  "34": {
+    "ten": "Tỉnh Hà Bắc",
+    "extra": []
+  },
+  "35": {
+    "ten": "Tỉnh Quảng Ngãi",
+    "extra": []
+  },
+  "36": {
+    "ten": "Tỉnh Đồng Nai",
+    "extra": []
+  },
+  "37": {
+    "ten": "Tỉnh Hoà Bình",
+    "extra": []
+  },
+  "38": {
+    "ten": "Tỉnh Thái Bình",
+    "extra": []
+  },
+  "39": {
+    "ten": "Tỉnh Điện Biên",
+    "extra": []
+  },
+  "40": {
+    "ten": "Tỉnh Bình Định",
+    "extra": []
+  },
+  "41": {
+    "ten": "Tỉnh Lào Cai",
+    "extra": []
+  },
+  "42": {
+    "ten": "Tỉnh Hải Hưng",
+    "extra": []
+  },
+  "43": {
+    "ten": "Tỉnh Đắk Nông",
+    "extra": []
+  },
+  "44": {
+    "ten": "Tỉnh Hải Dương",
+    "extra": []
+  },
+  "45": {
+    "ten": "Tỉnh Hưng Yên",
+    "extra": []
+  },
+  "46": {
+    "ten": "Tỉnh Kiên Giang",
+    "extra": []
+  },
+  "47": {
+    "ten": "Thành phố Cần Thơ",
+    "extra": []
+  },
+  "48": {
+    "ten": "Thành phố Hồ Chí Minh",
+    "extra": []
+  },
+  "49": {
+    "ten": "Tỉnh Bạc Liêu",
+    "extra": []
+  },
+  "50": {
+    "ten": "Tỉnh Lai Châu",
+    "extra": []
+  },
+  "51": {
+    "ten": "Tỉnh Cà Mau",
+    "extra": []
+  },
+  "52": {
+    "ten": "Tỉnh Hà Sơn Bình",
+    "extra": []
+  },
+  "53": {
+    "ten": "Tỉnh Quảng Trị",
+    "extra": []
+  },
+  "54": {
+    "ten": "Tỉnh An Giang",
+    "extra": []
+  },
+  "55": {
+    "ten": "Thành phố Đà Nẵng",
+    "extra": []
+  },
+  "56": {
+    "ten": "Tỉnh Cao Bằng",
+    "extra": []
+  },
+  "57": {
+    "ten": "Tỉnh Tuyên Quang",
+    "extra": []
+  },
+  "58": {
+    "ten": "Tỉnh Nghệ An",
+    "extra": []
+  },
+  "59": {
+    "ten": "Tỉnh Bình Thuận",
+    "extra": []
+  },
+  "60": {
+    "ten": "Tỉnh Sơn La",
+    "extra": []
+  },
+  "61": {
+    "ten": "Tỉnh Bến Tre",
+    "extra": []
+  },
+  "62": {
+    "ten": "Tỉnh Khánh Hòa",
+    "extra": []
+  },
+  "63": {
+    "ten": "Tỉnh Vĩnh Phú",
+    "extra": []
+  },
+  "64": {
+    "ten": "Tỉnh Ninh Thuận",
+    "extra": []
+  },
+  "65": {
+    "ten": "Tỉnh Hà Nam",
+    "extra": []
+  },
+  "66": {
+    "ten": "Tỉnh Bình Phước",
+    "extra": []
+  },
+  "67": {
+    "ten": "Tỉnh Tây Ninh",
+    "extra": []
+  },
+  "68": {
+    "ten": "Tỉnh Nam Định",
+    "extra": []
+  },
+  "69": {
+    "ten": "Tỉnh Sông Bé",
+    "extra": []
+  },
+  "70": {
+    "ten": "Tỉnh Hà Tĩnh",
+    "extra": []
+  },
+  "71": {
+    "ten": "Tỉnh Thanh Hóa",
+    "extra": []
+  },
+  "72": {
+    "ten": "Tỉnh Bắc Thái",
+    "extra": []
+  },
+  "73": {
+    "ten": "Tỉnh Vĩnh Long",
+    "extra": []
+  },
+  "74": {
+    "ten": "Tỉnh Sóc Trăng",
+    "extra": []
+  },
+  "75": {
+    "ten": "Tỉnh Hậu Giang",
+    "extra": []
+  }
+}

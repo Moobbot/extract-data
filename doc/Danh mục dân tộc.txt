@@ -1,0 +1,58 @@
+Danh mục dân tộc		
+		
+Mã	Tên 	Tên khác gọi theo địa phương
+1	Mạ	
+2	Kháng	Xá Khao, Xá Đón, Xá Tú Lăng
+3	Hà Nhì	U Ní, Xá U Ní, Hà Nhì Già
+4	Hrê	Mọi Đá Vách, Chăm-rê, Mọi Luỹ, Thạch Bých, Mọi Sơn Phòng
+5	Lào	Lào Bốc, Lào Nọi
+6	Mường	Mol, Mual, Mọi
+7	Chu-ru	Chơ-ru, Kru, Mọi
+8	Mnông	
+9	Ra-glai	O-rang, Glai, Rô-glai, Radlai, Mọi
+10	Cống	
+11	Bru-Vân Kiều	
+12	Si La	Cú Đề Xừ
+13	Xinh-mun	Puộc, Pụa, Xá
+14	La Hủ	
+15	Khác	
+16	Dao	Mán, Động, Trại, Dìu, Miền, Kiềm, Kìm Mùn
+17	Xtiêng	Xa-điêng, Mọi, Tà-mun
+18	Lự	Lừ, Duôn, Nhuồn
+19	Pu Péo	Ka Bẻo, Pen Ti Lô Lô, La Quả, Mán
+20	Khơ-me	
+21	Bố Y	Chủng Chá, Trung Gia, Pầu Y, Pủ Dí
+22	Cơ-tu	Ca-tu, Ca-tang, Mọi, Cao, Hạ
+23	Phù Lá	
+24	Chăm	Chiêm Thành, Chăm Pa, Hời, Chàm
+25	Gia-rai	Mọi, Chơ-rai
+26	Ba-na	Bơ-nâm, Roh, Kon Kde, Ala Công, Kpang Công
+27	Ngái	Sán Ngái
+28	Co	Trầu, Cùa, Mọi, Col, Cor, Khùa
+29	Hoa (Hán)	Khách, Tàu, Hán
+30	Sán Chay	Mán, Cao Lan-Sán Chỉ, Hờn Bạn, Hờn Chùng, Sơn Tử
+31	Kinh	Kinh (Việt)
+32	Ơ-đu	Tày Hạt
+33	Chứt	Xá La Vàng, Chà Củi (Tắc Củi), Tu Vang, Pa Leng
+34	Rơ-măm	
+35	Thái	Táy
+36	La Ha	Xá Khao, Xá Cha, Xá La Nga
+37	La-chí	Thổ Đen, Cù Tê, Xá, La ti, Mán Chí
+38	Cơ-ho	
+39	Xơ-đăng	Kmrâng, Hđang, Con-lan, Brila
+40	Giáy	Nhắng, Giẳng, Sa Nhân, Pầu Thỉn, Chủng Chá, Pu Nắm
+41	Ê-đê	Đe, Mọi
+42	Sán Dìu	Trại, Trại Đát, Sán Dợo, Mán quần Cộc, Mán Váy Xẻ
+43	Gié-Triêng	Giang Rẫy, Brila, Cà-tang, Mọi, Doãn
+44	Mảng	Mảng Ư, Xá Lá Vàng, Niễng O, Xa Mãng, Xá Cang Lai
+45	Nùng	
+46	LôLô	Mùn Di, Ô Man, Lu Lọc Màn, Di, Qua La, La La, Ma Di
+47	Brâu	Brao
+48	Chơ-ro	Châu-ro, Dơ-ro, Mọi
+49	Thổ	
+50	Khơmú	Xá Cốu, Pu Thênh, Tày Hạy, Việt Cang, Khá Klậu, Tềnh
+51	Ta-ôi	Tôi-ôi, Ta-hoi, Ta-ôih, Tà-uất (Atuất)
+52	H'Mông	Mèo, Mẹo, Mán, Miêu Tộc
+53	Pà Thẻn	Pà Hưng, Mán Pa Teng, Tống
+54	Tày	Thổ
+55	Cờ lao	

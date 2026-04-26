@@ -1,0 +1,10 @@
+Danh mục loại tốt nghiệp	
+	
+Mã	Tên
+1	Giỏi
+2	Kém
+3	Xuất sắc
+4	Khá
+5	Yếu
+6	Trung bình
+7	Trung bình khá

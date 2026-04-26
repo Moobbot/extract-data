@@ -1,0 +1,306 @@
+{
+  "1": {
+    "ten": "Mạ",
+    "extra": []
+  },
+  "2": {
+    "ten": "Kháng",
+    "extra": [
+      "Xá Khao, Xá Đón, Xá Tú Lăng"
+    ]
+  },
+  "3": {
+    "ten": "Hà Nhì",
+    "extra": [
+      "U Ní, Xá U Ní, Hà Nhì Già"
+    ]
+  },
+  "4": {
+    "ten": "Hrê",
+    "extra": [
+      "Mọi Đá Vách, Chăm-rê, Mọi Luỹ, Thạch Bých, Mọi Sơn Phòng"
+    ]
+  },
+  "5": {
+    "ten": "Lào",
+    "extra": [
+      "Lào Bốc, Lào Nọi"
+    ]
+  },
+  "6": {
+    "ten": "Mường",
+    "extra": [
+      "Mol, Mual, Mọi"
+    ]
+  },
+  "7": {
+    "ten": "Chu-ru",
+    "extra": [
+      "Chơ-ru, Kru, Mọi"
+    ]
+  },
+  "8": {
+    "ten": "Mnông",
+    "extra": []
+  },
+  "9": {
+    "ten": "Ra-glai",
+    "extra": [
+      "O-rang, Glai, Rô-glai, Radlai, Mọi"
+    ]
+  },
+  "10": {
+    "ten": "Cống",
+    "extra": []
+  },
+  "11": {
+    "ten": "Bru-Vân Kiều",
+    "extra": []
+  },
+  "12": {
+    "ten": "Si La",
+    "extra": [
+      "Cú Đề Xừ"
+    ]
+  },
+  "13": {
+    "ten": "Xinh-mun",
+    "extra": [
+      "Puộc, Pụa, Xá"
+    ]
+  },
+  "14": {
+    "ten": "La Hủ",
+    "extra": []
+  },
+  "15": {
+    "ten": "Khác",
+    "extra": []
+  },
+  "16": {
+    "ten": "Dao",
+    "extra": [
+      "Mán, Động, Trại, Dìu, Miền, Kiềm, Kìm Mùn"
+    ]
+  },
+  "17": {
+    "ten": "Xtiêng",
+    "extra": [
+      "Xa-điêng, Mọi, Tà-mun"
+    ]
+  },
+  "18": {
+    "ten": "Lự",
+    "extra": [
+      "Lừ, Duôn, Nhuồn"
+    ]
+  },
+  "19": {
+    "ten": "Pu Péo",
+    "extra": [
+      "Ka Bẻo, Pen Ti Lô Lô, La Quả, Mán"
+    ]
+  },
+  "20": {
+    "ten": "Khơ-me",
+    "extra": []
+  },
+  "21": {
+    "ten": "Bố Y",
+    "extra": [
+      "Chủng Chá, Trung Gia, Pầu Y, Pủ Dí"
+    ]
+  },
+  "22": {
+    "ten": "Cơ-tu",
+    "extra": [
+      "Ca-tu, Ca-tang, Mọi, Cao, Hạ"
+    ]
+  },
+  "23": {
+    "ten": "Phù Lá",
+    "extra": []
+  },
+  "24": {
+    "ten": "Chăm",
+    "extra": [
+      "Chiêm Thành, Chăm Pa, Hời, Chàm"
+    ]
+  },
+  "25": {
+    "ten": "Gia-rai",
+    "extra": [
+      "Mọi, Chơ-rai"
+    ]
+  },
+  "26": {
+    "ten": "Ba-na",
+    "extra": [
+      "Bơ-nâm, Roh, Kon Kde, Ala Công, Kpang Công"
+    ]
+  },
+  "27": {
+    "ten": "Ngái",
+    "extra": [
+      "Sán Ngái"
+    ]
+  },
+  "28": {
+    "ten": "Co",
+    "extra": [
+      "Trầu, Cùa, Mọi, Col, Cor, Khùa"
+    ]
+  },
+  "29": {
+    "ten": "Hoa (Hán)",
+    "extra": [
+      "Khách, Tàu, Hán"
+    ]
+  },
+  "30": {
+    "ten": "Sán Chay",
+    "extra": [
+      "Mán, Cao Lan-Sán Chỉ, Hờn Bạn, Hờn Chùng, Sơn Tử"
+    ]
+  },
+  "31": {
+    "ten": "Kinh",
+    "extra": [
+      "Kinh (Việt)"
+    ]
+  },
+  "32": {
+    "ten": "Ơ-đu",
+    "extra": [
+      "Tày Hạt"
+    ]
+  },
+  "33": {
+    "ten": "Chứt",
+    "extra": [
+      "Xá La Vàng, Chà Củi (Tắc Củi), Tu Vang, Pa Leng"
+    ]
+  },
+  "34": {
+    "ten": "Rơ-măm",
+    "extra": []
+  },
+  "35": {
+    "ten": "Thái",
+    "extra": [
+      "Táy"
+    ]
+  },
+  "36": {
+    "ten": "La Ha",
+    "extra": [
+      "Xá Khao, Xá Cha, Xá La Nga"
+    ]
+  },
+  "37": {
+    "ten": "La-chí",
+    "extra": [
+      "Thổ Đen, Cù Tê, Xá, La ti, Mán Chí"
+    ]
+  },
+  "38": {
+    "ten": "Cơ-ho",
+    "extra": []
+  },
+  "39": {
+    "ten": "Xơ-đăng",
+    "extra": [
+      "Kmrâng, Hđang, Con-lan, Brila"
+    ]
+  },
+  "40": {
+    "ten": "Giáy",
+    "extra": [
+      "Nhắng, Giẳng, Sa Nhân, Pầu Thỉn, Chủng Chá, Pu Nắm"
+    ]
+  },
+  "41": {
+    "ten": "Ê-đê",
+    "extra": [
+      "Đe, Mọi"
+    ]
+  },
+  "42": {
+    "ten": "Sán Dìu",
+    "extra": [
+      "Trại, Trại Đát, Sán Dợo, Mán quần Cộc, Mán Váy Xẻ"
+    ]
+  },
+  "43": {
+    "ten": "Gié-Triêng",
+    "extra": [
+      "Giang Rẫy, Brila, Cà-tang, Mọi, Doãn"
+    ]
+  },
+  "44": {
+    "ten": "Mảng",
+    "extra": [
+      "Mảng Ư, Xá Lá Vàng, Niễng O, Xa Mãng, Xá Cang Lai"
+    ]
+  },
+  "45": {
+    "ten": "Nùng",
+    "extra": []
+  },
+  "46": {
+    "ten": "LôLô",
+    "extra": [
+      "Mùn Di, Ô Man, Lu Lọc Màn, Di, Qua La, La La, Ma Di"
+    ]
+  },
+  "47": {
+    "ten": "Brâu",
+    "extra": [
+      "Brao"
+    ]
+  },
+  "48": {
+    "ten": "Chơ-ro",
+    "extra": [
+      "Châu-ro, Dơ-ro, Mọi"
+    ]
+  },
+  "49": {
+    "ten": "Thổ",
+    "extra": []
+  },
+  "50": {
+    "ten": "Khơmú",
+    "extra": [
+      "Xá Cốu, Pu Thênh, Tày Hạy, Việt Cang, Khá Klậu, Tềnh"
+    ]
+  },
+  "51": {
+    "ten": "Ta-ôi",
+    "extra": [
+      "Tôi-ôi, Ta-hoi, Ta-ôih, Tà-uất (Atuất)"
+    ]
+  },
+  "52": {
+    "ten": "H'Mông",
+    "extra": [
+      "Mèo, Mẹo, Mán, Miêu Tộc"
+    ]
+  },
+  "53": {
+    "ten": "Pà Thẻn",
+    "extra": [
+      "Pà Hưng, Mán Pa Teng, Tống"
+    ]
+  },
+  "54": {
+    "ten": "Tày",
+    "extra": [
+      "Thổ"
+    ]
+  },
+  "55": {
+    "ten": "Cờ lao",
+    "extra": []
+  }
+}
