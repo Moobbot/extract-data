@@ -150,6 +150,73 @@ def process_image_task(
         except Exception:
             return None
 
+    def _extract_records_for_mapping(payload: Any) -> Any:
+        """
+        Normalize common OCR JSON shapes into row records for template mapping.
+        Examples handled:
+        - {"tables": [{"rows": [...]}, ...]}
+        - {"result": [...]}
+        - [{"tables": ...}, ...]
+        """
+        if isinstance(payload, str):
+            text = _clean_json_string(payload)
+            try:
+                decoded = json.loads(text)
+                return _extract_records_for_mapping(decoded)
+            except Exception:
+                return payload
+
+        if isinstance(payload, dict):
+            for nested_key in ("data", "content", "text", "raw_text", "rendered_text"):
+                nested = payload.get(nested_key)
+                if isinstance(nested, (dict, list)):
+                    extracted = _extract_records_for_mapping(nested)
+                    if extracted is not nested:
+                        return extracted
+                elif isinstance(nested, str):
+                    extracted = _extract_records_for_mapping(nested)
+                    if extracted is not nested:
+                        return extracted
+
+            if isinstance(payload.get("result"), list):
+                return payload["result"]
+
+            tables = payload.get("tables")
+            if isinstance(tables, list):
+                rows = []
+                for table in tables:
+                    if isinstance(table, dict) and isinstance(table.get("rows"), list):
+                        rows.extend([r for r in table["rows"] if isinstance(r, dict)])
+                if rows:
+                    return rows
+
+            if isinstance(payload.get("rows"), list):
+                return payload["rows"]
+
+            return payload
+
+        if isinstance(payload, list):
+            rows = []
+            has_table_like = False
+            for item in payload:
+                if isinstance(item, dict) and (
+                    isinstance(item.get("tables"), list)
+                    or isinstance(item.get("result"), list)
+                    or isinstance(item.get("rows"), list)
+                ):
+                    has_table_like = True
+                extracted = _extract_records_for_mapping(item)
+                if isinstance(extracted, list):
+                    rows.extend([r for r in extracted if isinstance(r, dict)])
+                elif isinstance(extracted, dict):
+                    rows.append(extracted)
+
+            if has_table_like:
+                return rows
+            return payload
+
+        return payload
+
     try:
         self.update_state(state="PROGRESS", meta={"message": "Processing started"})
 
@@ -301,6 +368,8 @@ def process_image_task(
                 # ÁP DỤNG MAPPING Ở ĐÂY
                 if parsed is not None and template_id != "default":
                     from app.core.mapper import map_extracted_data
+
+                    parsed = _extract_records_for_mapping(parsed)
 
                     if isinstance(parsed, list):
                         parsed = [
