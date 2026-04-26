@@ -78,32 +78,74 @@ def process_image_task(
 
         # 3. Generate
         try:
-            content = ai_provider.generate_content(image_path, prompt)
+            content_result = ai_provider.generate_content(image_path, prompt)
         except Exception as e:
             return {"error": f"AI generation failed: {str(e)}", "status": "failed"}
+
+        api_base_url = None
+        api_json_path = None
+        api_excel_path = None
+        
+        if isinstance(content_result, dict):
+            content = content_result.get("text", "")
+            api_base_url = content_result.get("base_url", "http://localhost:8000")
+            api_json_path = content_result.get("api_json_path")
+            api_excel_path = content_result.get("api_excel_path")
+        else:
+            content = content_result
 
         # 4. Save to file if requested
         saved_path = None
         saved_excel = None
         if save_to_file:
             from app.core.config import settings
+            import requests
 
             base_name = os.path.splitext(os.path.basename(image_path))[0]
             ext = "md" if output_format == "markdown" else "json"
             output_filename = f"{base_name}.{ext}"
             saved_path = os.path.join(settings.OUTPUT_DIR, output_filename)
 
-            with open(saved_path, "w", encoding="utf-8") as f:
-                f.write(content)
-
-            if output_format == "json":
+            # Nếu API có file JSON chuẩn và định dạng yêu cầu là json, thử tải về thay vì ghi text chay
+            downloaded_json = False
+            if output_format == "json" and api_json_path and api_base_url:
                 try:
-                    parsed = json.loads(_clean_json_string(content))
-                except json.JSONDecodeError:
-                    parsed = None
+                    res = requests.post(f"{api_base_url}/download", json={"path": api_json_path}, timeout=60)
+                    res.raise_for_status()
+                    with open(saved_path, "wb") as f:
+                        f.write(res.content)
+                    downloaded_json = True
+                except Exception:
+                    pass
+            
+            # Nếu không tải được hoặc định dạng là markdown, lưu content như cũ
+            if not downloaded_json:
+                with open(saved_path, "w", encoding="utf-8") as f:
+                    f.write(content)
 
-                if parsed is not None:
-                    saved_excel = _save_excel_from_json(parsed, saved_path)
+            # Xử lý Excel
+            if output_format == "json":
+                # Thử tải Excel xịn từ API trước
+                if api_excel_path and api_base_url:
+                    excel_out = os.path.join(settings.OUTPUT_DIR, f"{base_name}.xlsx")
+                    try:
+                        res = requests.post(f"{api_base_url}/download", json={"path": api_excel_path}, timeout=60)
+                        res.raise_for_status()
+                        with open(excel_out, "wb") as f:
+                            f.write(res.content)
+                        saved_excel = excel_out
+                    except Exception:
+                        pass
+                
+                # Nếu API không có excel hoặc lỗi tải, thì tự generate
+                if not saved_excel:
+                    try:
+                        parsed = json.loads(_clean_json_string(content))
+                    except json.JSONDecodeError:
+                        parsed = None
+
+                    if parsed is not None:
+                        saved_excel = _save_excel_from_json(parsed, saved_path)
 
         return {
             "status": "success",
@@ -114,6 +156,9 @@ def process_image_task(
             "content": content,
             "saved_to": saved_path,
             "saved_excel": saved_excel,
+            "api_base_url": api_base_url,
+            "api_json_path": api_json_path,
+            "api_excel_path": api_excel_path,
         }
 
     except Exception as e:

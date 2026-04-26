@@ -379,6 +379,7 @@
               <div class="field">
                 <label for="profileAgent">Agent</label>
                 <select id="profileAgent">
+                  <option value="lightonocr">lightonocr</option>
                   <option value="local_http">local_http</option>
                   <option value="gemini">gemini</option>
                   <option value="openai">openai</option>
@@ -391,7 +392,7 @@
               </div>
               <div class="field full">
                 <label for="profileBaseUrl">Base URL</label>
-                <input id="profileBaseUrl" placeholder="http://127.0.0.1:7860/ocr">
+                <input id="profileBaseUrl" placeholder="http://127.0.0.1:7861/extract">
               </div>
               <div class="field full">
                 <label for="profileApiKey">API key</label>
@@ -646,9 +647,9 @@
               {
                 id: "lightonocr-2-1b",
                 label: "LightOnOCR-2-1B",
-                agent: "local_http",
+                agent: "lightonocr",
                 model: "LightOnOCR-2-1B",
-                base_url: "http://127.0.0.1:7860/ocr",
+                base_url: "http://127.0.0.1:7861/extract",
                 api_key: "",
                 output_format: "markdown",
                 save_to_file: false,

@@ -6,6 +6,7 @@ from typing import Any, Dict
 
 
 CONFIG_PATH = Path(__file__).resolve().parents[2] / "ui-config.json"
+_cached_config = None
 
 
 def default_ui_config() -> Dict[str, Any]:
@@ -15,9 +16,9 @@ def default_ui_config() -> Dict[str, Any]:
             {
                 "id": "lightonocr-2-1b",
                 "label": "LightOnOCR-2-1B",
-                "agent": "local_http",
+                "agent": "lightonocr",
                 "model": "LightOnOCR-2-1B",
-                "base_url": "http://127.0.0.1:7860/ocr",
+                "base_url": "http://127.0.0.1:7861/extract",
                 "api_key": "",
                 "output_format": "markdown",
                 "save_to_file": False,
@@ -94,25 +95,34 @@ def normalize_ui_config(raw_config: Dict[str, Any] | None) -> Dict[str, Any]:
     return normalized
 
 
-def load_ui_config() -> Dict[str, Any]:
+def load_ui_config(force_reload: bool = False) -> Dict[str, Any]:
+    global _cached_config
+    if _cached_config is not None and not force_reload:
+        return _cached_config
+
     if not CONFIG_PATH.exists():
-        return default_ui_config()
+        _cached_config = default_ui_config()
+        return _cached_config
 
     try:
         with CONFIG_PATH.open("r", encoding="utf-8") as config_file:
             raw_config = json.load(config_file)
     except (OSError, json.JSONDecodeError):
-        return default_ui_config()
+        _cached_config = default_ui_config()
+        return _cached_config
 
-    return normalize_ui_config(raw_config)
+    _cached_config = normalize_ui_config(raw_config)
+    return _cached_config
 
 
 def save_ui_config(config: Dict[str, Any]) -> Dict[str, Any]:
+    global _cached_config
     normalized = normalize_ui_config(config)
     CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
     with CONFIG_PATH.open("w", encoding="utf-8") as config_file:
         json.dump(normalized, config_file, ensure_ascii=False, indent=2)
         config_file.write("\n")
+    _cached_config = normalized
     return normalized
 
 

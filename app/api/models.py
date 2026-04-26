@@ -24,10 +24,11 @@ class ExtractionJsonRequest(BaseModel):
     image_path: Optional[str] = None
     image_base64: Optional[str] = None
     filename: Optional[str] = None
-    agent: str = "gemini"
-    output_format: str = "markdown"
-    save_to_file: bool = False
-    options: AgentRuntimeOptions = Field(default_factory=AgentRuntimeOptions)
+    template: Optional[str] = "default"
+    agent: Optional[str] = None
+    output_format: Optional[str] = None
+    save_to_file: Optional[bool] = None
+    options: Optional[AgentRuntimeOptions] = None
 
 
 class AgentDescriptor(BaseModel):

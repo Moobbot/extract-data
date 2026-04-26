@@ -153,6 +153,52 @@ class LocalHTTPProvider(AIProvider):
         return AIProviderFactory.extract_text_from_response(parsed)
 
 
+class LightOnOCRProvider(AIProvider):
+    def __init__(self, endpoint: Optional[str] = None):
+        self.endpoint = endpoint or "http://localhost:8000/extract"
+
+    def generate_content(self, image_path: str, prompt: str) -> str:
+        import requests
+        import os
+        
+        if not os.path.exists(image_path):
+            raise RuntimeError(f"Image not found: {image_path}")
+
+        with open(image_path, "rb") as f:
+            files = {"file": (os.path.basename(image_path), f, "image/jpeg")}
+            data = {
+                "page_num": 1,
+                "prompt": prompt,
+                "temperature": 0.2,
+                "max_tokens": 4096
+            }
+            
+            try:
+                response = requests.post(self.endpoint, files=files, data=data)
+                response.raise_for_status()
+                result = response.json()
+                
+                # Trả về dict chứa text và đường dẫn file
+                base_url = self.endpoint.replace("/extract", "")
+                
+                text_content = ""
+                if result.get("data") and isinstance(result["data"], dict) and result["data"]:
+                    import json
+                    text_content = json.dumps(result["data"], ensure_ascii=False, indent=2)
+                else:
+                    text_content = result.get("raw_text") or result.get("rendered_text") or str(result)
+                    
+                return {
+                    "text": text_content,
+                    "api_json_path": result.get("json_path"),
+                    "api_excel_path": result.get("excel_path"),
+                    "base_url": base_url
+                }
+            except requests.exceptions.RequestException as e:
+                body = e.response.text if hasattr(e, 'response') and e.response else str(e)
+                raise RuntimeError(f"LightOnOCR call failed: {body}")
+
+
 class AIProviderFactory:
     @staticmethod
     def extract_text_from_response(parsed: Any) -> str:
@@ -195,6 +241,11 @@ class AIProviderFactory:
         return LocalHTTPProvider(endpoint=endpoint, api_key=api_key, model=model)
 
     @staticmethod
+    def _build_lightonocr(config: Dict[str, Any]) -> AIProvider:
+        endpoint = config.get("base_url")
+        return LightOnOCRProvider(endpoint=endpoint)
+
+    @staticmethod
     def list_available_agents() -> List[Dict[str, Any]]:
         builtin_agents = [
             {
@@ -220,6 +271,12 @@ class AIProviderFactory:
                 "type": "openai_compatible",
                 "source": "builtin",
                 "requires": ["api_key", "base_url", "model"],
+            },
+            {
+                "name": "lightonocr",
+                "type": "lightonocr",
+                "source": "builtin",
+                "requires": ["base_url"],
             },
         ]
 
@@ -279,6 +336,7 @@ class AIProviderFactory:
             "openai": AIProviderFactory._build_openai,
             "openai_compatible": AIProviderFactory._build_openai_compatible,
             "local_http": AIProviderFactory._build_local_http,
+            "lightonocr": AIProviderFactory._build_lightonocr,
         }
 
         build_fn = builders.get(agent_type)
@@ -301,6 +359,7 @@ class AIProviderFactory:
             "openai": AIProviderFactory._build_openai,
             "openai_compatible": AIProviderFactory._build_openai_compatible,
             "local_http": AIProviderFactory._build_local_http,
+            "lightonocr": AIProviderFactory._build_lightonocr,
         }
 
         if normalized_agent in builders:

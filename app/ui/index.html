@@ -238,6 +238,10 @@
       box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.11);
     }
 
+    .hidden-field {
+      display: none !important;
+    }
+
     .switch-row {
       display: flex;
       align-items: center;
@@ -413,115 +417,40 @@
             `/api/v1/extract/json`.</p>
         </div>
         <div class="panel-body">
-          <div class="cards">
-            <div class="card">
-              <label>Active preset</label>
-              <div class="value" id="activePresetText">Loading...</div>
-            </div>
-            <div class="card">
-              <label>Selected agent</label>
-              <div class="value" id="activeAgentText">-</div>
-            </div>
-            <div class="card">
-              <label>Selected model</label>
-              <div class="value" id="activeModelText">-</div>
-            </div>
-          </div>
-
           <div class="grid-form">
+            <!-- VISIBLE FIELDS -->
             <div class="field full">
-              <label for="profileSelect">Preset from config</label>
-              <select id="profileSelect" data-help-title="Preset from config"
-                data-help-text="Chọn preset sẽ nạp agent, model, base_url và output mặc định từ file ui-config.json."></select>
-            </div>
-
-            <div class="field">
-              <label for="agent">Agent</label>
-              <select id="agent" data-help-title="Agent"
-                data-help-text="Chọn provider/agent sẽ xử lý ảnh. Preset LightOnOCR dùng local_http để gọi API ngoài."></select>
-            </div>
-
-            <div class="field">
-              <label for="outputFormat">Output format</label>
-              <select id="outputFormat" data-help-title="Output format"
-                data-help-text="Markdown phù hợp khi muốn xem nhanh; JSON phù hợp nếu muốn parse thêm hoặc lưu Excel.">
-                <option value="markdown">markdown</option>
-                <option value="json">json</option>
+              <label for="templateSelect">Template Trích Xuất</label>
+              <select id="templateSelect">
+                <option value="default">Không dùng Template (Chỉ xuất Text thô)</option>
+                <option value="invoice">Hoá Đơn Bán Hàng</option>
+                <option value="id_card">Căn Cước Công Dân</option>
+                <option value="medical_record">Hồ Sơ Bệnh Án</option>
               </select>
             </div>
 
-            <div class="field">
-              <label for="model">Model</label>
-              <input id="model" placeholder="LightOnOCR-2-1B" data-help-title="Model"
-                data-help-text="Model sẽ được gửi sang agent nếu agent hỗ trợ. Với local_http, field này cũng được đẩy vào payload để LightOnOCR chọn model.">
-            </div>
-
-            <div class="field">
-              <label for="baseUrl">Base URL</label>
-              <input id="baseUrl" placeholder="http://127.0.0.1:7860/ocr" data-help-title="Base URL"
-                data-help-text="Endpoint của LightOnOCR hoặc API OCR khác khi dùng local_http / openai_compatible.">
+            <div class="field full">
+              <label for="imageFile">Tải lên Ảnh / PDF</label>
+              <input id="imageFile" type="file" accept="image/*,application/pdf" multiple>
             </div>
 
             <div class="field full">
-              <label for="apiKey">API key</label>
-              <input id="apiKey" placeholder="optional token" data-help-title="API key"
-                data-help-text="Giữ trống nếu endpoint không yêu cầu xác thực. Nếu có token, trường này sẽ được gửi lên server xử lý.">
-            </div>
-
-            <div class="field full">
-              <label for="imageFile">Image file</label>
-              <input id="imageFile" type="file" accept="image/*" data-help-title="Image file"
-                data-help-text="Tải ảnh từ máy local lên; UI sẽ encode sang base64 trước khi gửi request.">
-            </div>
-
-            <div class="field full">
-              <label for="imagePath">Image path on server</label>
-              <input id="imagePath" placeholder="D:/path/to/image.png" data-help-title="Image path"
-                data-help-text="Dùng nếu file đã nằm trên máy chạy API và server có thể truy cập trực tiếp đường dẫn này.">
-            </div>
-
-            <div class="field full">
-              <div class="switch-row" data-help-title="Save output files"
-                data-help-text="Bật lên nếu muốn lưu kết quả ra JSON/MD và cho phép download file sau khi task hoàn tất.">
-                <input id="saveToFile" type="checkbox" checked>
-                <label for="saveToFile">Save output files</label>
-              </div>
+              <label for="folderPath">Hoặc nhập đường dẫn Thư mục trên server</label>
+              <input id="folderPath" placeholder="Ví dụ: D:/data/images">
             </div>
           </div>
 
           <div class="actions">
-            <button id="submitBtn" class="btn primary" data-help-title="Submit task"
-              data-help-text="Gửi payload tới backend và bắt đầu Celery task để trích xuất nội dung.">Submit
-              Task</button>
-            <button id="downloadJsonBtn" class="btn secondary" disabled data-help-title="Download JSON"
-              data-help-text="Tải JSON nếu task lưu artifact thật sự trên server.">Download JSON</button>
-            <button id="downloadExcelBtn" class="btn secondary" disabled data-help-title="Download Excel"
-              data-help-text="Tải Excel nếu output là JSON và parse thành công dữ liệu có cấu trúc.">Download
-              Excel</button>
-            <button id="copyContentBtn" class="btn ghost" disabled data-help-title="Copy content"
-              data-help-text="Copy nội dung content hiện tại vào clipboard.">Copy Content</button>
-            <button id="clearBtn" class="btn ghost" data-help-title="Clear"
-              data-help-text="Xóa kết quả hiện tại trên màn hình, không xóa file output trên server.">Clear</button>
+            <button id="submitBtn" class="btn primary">Submit Task</button>
+            <button id="downloadJsonBtn" class="btn secondary" disabled>Download JSON</button>
+            <button id="downloadExcelBtn" class="btn secondary" disabled>Download Excel</button>
+            <button id="copyContentBtn" class="btn ghost" disabled>Copy Content</button>
+            <button id="clearBtn" class="btn ghost">Clear</button>
           </div>
 
           <div id="statusText" class="status">Ready</div>
         </div>
       </section>
-
-      <aside class="panel">
-        <div class="panel-head">
-          <h2 class="section-title">Field help</h2>
-          <p class="section-copy">Di chuột vào trường nhập liệu hoặc nút để xem mô tả ngắn.</p>
-        </div>
-        <div class="panel-body stack">
-          <div class="help-box">
-            <h4 id="hoverHelpTitle">Hover a field or button</h4>
-            <p id="hoverHelpText">Di chuột vào input, select, checkbox hoặc nút để xem giải thích ngắn về từng thành
-              phần.</p>
-          </div>
-          <a class="footer-link" href="/ui/settings" target="_blank" rel="noreferrer">Open settings page</a>
-        </div>
-      </aside>
     </div>
 
     <div class="grid" style="margin-top: 16px;">
@@ -548,14 +477,8 @@
   </div>
 
   <script>
-    const agentEl = document.getElementById("agent");
-    const outputFormatEl = document.getElementById("outputFormat");
-    const modelEl = document.getElementById("model");
-    const baseUrlEl = document.getElementById("baseUrl");
-    const apiKeyEl = document.getElementById("apiKey");
     const imageFileEl = document.getElementById("imageFile");
-    const imagePathEl = document.getElementById("imagePath");
-    const saveToFileEl = document.getElementById("saveToFile");
+    const folderPathEl = document.getElementById("folderPath");
     const submitBtn = document.getElementById("submitBtn");
     const downloadJsonBtn = document.getElementById("downloadJsonBtn");
     const downloadExcelBtn = document.getElementById("downloadExcelBtn");
@@ -564,37 +487,10 @@
     const statusText = document.getElementById("statusText");
     const rawResultEl = document.getElementById("rawResult");
     const contentBoxEl = document.getElementById("contentBox");
-    const hoverHelpTitleEl = document.getElementById("hoverHelpTitle");
-    const hoverHelpTextEl = document.getElementById("hoverHelpText");
-    const profileSelectEl = document.getElementById("profileSelect");
-    const activePresetTextEl = document.getElementById("activePresetText");
-    const activeAgentTextEl = document.getElementById("activeAgentText");
-    const activeModelTextEl = document.getElementById("activeModelText");
+    const templateSelectEl = document.getElementById("templateSelect");
 
     let lastTaskId = null;
     let lastTaskResult = null;
-    let currentConfig = null;
-
-    const defaultHelp = {
-      title: "Hover a field or button",
-      text: "Di chuot vao input, select, checkbox hoac nut de xem giai thich ngan ve tung thanh phan."
-    };
-
-    function setHoverHelp(title, text) {
-      hoverHelpTitleEl.textContent = title || defaultHelp.title;
-      hoverHelpTextEl.textContent = text || defaultHelp.text;
-    }
-
-    function bindHoverHelp() {
-      document.querySelectorAll("[data-help-title]").forEach((el) => {
-        const title = el.getAttribute("data-help-title") || el.textContent.trim();
-        const text = el.getAttribute("data-help-text") || "No description";
-        el.addEventListener("mouseenter", () => setHoverHelp(title, text));
-        el.addEventListener("focus", () => setHoverHelp(title, text));
-        el.addEventListener("mouseleave", () => setHoverHelp(defaultHelp.title, defaultHelp.text));
-        el.addEventListener("blur", () => setHoverHelp(defaultHelp.title, defaultHelp.text));
-      });
-    }
 
     function setStatus(text, kind) {
       statusText.textContent = text;
@@ -616,73 +512,6 @@
 
     function safeValue(value) {
       return value == null ? "" : String(value);
-    }
-
-    function updateSummary(profile) {
-      activePresetTextEl.textContent = profile ? profile.label : "-";
-      activeAgentTextEl.textContent = profile ? profile.agent : "-";
-      activeModelTextEl.textContent = profile && profile.model ? profile.model : "-";
-    }
-
-    function fillAgentOptions(agents, selectedAgent) {
-      agentEl.innerHTML = "";
-      (agents || []).forEach((agent) => {
-        const option = document.createElement("option");
-        option.value = agent.name;
-        option.textContent = `${agent.name} (${agent.source})`;
-        if (agent.name === selectedAgent) {
-          option.selected = true;
-        }
-        agentEl.appendChild(option);
-      });
-    }
-
-    function fillProfileSelect(config) {
-      profileSelectEl.innerHTML = "";
-      (config.profiles || []).forEach((profile) => {
-        const option = document.createElement("option");
-        option.value = profile.id;
-        option.textContent = profile.label;
-        if (profile.id === config.active_profile_id) {
-          option.selected = true;
-        }
-        profileSelectEl.appendChild(option);
-      });
-    }
-
-    function applyProfile(profile) {
-      if (!profile) {
-        return;
-      }
-
-      agentEl.value = safeValue(profile.agent);
-      modelEl.value = safeValue(profile.model);
-      baseUrlEl.value = safeValue(profile.base_url);
-      apiKeyEl.value = safeValue(profile.api_key);
-      outputFormatEl.value = profile.output_format || "markdown";
-      saveToFileEl.checked = Boolean(profile.save_to_file);
-      updateSummary(profile);
-    }
-
-    async function loadConfig() {
-      try {
-        const [configRes, agentsRes] = await Promise.all([
-          fetch("/api/v1/ui-config"),
-          fetch("/api/v1/agents")
-        ]);
-        const config = await configRes.json();
-        const agents = await agentsRes.json();
-        currentConfig = config;
-
-        fillProfileSelect(config);
-        fillAgentOptions(agents.agents || [], agents.default_agent || "gemini");
-
-        const activeProfile = (config.profiles || []).find((profile) => profile.id === config.active_profile_id) || (config.profiles || [])[0];
-        applyProfile(activeProfile);
-        setStatus(`Loaded config from preset ${activeProfile ? activeProfile.label : "default"}.`, "ok");
-      } catch (error) {
-        setStatus(`Cannot load config: ${error.message}`, "err");
-      }
     }
 
     async function pollTask(taskId) {
@@ -749,14 +578,6 @@
       anchor.remove();
     }
 
-    profileSelectEl.addEventListener("change", () => {
-      if (!currentConfig) {
-        return;
-      }
-      const profile = (currentConfig.profiles || []).find((item) => item.id === profileSelectEl.value);
-      applyProfile(profile);
-    });
-
     downloadJsonBtn.addEventListener("click", () => {
       if (!lastTaskId) {
         return;
@@ -798,32 +619,25 @@
 
       try {
         const file = imageFileEl.files && imageFileEl.files[0];
-        const imagePath = imagePathEl.value.trim();
+        const folderPath = folderPathEl.value.trim();
 
-        if (!file && !imagePath) {
-          throw new Error("Please provide image file or image path.");
+        if (!file && !folderPath) {
+          throw new Error("Vui lòng chọn Ảnh/PDF hoặc nhập đường dẫn thư mục.");
         }
 
         const payload = {
-          image_path: imagePath || null,
+          image_path: folderPath || null,
           image_base64: null,
           filename: file ? file.name : null,
-          agent: agentEl.value,
-          output_format: outputFormatEl.value,
-          save_to_file: Boolean(saveToFileEl.checked),
-          options: {
-            model: modelEl.value.trim() || null,
-            base_url: baseUrlEl.value.trim() || null,
-            api_key: apiKeyEl.value.trim() || null
-          }
+          template: templateSelectEl.value
         };
 
         if (file) {
-          setStatus("Encoding image...", "");
+          setStatus("Đang xử lý ảnh...", "");
           payload.image_base64 = await toBase64(file);
         }
 
-        setStatus("Submitting task...", "");
+        setStatus("Đang gửi yêu cầu trích xuất...", "");
         const res = await fetch("/api/v1/extract/json", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -835,24 +649,27 @@
         lastTaskResult = data;
 
         if (!res.ok) {
-          throw new Error(data.detail || "Request failed");
+          throw new Error(data.detail || "Yêu cầu thất bại");
+        }
+
+        // Handle folder batch submission response
+        if (data.task_id === "folder_batch") {
+            setStatus("Đã gửi batch xử lý toàn bộ folder. Xem raw result để biết chi tiết.", "ok");
+            return;
         }
 
         const taskId = data.task_id;
         if (!taskId) {
-          throw new Error("No task_id returned");
+          throw new Error("Không nhận được task_id");
         }
 
         await pollTask(taskId);
       } catch (error) {
-        setStatus("Error: " + error.message, "err");
+        setStatus("Lỗi: " + error.message, "err");
       } finally {
         submitBtn.disabled = false;
       }
     });
-
-    bindHoverHelp();
-    loadConfig();
   </script>
 </body>
 </html>

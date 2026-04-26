@@ -233,18 +233,44 @@ async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
     Submits an extraction task using a JSON payload.
     Supports either a local image_path or image_base64.
     """
+    from app.core.ui_config import load_ui_config, get_active_profile
+    active_profile = get_active_profile(load_ui_config())
+
+    agent = payload.agent if payload.agent else active_profile.get("agent", settings.DEFAULT_PROVIDER)
+    output_format = payload.output_format if payload.output_format else active_profile.get("output_format", "markdown")
+    save_to_file = payload.save_to_file if payload.save_to_file is not None else active_profile.get("save_to_file", False)
+
+    options = payload.options or None
+    model = options.model if options and options.model else active_profile.get("model")
+    base_url = options.base_url if options and options.base_url else active_profile.get("base_url")
+    api_key = options.api_key if options and options.api_key else active_profile.get("api_key")
+
+    # If folder path is provided, redirect to folder task handler
+    if payload.image_path and os.path.isdir(payload.image_path):
+        tasks = await extract_folder_task(
+            folder_path=payload.image_path,
+            agent=agent,
+            output_format=output_format,
+            save_to_file=save_to_file,
+            model=model,
+            base_url=base_url,
+            api_key=api_key
+        )
+        return {
+            "task_id": "folder_batch",
+            "message": f"Submitted {len(tasks)} tasks for folder",
+            "status": "pending",
+            "tasks": tasks
+        }
+
     file_path = _persist_image_from_json_payload(payload)
 
-    agent_config = _build_agent_config(
-        model=payload.options.model,
-        base_url=payload.options.base_url,
-        api_key=payload.options.api_key,
-    )
+    agent_config = _build_agent_config(model=model, base_url=base_url, api_key=api_key)
     task = process_image_task.delay(
         file_path,
-        payload.agent,
-        payload.output_format,
-        payload.save_to_file,
+        agent,
+        output_format,
+        save_to_file,
         agent_config,
     )
 
