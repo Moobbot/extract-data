@@ -6,6 +6,13 @@ Neu ban chay bang container, xem them [docker-run.md](docker-run.md).
 
 ```bash
 conda activate extract-pdf
+python -m app.main
+```
+
+Lua chon khac (tuong duong, dung cho truong hop can tuy chinh host/port):
+
+```bash
+conda activate extract-pdf
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 

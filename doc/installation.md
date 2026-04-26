@@ -19,12 +19,30 @@
 1. Env `extract-pdf`: chay web API va worker.
 2. Env `lightonocr`: chay service/UI LightOnOCR doc lap.
 
+### Dac biet voi LightOnOCR
+
+Neu muon dung LightOnOCR-2-1B (model OCR de on):
+
+- Dung chung env `extract-pdf` cho ca LightOnOCR API va extract-pdf.
+- Hoac tao rieng env `lightonocr` neu muon tang khong dung.
+
+Xem [Khoi dong he thong - LightOnOCR API](../doc/docker-run.md#chay-lightonocr-api-tuong-tac-voi-extract-pdf).
+
 ## Cai dat dependencies
 
 ```bash
 conda activate extract-pdf
 pip install -r requirements.txt
 ```
+
+## Chay nhanh sau cai dat
+
+```bash
+conda activate extract-pdf
+python -m app.main
+```
+
+Luu y: tranh dung `python app/main.py` de khong gap loi import package `app`.
 
 ## Quick UI help
 
