@@ -426,9 +426,9 @@
             <div class="field full">
               <label for="templateSelect">Template Trích Xuất</label>
               <select id="templateSelect">
+                <option value="chung_chi_so">Danh Sách Chứng Chỉ</option>
+                <option value="van_bang_dai_hoc" selected>Danh Sách Văn Bằng Giáo Dục Đại Học</option>
                 <option value="default">Không dùng Template (Chỉ xuất Text thô)</option>
-                <option value="chung_chi_so">Chứng Chỉ Số</option>
-                <option value="van_bang_dai_hoc">Văn Bằng Đại Học</option>
               </select>
             </div>
 
@@ -446,7 +446,8 @@
           <div class="actions">
             <button id="submitBtn" class="btn primary">Submit Task</button>
             <button id="downloadJsonBtn" class="btn secondary" disabled>Download JSON</button>
-            <button id="downloadExcelBtn" class="btn secondary" disabled>Download Excel</button>
+            <button id="downloadExcelLv1Btn" class="btn secondary" disabled>Download Excel Goc (LV1)</button>
+            <button id="downloadExcelBtn" class="btn secondary" disabled>Download Excel Template</button>
             <button id="copyContentBtn" class="btn ghost" disabled>Copy Content</button>
             <button id="clearBtn" class="btn ghost">Clear</button>
           </div>
@@ -484,6 +485,7 @@
     const folderPathEl = document.getElementById("folderPath");
     const submitBtn = document.getElementById("submitBtn");
     const downloadJsonBtn = document.getElementById("downloadJsonBtn");
+    const downloadExcelLv1Btn = document.getElementById("downloadExcelLv1Btn");
     const downloadExcelBtn = document.getElementById("downloadExcelBtn");
     const copyContentBtn = document.getElementById("copyContentBtn");
     const clearBtn = document.getElementById("clearBtn");
@@ -521,6 +523,7 @@
       lastTaskId = taskId;
       lastTaskResult = null;
       downloadJsonBtn.disabled = true;
+      downloadExcelLv1Btn.disabled = true;
       downloadExcelBtn.disabled = true;
       copyContentBtn.disabled = true;
 
@@ -537,16 +540,19 @@
           const result = data.result || {};
           lastTaskResult = result;
           const savedTo = typeof result.saved_to === "string" ? result.saved_to.toLowerCase() : "";
+          const savedExcelLv1 = typeof result.saved_excel_lv1 === "string" ? result.saved_excel_lv1.toLowerCase() : "";
           const savedExcel = typeof result.saved_excel === "string" ? result.saved_excel.toLowerCase() : "";
           const hasJsonArtifact = savedTo.endsWith(".json");
+          const hasExcelLv1Artifact = savedExcelLv1.endsWith(".xlsx");
           const hasExcelArtifact = savedExcel.endsWith(".xlsx");
 
           contentBoxEl.textContent = result.content || "(empty content)";
           downloadJsonBtn.disabled = !hasJsonArtifact;
+          downloadExcelLv1Btn.disabled = !hasExcelLv1Artifact;
           downloadExcelBtn.disabled = !hasExcelArtifact;
           copyContentBtn.disabled = !result.content;
 
-          if (!hasJsonArtifact && !hasExcelArtifact) {
+          if (!hasJsonArtifact && !hasExcelLv1Artifact && !hasExcelArtifact) {
             setStatus("Completed. Download buttons require Save output files enabled.", "");
           } else {
             setStatus("Completed", "ok");
@@ -570,27 +576,90 @@
       setStatus("Đã hết thời gian chờ tự động tải trên giao diện. Tác vụ vẫn đang chạy ngầm, bạn có thể kiểm tra kết quả trong trang Quản lý sau.", "ok");
     }
 
-    function triggerDownload(url) {
+    function getFilenameFromContentDisposition(value, fallbackName) {
+      if (!value) {
+        return fallbackName;
+      }
+      const match = /filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i.exec(value);
+      const encoded = match && (match[1] || match[2]);
+      if (!encoded) {
+        return fallbackName;
+      }
+      try {
+        return decodeURIComponent(encoded);
+      } catch (_) {
+        return encoded;
+      }
+    }
+
+    async function triggerDownload(url, fallbackName) {
+      const res = await fetch(url, { method: "POST" });
+      if (!res.ok) {
+        let detail = "Download failed";
+        try {
+          const err = await res.json();
+          detail = err.detail || detail;
+        } catch (_) {
+          // ignore JSON parse failure for non-JSON error responses
+        }
+        throw new Error(detail);
+      }
+
+      const blob = await res.blob();
+      const filename = getFilenameFromContentDisposition(
+        res.headers.get("content-disposition"),
+        fallbackName
+      );
+      const objectUrl = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = "";
+      anchor.href = objectUrl;
+      anchor.download = filename;
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
+      URL.revokeObjectURL(objectUrl);
     }
 
-    downloadJsonBtn.addEventListener("click", () => {
+    downloadJsonBtn.addEventListener("click", async () => {
       if (!lastTaskId) {
         return;
       }
-      triggerDownload("/api/v1/task-artifact/" + encodeURIComponent(lastTaskId) + "/json");
+      try {
+        await triggerDownload(
+          "/api/v1/task-artifact/" + encodeURIComponent(lastTaskId) + "/json",
+          lastTaskId + ".json"
+        );
+      } catch (error) {
+        setStatus("Lỗi tải JSON: " + error.message, "err");
+      }
     });
 
-    downloadExcelBtn.addEventListener("click", () => {
+    downloadExcelBtn.addEventListener("click", async () => {
       if (!lastTaskId) {
         return;
       }
-      triggerDownload("/api/v1/task-artifact/" + encodeURIComponent(lastTaskId) + "/excel");
+      try {
+        await triggerDownload(
+          "/api/v1/task-artifact/" + encodeURIComponent(lastTaskId) + "/excel",
+          lastTaskId + "_template.xlsx"
+        );
+      } catch (error) {
+        setStatus("Lỗi tải Excel template: " + error.message, "err");
+      }
+    });
+
+    downloadExcelLv1Btn.addEventListener("click", async () => {
+      if (!lastTaskId) {
+        return;
+      }
+      try {
+        await triggerDownload(
+          "/api/v1/task-artifact/" + encodeURIComponent(lastTaskId) + "/excel-lv1",
+          lastTaskId + "_lv1.xlsx"
+        );
+      } catch (error) {
+        setStatus("Lỗi tải Excel model: " + error.message, "err");
+      }
     });
 
     copyContentBtn.addEventListener("click", async () => {
@@ -608,6 +677,7 @@
       contentBoxEl.textContent = "";
       rawResultEl.textContent = "{}";
       downloadJsonBtn.disabled = true;
+      downloadExcelLv1Btn.disabled = true;
       downloadExcelBtn.disabled = true;
       copyContentBtn.disabled = true;
       setStatus("Ready");
@@ -655,8 +725,8 @@
 
         // Handle folder batch submission response
         if (data.task_id === "folder_batch") {
-            setStatus("Đã gửi batch xử lý toàn bộ folder. Xem raw result để biết chi tiết.", "ok");
-            return;
+          setStatus("Đã gửi batch xử lý toàn bộ folder. Xem raw result để biết chi tiết.", "ok");
+          return;
         }
 
         const taskId = data.task_id;

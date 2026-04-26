@@ -14,6 +14,42 @@ services:
       retries: 5
       start_period: 5s
 
+  # ── LightOnOCR API Server (tùy chọn) ──────────────────────────────────────
+  # Dùng để extract-pdf gọi OCR qua local_http provider
+  # Khởi động: docker compose up lightonocr
+  # Hoặc đặt `profiles: []` để chạy luôn khi `docker compose up`
+  lightonocr:
+    build:
+      context: ./LightOnOCR-2-1B
+      dockerfile: docker/Dockerfile
+    image: lightonocr:latest
+    container_name: lightonocr
+    ports:
+      - "7861:7861"
+    volumes:
+      - ./LightOnOCR-2-1B:/weights:ro
+      - ./LightOnOCR-2-1B/outputs:/app/outputs
+    environment:
+      MODEL_PATH: /weights
+      PYTORCH_ENABLE_MPS_FALLBACK: "1"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:7860/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    profiles:
+      - lightonocr # khởi động với: docker compose --profile lightonocr up
+    command: [ "python", "app_server.py", "--host", "0.0.0.0", "--port", "7860" ]
+
   api:
     build: .
     ports:
@@ -28,6 +64,10 @@ services:
       - AI_PROVIDER=${AI_PROVIDER}
       - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
       - LOCAL_HTTP_TIMEOUT=${LOCAL_HTTP_TIMEOUT:-60}
+      # Endpoint LightOnOCR API (nếu dùng local_http provider)
+      # Khi lightonocr service chạy, extract-pdf có thể gọi:
+      #   http://lightonocr:7860/ocr
+      - LOCAL_HTTP_BASE_URL=${LOCAL_HTTP_BASE_URL:-http://lightonocr:7860/ocr}
       - CORS_ALLOW_ORIGINS=${CORS_ALLOW_ORIGINS:-}
     depends_on:
       redis:
@@ -63,6 +103,8 @@ services:
       - AI_PROVIDER=${AI_PROVIDER}
       - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
       - LOCAL_HTTP_TIMEOUT=${LOCAL_HTTP_TIMEOUT:-60}
+      # Endpoint LightOnOCR API
+      - LOCAL_HTTP_BASE_URL=${LOCAL_HTTP_BASE_URL:-http://lightonocr:7861/extract}
       - CORS_ALLOW_ORIGINS=${CORS_ALLOW_ORIGINS:-}
     depends_on:
       redis:

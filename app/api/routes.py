@@ -120,6 +120,10 @@ async def extract_table_task(
         agent_config,
     )
 
+    from app.core.db import insert_task
+
+    insert_task(task.id, file.filename, "default")
+
     return {
         "task_id": task.id,
         "message": "Task submitted successfully",
@@ -161,6 +165,9 @@ async def extract_batch_task(
                 save_to_file,
                 agent_config,
             )
+            from app.core.db import insert_task
+
+            insert_task(task.id, file.filename, "default")
             tasks.append(
                 {"filename": file.filename, "task_id": task.id, "status": "pending"}
             )
@@ -208,8 +215,10 @@ async def extract_folder_task(
                         output_format,
                         save_to_file,
                         agent_config,
+                        template_id=template,
                     )
                     from app.core.db import insert_task
+
                     insert_task(task.id, filename, template, folder_path=folder_path)
 
                     tasks.append(
@@ -238,16 +247,37 @@ async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
     Supports either a local image_path or image_base64.
     """
     from app.core.ui_config import load_ui_config, get_active_profile
+
     active_profile = get_active_profile(load_ui_config())
 
-    agent = payload.agent if payload.agent else active_profile.get("agent", settings.DEFAULT_PROVIDER)
-    output_format = payload.output_format if payload.output_format else active_profile.get("output_format", "markdown")
-    save_to_file = payload.save_to_file if payload.save_to_file is not None else active_profile.get("save_to_file", False)
+    agent = (
+        payload.agent
+        if payload.agent
+        else active_profile.get("agent", settings.DEFAULT_PROVIDER)
+    )
+    output_format = (
+        payload.output_format
+        if payload.output_format
+        else active_profile.get("output_format", "markdown")
+    )
+    save_to_file = (
+        payload.save_to_file
+        if payload.save_to_file is not None
+        else active_profile.get("save_to_file", False)
+    )
 
     options = payload.options or None
     model = options.model if options and options.model else active_profile.get("model")
-    base_url = options.base_url if options and options.base_url else active_profile.get("base_url")
-    api_key = options.api_key if options and options.api_key else active_profile.get("api_key")
+    base_url = (
+        options.base_url
+        if options and options.base_url
+        else active_profile.get("base_url")
+    )
+    api_key = (
+        options.api_key
+        if options and options.api_key
+        else active_profile.get("api_key")
+    )
 
     # If folder path is provided, redirect to folder task handler
     if payload.image_path and os.path.isdir(payload.image_path):
@@ -259,16 +289,22 @@ async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
             model=model,
             base_url=base_url,
             api_key=api_key,
-            template=payload.template or "default"
+            template=payload.template or "default",
         )
         return {
             "task_id": "folder_batch",
             "message": f"Submitted {len(tasks)} tasks for folder",
             "status": "pending",
-            "tasks": tasks
+            "tasks": tasks,
         }
 
     file_path = _persist_image_from_json_payload(payload)
+    source_filename = payload.filename or os.path.basename(file_path)
+    source_folder = (
+        os.path.dirname(payload.image_path)
+        if payload.image_path and os.path.isfile(payload.image_path)
+        else None
+    )
 
     agent_config = _build_agent_config(model=model, base_url=base_url, api_key=api_key)
     task = process_image_task.delay(
@@ -277,10 +313,17 @@ async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
         output_format,
         save_to_file,
         agent_config,
+        template_id=payload.template or "default",
     )
 
     from app.core.db import insert_task
-    insert_task(task.id, os.path.basename(file_path), payload.template or "default")
+
+    insert_task(
+        task.id,
+        source_filename,
+        payload.template or "default",
+        folder_path=source_folder,
+    )
 
     return {
         "task_id": task.id,
@@ -289,19 +332,30 @@ async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
     }
 
 
-@router.get("/task-artifact/{task_id}/json")
+@router.post("/task-artifact/{task_id}/json")
 async def get_task_artifact_json(task_id: str):
-    return FileResponse(os.path.join(settings.OUTPUT_DIR, f"artifact_{task_id}.json"))
+    return await download_task_artifact(task_id, "json")
 
 
-@router.get("/task-artifact/{task_id}/excel")
+@router.post("/task-artifact/{task_id}/excel")
 async def get_task_artifact_excel(task_id: str):
-    return FileResponse(os.path.join(settings.OUTPUT_DIR, f"artifact_{task_id}.xlsx"))
+    return await download_task_artifact(task_id, "excel")
+
+
+@router.post("/task-artifact/{task_id}/excel-lv1")
+async def get_task_artifact_excel_lv1(task_id: str):
+    return await download_task_artifact(task_id, "excel_lv1")
+
+
+@router.post("/task-artifact/{task_id}/excel-template")
+async def get_task_artifact_excel_template(task_id: str):
+    return await download_task_artifact(task_id, "excel_template")
 
 
 @router.get("/tasks")
 async def get_tasks():
     from app.core.db import get_all_tasks
+
     return get_all_tasks()
 
 
@@ -325,21 +379,47 @@ async def get_task_status(task_id: str):
     return response
 
 
-@router.get("/task-artifact/{task_id}/{artifact_kind}")
+@router.post("/task-artifact/{task_id}/{artifact_kind}")
 async def download_task_artifact(task_id: str, artifact_kind: str):
     """
     Download a saved task artifact from the outputs directory.
-    artifact_kind can be 'json' or 'excel'.
+    artifact_kind can be 'json', 'excel', 'excel_lv1', or 'excel_template'.
     """
-    if artifact_kind not in {"json", "excel"}:
+    if artifact_kind not in {"json", "excel", "excel_lv1", "excel_template"}:
         raise HTTPException(status_code=400, detail="Invalid artifact kind")
 
-    task = AsyncResult(task_id)
-    if task.state != "SUCCESS" or not isinstance(task.result, dict):
-        raise HTTPException(status_code=404, detail="Task result not available")
+    result_key_map = {
+        "json": "saved_to",
+        "excel": "saved_excel",
+        "excel_lv1": "saved_excel_lv1",
+        "excel_template": "saved_excel_template",
+    }
+    result_key = result_key_map[artifact_kind]
+    artifact_path = None
 
-    result_key = "saved_excel" if artifact_kind == "excel" else "saved_to"
-    artifact_path = task.result.get(result_key)
+    task = AsyncResult(task_id)
+    if task.state == "SUCCESS" and isinstance(task.result, dict):
+        artifact_path = task.result.get(result_key)
+
+    # Fallback to persisted DB record in case Celery backend result is gone.
+    if not artifact_path:
+        from app.core.db import get_task_by_id
+
+        task_row = get_task_by_id(task_id)
+        if task_row:
+            if artifact_kind == "json":
+                artifact_path = task_row.get("json_path")
+            elif artifact_kind in {"excel", "excel_template"}:
+                artifact_path = task_row.get("excel_path")
+            elif artifact_kind == "excel_lv1":
+                template_path = task_row.get("excel_path")
+                if isinstance(template_path, str) and template_path.endswith(
+                    "_template.xlsx"
+                ):
+                    candidate = template_path.replace("_template.xlsx", "_lv1.xlsx")
+                    if os.path.exists(candidate):
+                        artifact_path = candidate
+
     if not artifact_path:
         raise HTTPException(
             status_code=404, detail=f"No {artifact_kind} artifact found"

@@ -1,0 +1,68 @@
+{
+  "van_bang_dai_hoc": {
+    "aliases": {
+      "STT": [
+        "stt",
+        "sdt"
+      ],
+      "Số hiệu bằng": [
+        "so hieu bang",
+        "số hiệu bằng",
+        "so bang nganh nhan",
+        "số bằng ngành nhân",
+        "so bang",
+        "số bằng"
+      ],
+      "Số vào sổ gốc cấp văn bằng": [
+        "so vao so",
+        "số vào sổ",
+        "so vao so goc cap van bang",
+        "số vào sổ gốc cấp văn bằng"
+      ],
+      "Họ, chữ đệm và tên": [
+        "ho va ten",
+        "họ và tên",
+        "ho ten",
+        "hồ và tên",
+        "hộ và tên"
+      ],
+      "Giới tính": [
+        "gioi",
+        "giói",
+        "gioi tinh",
+        "giới",
+        "giới tính"
+      ],
+      "Ngày, tháng, năm sinh": [
+        "ngay sinh",
+        "ngày sinh",
+        "nam sinh"
+      ],
+      "Xếp loại/hạng tốt nghiệp": [
+        "xep loai",
+        "xếp loại",
+        "xep loai tot nghiep",
+        "xếp loại tốt nghiệp"
+      ],
+      "Họ, chữ đệm, tên người ký bằng": [
+        "ky, hen ten",
+        "ký, hẹn tên",
+        "ky, ghi ten",
+        "ký, ghi tên"
+      ],
+      "Ngày tháng năm cấp bằng": [
+        "ngay nhan",
+        "ngày nhận",
+        "ngay cap bang",
+        "ngày cấp bằng",
+        "ngay thang nam cap bang",
+        "ngày tháng năm cấp bằng"
+      ],
+      "Ghi chú": [
+        "ghi chu",
+        "ghi chú"
+      ]
+    },
+    "carry_date_from_signer_to_issue_date": true
+  }
+}

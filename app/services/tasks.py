@@ -3,6 +3,7 @@ from app.services.ai_providers import AIProviderFactory
 from app.services.prompt_manager import PromptManager
 import os
 import json
+from datetime import datetime
 from typing import Any, Dict, Optional
 
 import pandas as pd
@@ -16,10 +17,37 @@ def process_image_task(
     output_format: str,
     save_to_file: bool = False,
     agent_config: Optional[Dict[str, Any]] = None,
+    template_id: str = "default",
+    source_filename: Optional[str] = None,
+    source_folder: Optional[str] = None,
 ):
     """
     Background task to process an image.
     """
+    # `self.request.id` may be unavailable in some early-failure scenarios.
+    # Keep a safe fallback so error handling never raises NameError.
+    task_id = None
+    try:
+        task_id = self.request.id
+    except Exception:
+        task_id = "unknown"
+
+    resolved_source_filename = source_filename
+    resolved_source_folder = source_folder
+    if task_id != "unknown" and (
+        not resolved_source_filename or not resolved_source_folder
+    ):
+        try:
+            from app.core.db import get_task_by_id
+
+            task_row = get_task_by_id(task_id)
+            if task_row:
+                if not resolved_source_filename:
+                    resolved_source_filename = task_row.get("filename")
+                if not resolved_source_folder:
+                    resolved_source_folder = task_row.get("folder_path")
+        except Exception:
+            pass
 
     def _clean_json_string(raw_text: str) -> str:
         text = raw_text.strip()
@@ -31,15 +59,77 @@ def process_image_task(
             text = text[:-3]
         return text.strip()
 
-    def _save_excel_from_json(data: Any, saved_path: str) -> Optional[str]:
-        excel_path = os.path.splitext(saved_path)[0] + ".xlsx"
+    def _save_excel_from_json(data: Any, excel_path: str) -> Optional[str]:
 
         try:
             sheets = {}
 
-            if isinstance(data, list):
-                sheets["Sheet1"] = pd.DataFrame(data)
-            elif isinstance(data, dict):
+            def _frame_from_rows(
+                rows: Any, headers: Optional[Any] = None
+            ) -> Optional[pd.DataFrame]:
+                if not isinstance(rows, list) or not rows:
+                    return None
+                if not isinstance(rows[0], dict):
+                    return None
+                frame = pd.DataFrame(rows)
+                if isinstance(headers, list) and headers:
+                    ordered_headers = [h for h in headers if h in frame.columns]
+                    remaining = [c for c in frame.columns if c not in ordered_headers]
+                    frame = frame[ordered_headers + remaining]
+                return frame
+
+            # Prefer OCR-style table extraction first (tables[].rows + optional headers)
+            table_frames = []
+            queue = [data]
+            while queue:
+                current = queue.pop(0)
+                if isinstance(current, dict):
+                    rows_frame = _frame_from_rows(
+                        current.get("rows"), current.get("headers")
+                    )
+                    if rows_frame is not None:
+                        table_frames.append(rows_frame)
+
+                    tables = current.get("tables")
+                    if isinstance(tables, list):
+                        for table in tables:
+                            if isinstance(table, dict):
+                                frame = _frame_from_rows(
+                                    table.get("rows"), table.get("headers")
+                                )
+                                if frame is not None:
+                                    table_frames.append(frame)
+
+                    for key, value in current.items():
+                        if key == "tables":
+                            continue
+                        if isinstance(value, (dict, list)):
+                            queue.append(value)
+                elif isinstance(current, list):
+                    for item in current:
+                        if isinstance(item, (dict, list)):
+                            queue.append(item)
+
+            if table_frames:
+                for idx, frame in enumerate(table_frames, start=1):
+                    sheet_name = "Sheet1" if idx == 1 else f"Table{idx}"
+                    sheets[sheet_name] = frame
+
+            if not sheets and isinstance(data, list):
+                if (
+                    data
+                    and isinstance(data[0], list)
+                    and data[0]
+                    and isinstance(data[0][0], dict)
+                ):
+                    flat_rows = []
+                    for chunk in data:
+                        if isinstance(chunk, list):
+                            flat_rows.extend([r for r in chunk if isinstance(r, dict)])
+                    sheets["Sheet1"] = pd.DataFrame(flat_rows)
+                else:
+                    sheets["Sheet1"] = pd.DataFrame(data)
+            elif not sheets and isinstance(data, dict):
                 found_list = False
                 for key, value in data.items():
                     if isinstance(value, list) and value and isinstance(value[0], dict):
@@ -49,7 +139,7 @@ def process_image_task(
 
                 if not found_list:
                     sheets["Sheet1"] = pd.DataFrame([data])
-            else:
+            elif not sheets:
                 sheets["Sheet1"] = pd.DataFrame([{"result": data}])
 
             with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
@@ -68,11 +158,23 @@ def process_image_task(
             ai_provider = AIProviderFactory.get_provider(agent, agent_config)
         except ValueError as e:
             from app.core.db import update_task_status
+
             update_task_status(task_id, "failed", error=str(e))
             return {"error": str(e), "status": "failed"}
 
-        # 2. Get Prompt
+        # 2. Get Prompt (Truyền cấu trúc template vào nếu có)
+        from app.core.reference_data import get_reference_data
+
+        ref_data = get_reference_data()
+        templates = ref_data.get("templates", {})
+
         prompt = PromptManager.get_prompt(output_format)
+
+        if template_id != "default" and template_id in templates:
+            # Gắn thêm cấu trúc mẫu vào prompt để AI xuất ra đúng field
+            fields = templates[template_id].get("fields", [])
+            fields_str = ", ".join([f["name"] for f in fields])
+            prompt += f"\n\nIMPORTANT: You must extract EXACTLY the following fields in your JSON output: {fields_str}"
 
         self.update_state(
             state="PROGRESS", meta={"message": "Generating content with AI"}
@@ -84,13 +186,14 @@ def process_image_task(
         except Exception as e:
             err_msg = f"AI generation failed: {str(e)}"
             from app.core.db import update_task_status
+
             update_task_status(task_id, "failed", error=err_msg)
             return {"error": err_msg, "status": "failed"}
 
         api_base_url = None
         api_json_path = None
         api_excel_path = None
-        
+
         if isinstance(content_result, dict):
             content = content_result.get("text", "")
             api_base_url = content_result.get("base_url", "http://localhost:8000")
@@ -102,78 +205,190 @@ def process_image_task(
         # 4. Save to file if requested
         saved_path = None
         saved_excel = None
+        saved_excel_lv1 = None
+        saved_excel_template = None
         if save_to_file:
             from app.core.config import settings
             import requests
 
-            base_name = os.path.splitext(os.path.basename(image_path))[0]
+            def _safe_name(value: str) -> str:
+                cleaned = "".join(ch if ch not in '<>:"/\\|?*' else "_" for ch in value)
+                return cleaned.strip().strip(".") or "output"
+
+            display_filename = resolved_source_filename or os.path.basename(image_path)
+            base_name = _safe_name(
+                os.path.splitext(os.path.basename(display_filename))[0]
+            )
+            folder_label = ""
+            if resolved_source_folder:
+                folder_label = _safe_name(
+                    os.path.basename(os.path.normpath(resolved_source_folder))
+                )
+            base_slug = f"{folder_label}_{base_name}" if folder_label else base_name
             ext = "md" if output_format == "markdown" else "json"
-            output_filename = f"{base_name}.{ext}"
-            saved_path = os.path.join(settings.OUTPUT_DIR, output_filename)
+            output_filename = f"{base_slug}.{ext}"
+            now = datetime.now()
+            dated_output_dir = os.path.join(
+                settings.OUTPUT_DIR,
+                now.strftime("%Y"),
+                now.strftime("%m"),
+                now.strftime("%d"),
+            )
+            os.makedirs(dated_output_dir, exist_ok=True)
+            saved_path = os.path.join(dated_output_dir, output_filename)
+            excel_name_prefix = f"excel_{base_slug}"
+            excel_lv1_path = os.path.join(
+                dated_output_dir, f"{excel_name_prefix}_lv1.xlsx"
+            )
+            excel_template_path = os.path.join(
+                dated_output_dir, f"{excel_name_prefix}_template.xlsx"
+            )
 
             # Nếu API có file JSON chuẩn và định dạng yêu cầu là json, thử tải về thay vì ghi text chay
             downloaded_json = False
             if output_format == "json" and api_json_path and api_base_url:
                 try:
-                    res = requests.post(f"{api_base_url}/download", json={"path": api_json_path}, timeout=60)
+                    res = requests.post(
+                        f"{api_base_url}/download",
+                        json={"path": api_json_path},
+                        timeout=60,
+                    )
                     res.raise_for_status()
                     with open(saved_path, "wb") as f:
                         f.write(res.content)
                     downloaded_json = True
                 except Exception:
                     pass
-            
+
             # Nếu không tải được hoặc định dạng là markdown, lưu content như cũ
             if not downloaded_json:
                 with open(saved_path, "w", encoding="utf-8") as f:
                     f.write(content)
 
-            # Xử lý Excel
+            # Xử lý JSON mapping & Excel
             if output_format == "json":
-                # Thử tải Excel xịn từ API trước
-                if api_excel_path and api_base_url:
-                    excel_out = os.path.join(settings.OUTPUT_DIR, f"{base_name}.xlsx")
+                # Đọc nội dung JSON để parse
+                parsed = None
+                parsed_lv1 = None
+                if downloaded_json:
                     try:
-                        res = requests.post(f"{api_base_url}/download", json={"path": api_excel_path}, timeout=60)
+                        with open(saved_path, "r", encoding="utf-8") as f:
+                            parsed = json.load(f)
+                    except Exception:
+                        pass
+                else:
+                    try:
+                        parsed = json.loads(_clean_json_string(content))
+                    except json.JSONDecodeError:
+                        pass
+
+                if parsed is not None:
+                    parsed_lv1 = json.loads(json.dumps(parsed, ensure_ascii=False))
+
+                def _flatten_mapped_rows(value: Any) -> Any:
+                    if not isinstance(value, list):
+                        return value
+                    flattened = []
+                    for item in value:
+                        if isinstance(item, list):
+                            flattened.extend(
+                                [row for row in item if isinstance(row, dict)]
+                            )
+                        else:
+                            flattened.append(item)
+                    return flattened
+
+                # ÁP DỤNG MAPPING Ở ĐÂY
+                if parsed is not None and template_id != "default":
+                    from app.core.mapper import map_extracted_data
+
+                    if isinstance(parsed, list):
+                        parsed = [
+                            map_extracted_data(item, template_id) for item in parsed
+                        ]
+                        parsed = _flatten_mapped_rows(parsed)
+                    elif isinstance(parsed, dict):
+                        # Đôi khi LightOnOCR trả về dict chứa key "result" -> list
+                        if "result" in parsed and isinstance(parsed["result"], list):
+                            parsed["result"] = [
+                                map_extracted_data(item, template_id)
+                                for item in parsed["result"]
+                            ]
+                            parsed["result"] = _flatten_mapped_rows(parsed["result"])
+                        else:
+                            parsed = map_extracted_data(parsed, template_id)
+
+                    # Lưu lại JSON sau khi map, đè lên file cũ
+                    with open(saved_path, "w", encoding="utf-8") as f:
+                        json.dump(parsed, f, ensure_ascii=False, indent=2)
+
+                # Build LV1 excel from raw parsed JSON (before template mapping).
+                if parsed_lv1 is not None:
+                    saved_excel_lv1 = _save_excel_from_json(parsed_lv1, excel_lv1_path)
+
+                # Build template excel from mapped/final JSON.
+                if parsed is not None:
+                    saved_excel_template = _save_excel_from_json(
+                        parsed, excel_template_path
+                    )
+                    saved_excel = saved_excel_template
+
+                # Fallback: if JSON parsing fails entirely, try downloading API Excel.
+                if (
+                    not saved_excel
+                    and template_id == "default"
+                    and api_excel_path
+                    and api_base_url
+                ):
+                    excel_out = os.path.join(dated_output_dir, f"{base_name}.xlsx")
+                    try:
+                        res = requests.post(
+                            f"{api_base_url}/download",
+                            json={"path": api_excel_path},
+                            timeout=60,
+                        )
                         res.raise_for_status()
                         with open(excel_out, "wb") as f:
                             f.write(res.content)
                         saved_excel = excel_out
+                        saved_excel_lv1 = excel_out
+                        saved_excel_template = excel_out
                     except Exception:
                         pass
-                
-                # Nếu API không có excel hoặc lỗi tải, thì tự generate
-                if not saved_excel:
-                    try:
-                        parsed = json.loads(_clean_json_string(content))
-                    except json.JSONDecodeError:
-                        parsed = None
-
-                    if parsed is not None:
-                        saved_excel = _save_excel_from_json(parsed, saved_path)
 
         from app.core.db import update_task_status
-        update_task_status(task_id, "success", json_path=saved_path, excel_path=saved_excel)
+
+        update_task_status(
+            task_id, "success", json_path=saved_path, excel_path=saved_excel
+        )
 
         return {
             "status": "success",
             "agent": agent,
             "provider": agent,
             "format": output_format,
-            "filename": os.path.basename(image_path),
+            "filename": resolved_source_filename or os.path.basename(image_path),
+            "folder_name": (
+                os.path.basename(os.path.normpath(resolved_source_folder))
+                if resolved_source_folder
+                else None
+            ),
             "content": content,
             "saved_to": saved_path,
             "saved_excel": saved_excel,
+            "saved_excel_lv1": saved_excel_lv1,
+            "saved_excel_template": saved_excel_template,
             "api_base_url": api_base_url,
             "api_json_path": api_json_path,
             "api_excel_path": api_excel_path,
         }
 
     except Exception as e:
-        self.update_state(state="FAILURE", meta={"error": str(e)})
         from app.core.db import update_task_status
+
         update_task_status(task_id, "failed", error=str(e))
-        raise e
+        # Let Celery record the real exception payload (exc_type, traceback, ...).
+        raise
     finally:
         # Cleanup uploaded file if needed?
         # For now, let's keep it or manage cleanup policy separately

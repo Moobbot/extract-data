@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from app.core.config import settings
 
 DB_PATH = os.path.join(settings.OUTPUT_DIR, "tasks.sqlite3")
@@ -39,7 +39,8 @@ def init_db():
 def insert_task(task_id: str, filename: str, template: str, folder_path: str = None):
     conn = get_db()
     cursor = conn.cursor()
-    now = datetime.utcnow().isoformat()
+    tz_gmt7 = timezone(timedelta(hours=7))
+    now = datetime.now(tz_gmt7).isoformat()
     cursor.execute("""
         INSERT INTO tasks (id, filename, template, status, created_at, folder_path)
         VALUES (?, ?, ?, 'pending', ?, ?)
@@ -50,7 +51,8 @@ def insert_task(task_id: str, filename: str, template: str, folder_path: str = N
 def update_task_status(task_id: str, status: str, json_path: str = None, excel_path: str = None, error: str = None):
     conn = get_db()
     cursor = conn.cursor()
-    now = datetime.utcnow().isoformat()
+    tz_gmt7 = timezone(timedelta(hours=7))
+    now = datetime.now(tz_gmt7).isoformat()
     
     updates = ["status = ?", "completed_at = ?"]
     params = [status, now]
@@ -79,3 +81,12 @@ def get_all_tasks():
     rows = cursor.fetchall()
     conn.close()
     return [dict(row) for row in rows]
+
+
+def get_task_by_id(task_id: str):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM tasks WHERE id = ?", (task_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return dict(row) if row else None

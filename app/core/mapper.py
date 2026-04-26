@@ -1,0 +1,232 @@
+import os
+import json
+import unicodedata
+from typing import Any
+from app.core.reference_data import get_reference_data
+
+
+COMMON_ERROR_MAP_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+    "config",
+    "field_mapping_common_errors.json",
+)
+
+
+def load_common_error_mapping() -> dict:
+    if not os.path.exists(COMMON_ERROR_MAP_PATH):
+        return {}
+    try:
+        with open(COMMON_ERROR_MAP_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def unaccent_and_lower(text: str) -> str:
+    """Loại bỏ dấu tiếng Việt và chuyển thành chữ thường để so sánh."""
+    if not text:
+        return ""
+    text = text.lower()
+    text = unicodedata.normalize("NFD", text)
+    text = "".join(c for c in text if unicodedata.category(c) != "Mn")
+    return text.replace("đ", "d")
+
+
+def find_category_code(value: str, category_dict: dict) -> str:
+    """
+    Tìm tên chuẩn của giá trị trong danh mục dựa vào so sánh không dấu, không phân biệt hoa thường.
+    Trả về tên chuẩn (không phải mã) nếu tìm thấy, ngược lại trả về chuỗi rỗng.
+    """
+    if not value or not isinstance(value, str):
+        return ""
+
+    search_val = unaccent_and_lower(value.strip())
+
+    for code, info in category_dict.items():
+        # Kiểm tra tên chính
+        if unaccent_and_lower(info.get("ten", "")) == search_val:
+            return info.get("ten")
+        # Kiểm tra các tên phụ (extra)
+        for extra_name in info.get("extra", []):
+            if unaccent_and_lower(extra_name) == search_val:
+                return info.get("ten")
+
+    return ""
+
+
+def map_extracted_data(data, template_id: str):
+    """
+    Map dữ liệu trích xuất được từ OCR với danh mục chuẩn dựa trên template_id.
+    """
+    ref_data = get_reference_data()
+    templates = ref_data.get("templates", {})
+    categories = ref_data.get("danh_muc", {})
+    common_error_map = load_common_error_mapping().get(template_id, {})
+    alias_map = common_error_map.get("aliases", {})
+
+    if template_id not in templates:
+        return data
+
+    template_fields = templates[template_id].get("fields", [])
+
+    def _normalize_key(text: str) -> str:
+        return unaccent_and_lower(text or "")
+
+    def _canonical_gender(value: Any) -> str:
+        normalized = _normalize_key(str(value).strip())
+        if normalized == "nam":
+            return "Nam"
+        if normalized == "nu":
+            return "Nữ"
+        if normalized == "khac":
+            return "Khác"
+        return ""
+
+    def _looks_like_date(value: Any) -> bool:
+        text = str(value or "").strip()
+        if not text:
+            return False
+        parts = text.split("/")
+        if len(parts) != 3:
+            return False
+        if not all(part.isdigit() for part in parts):
+            return False
+        day, month, year = parts
+        return 1 <= len(day) <= 2 and 1 <= len(month) <= 2 and len(year) == 4
+
+    def _extract_with_aliases(record: dict, field_name: str) -> Any:
+        wanted = _normalize_key(field_name)
+        aliases = [wanted]
+        aliases.extend(_normalize_key(a) for a in alias_map.get(field_name, []))
+
+        for k, v in record.items():
+            if _normalize_key(str(k)) in aliases:
+                return v
+        return ""
+
+    def _fix_van_bang_shift(mapped: dict) -> dict:
+        if template_id != "van_bang_dai_hoc":
+            return mapped
+
+        name_key = "Họ, chữ đệm và tên"
+        gender_key = "Giới tính"
+        dob_key = "Ngày, tháng, năm sinh"
+        rank_key = "Xếp loại/hạng tốt nghiệp"
+        degree_key = "Số hiệu bằng"
+        signer_key = "Họ, chữ đệm, tên người ký bằng"
+        note_key = "Ghi chú"
+
+        gender = _canonical_gender(mapped.get(gender_key, ""))
+        next_gender = _canonical_gender(mapped.get(dob_key, ""))
+
+        # When gender column accidentally receives the tail of person's name,
+        # and the true gender shifts into the next column, shift values right.
+        if not gender and next_gender:
+            extra_name = str(mapped.get(gender_key, "")).strip()
+            base_name = str(mapped.get(name_key, "")).strip()
+            if extra_name:
+                mapped[name_key] = (base_name + " " + extra_name).strip()
+
+            old_dob = mapped.get(dob_key, "")
+            old_rank = mapped.get(rank_key, "")
+            old_degree = mapped.get(degree_key, "")
+            old_signer = mapped.get(signer_key, "")
+            old_note = mapped.get(note_key, "")
+
+            mapped[gender_key] = old_dob
+            mapped[dob_key] = old_rank
+            mapped[rank_key] = old_degree
+            mapped[degree_key] = old_signer
+            mapped[signer_key] = old_note
+            mapped[note_key] = ""
+
+        if common_error_map.get("carry_date_from_signer_to_issue_date"):
+            issue_date_key = "Ngày tháng năm cấp bằng"
+            signer_value = str(mapped.get(signer_key, "")).strip()
+            if not str(mapped.get(issue_date_key, "")).strip() and _looks_like_date(
+                signer_value
+            ):
+                mapped[issue_date_key] = signer_value
+                mapped[signer_key] = ""
+
+        return mapped
+
+    def _extract_rows_from_ocr_payload(obj: Any) -> list:
+        rows = []
+        if not isinstance(obj, dict):
+            return rows
+
+        tables = obj.get("tables")
+        if isinstance(tables, list):
+            for table in tables:
+                if not isinstance(table, dict):
+                    continue
+                table_rows = table.get("rows")
+                if isinstance(table_rows, list):
+                    rows.extend([r for r in table_rows if isinstance(r, dict)])
+
+        result_rows = obj.get("result")
+        if isinstance(result_rows, list):
+            rows.extend([r for r in result_rows if isinstance(r, dict)])
+
+        return rows
+
+    def _map_one_record(record: dict) -> dict:
+        mapped = {}
+        for field in template_fields:
+            field_name = field.get("name", "")
+            if not field_name:
+                continue
+
+            category_name = field.get("category")
+            raw_value = _extract_with_aliases(record, field_name)
+
+            if raw_value is None:
+                raw_value = ""
+
+            mapped[field_name] = raw_value
+
+        mapped = _fix_van_bang_shift(mapped)
+
+        for field in template_fields:
+            field_name = field.get("name", "")
+            if not field_name:
+                continue
+            category_name = field.get("category")
+            raw_value = mapped.get(field_name, "")
+
+            if category_name and category_name in categories:
+                if isinstance(raw_value, list):
+                    mapped[field_name] = [
+                        find_category_code(str(item), categories[category_name])
+                        for item in raw_value
+                    ]
+                else:
+                    mapped[field_name] = find_category_code(
+                        str(raw_value), categories[category_name]
+                    )
+            else:
+                mapped[field_name] = raw_value
+
+        return mapped
+
+    if isinstance(data, list):
+        extracted_rows = []
+        for item in data:
+            extracted_rows.extend(_extract_rows_from_ocr_payload(item))
+
+        if extracted_rows:
+            return [_map_one_record(row) for row in extracted_rows]
+
+        return [
+            _map_one_record(item) if isinstance(item, dict) else item for item in data
+        ]
+
+    if isinstance(data, dict):
+        extracted_rows = _extract_rows_from_ocr_payload(data)
+        if extracted_rows:
+            return [_map_one_record(row) for row in extracted_rows]
+        return _map_one_record(data)
+
+    return data

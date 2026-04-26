@@ -17,21 +17,27 @@
       --ok: #067647;
       --shadow: 0 24px 80px rgba(8, 19, 31, 0.22);
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.22), transparent 28%),
-                  radial-gradient(circle at top right, rgba(20, 184, 166, 0.24), transparent 28%),
-                  linear-gradient(180deg, #07111c 0%, #0b1727 38%, #eef4fb 38%, #eef4fb 100%);
+        radial-gradient(circle at top right, rgba(20, 184, 166, 0.24), transparent 28%),
+        linear-gradient(180deg, #07111c 0%, #0b1727 38%, #eef4fb 38%, #eef4fb 100%);
       color: var(--text);
       min-height: 100vh;
     }
+
     .wrap {
       max-width: 1180px;
       margin: 0 auto;
       padding: 24px 16px 32px;
     }
+
     .hero {
       color: #f8fbff;
       padding: 18px 20px 24px;
@@ -39,6 +45,7 @@
       background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(37, 99, 235, 0.82));
       box-shadow: var(--shadow);
     }
+
     .hero-top {
       display: flex;
       justify-content: space-between;
@@ -46,34 +53,112 @@
       flex-wrap: wrap;
       align-items: center;
     }
-    .brand h1 { margin: 0; font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.03em; }
-    .brand p { margin: 6px 0 0; color: rgba(248, 251, 255, 0.78); font-size: 14px; }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 40px);
+      letter-spacing: -0.03em;
+    }
+
+    .brand p {
+      margin: 6px 0 0;
+      color: rgba(248, 251, 255, 0.78);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .chip {
-      display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px;
-      background: rgba(255, 255, 255, 0.12); color: #f7fbff;
-      border: 1px solid rgba(255, 255, 255, 0.14); text-decoration: none; border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f7fbff;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      text-decoration: none;
+      border-radius: 14px;
     }
+
     .panel {
-      background: var(--panel); border: 1px solid var(--border);
-      border-radius: 22px; box-shadow: var(--shadow); overflow: hidden; margin-top: 18px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-top: 18px;
     }
-    .panel-body { padding: 20px; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; text-align: left; }
-    th, td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
-    th { font-weight: 700; color: var(--muted); }
+
+    .panel-body {
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    th {
+      font-weight: 700;
+      color: var(--muted);
+    }
+
     .status-badge {
-      display: inline-block; padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
     }
-    .status-success { background: rgba(6, 118, 71, 0.1); color: var(--ok); }
-    .status-failed { background: rgba(180, 35, 24, 0.1); color: var(--danger); }
-    .status-pending { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
+
+    .status-success {
+      background: rgba(6, 118, 71, 0.1);
+      color: var(--ok);
+    }
+
+    .status-failed {
+      background: rgba(180, 35, 24, 0.1);
+      color: var(--danger);
+    }
+
+    .status-pending {
+      background: rgba(37, 99, 235, 0.1);
+      color: #2563eb;
+    }
+
     .btn {
-      padding: 6px 12px; border: none; border-radius: 8px; background: #e8eef6; cursor: pointer;
-      color: var(--text); font-weight: 600; text-decoration: none; display: inline-block;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      background: #e8eef6;
+      cursor: pointer;
+      color: var(--text);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
     }
-    .btn:hover { background: #d1d9e6; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn:hover {
+      background: #d1d9e6;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -107,7 +192,9 @@
             </tr>
           </thead>
           <tbody id="historyBody">
-            <tr><td colspan="8">Đang tải dữ liệu...</td></tr>
+            <tr>
+              <td colspan="8">Đang tải dữ liệu...</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -122,11 +209,64 @@
       return new Date(isoString).toLocaleString("vi-VN");
     }
 
+    function safeSlug(text) {
+      return String(text || "output")
+        .replace(/[<>:"/\\|?*]+/g, "_")
+        .replace(/\s+/g, "_")
+        .replace(/^\.+|\.+$/g, "") || "output";
+    }
+
+    function getFilenameFromContentDisposition(value, fallbackName) {
+      if (!value) {
+        return fallbackName;
+      }
+      const match = /filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i.exec(value);
+      const encoded = match && (match[1] || match[2]);
+      if (!encoded) {
+        return fallbackName;
+      }
+      try {
+        return decodeURIComponent(encoded);
+      } catch (_) {
+        return encoded;
+      }
+    }
+
+    async function downloadArtifact(taskId, kind, fallbackName) {
+      const res = await fetch(`/api/v1/task-artifact/${encodeURIComponent(taskId)}/${kind}`, {
+        method: "POST"
+      });
+      if (!res.ok) {
+        let detail = "Download failed";
+        try {
+          const err = await res.json();
+          detail = err.detail || detail;
+        } catch (_) {
+          // ignore parse error
+        }
+        throw new Error(detail);
+      }
+
+      const blob = await res.blob();
+      const filename = getFilenameFromContentDisposition(
+        res.headers.get("content-disposition"),
+        fallbackName
+      );
+      const objectUrl = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = objectUrl;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(objectUrl);
+    }
+
     async function fetchTasks() {
       try {
         const res = await fetch("/api/v1/tasks");
         const tasks = await res.json();
-        
+
         historyBody.innerHTML = "";
         if (tasks.length === 0) {
           historyBody.innerHTML = `<tr><td colspan="8">Chưa có dữ liệu nào trong lịch sử.</td></tr>`;
@@ -135,7 +275,7 @@
 
         tasks.forEach(task => {
           const tr = document.createElement("tr");
-          
+
           let statusHtml = "";
           if (task.status === "success") {
             statusHtml = `<span class="status-badge status-success">Thành công</span>`;
@@ -145,12 +285,17 @@
             statusHtml = `<span class="status-badge status-pending">Đang xử lý</span>`;
           }
 
+          const fileBase = safeSlug(String(task.filename || "output").replace(/\.[^/.]+$/, ""));
+          const folderName = task.folder_path ? String(task.folder_path).split(/[/\\]/).pop() : "";
+          const slug = folderName ? `${safeSlug(folderName)}_${fileBase}` : fileBase;
+
           let downloadHtml = "-";
           if (task.status === "success") {
             downloadHtml = `
               <div style="display:flex; gap: 8px;">
-                <a class="btn" ${task.json_path ? `href="/api/v1/task-artifact/${task.id}/json" target="_blank"` : 'disabled'}>JSON</a>
-                <a class="btn" ${task.excel_path ? `href="/api/v1/task-artifact/${task.id}/excel" target="_blank"` : 'disabled'}>Excel</a>
+                <button class="btn dl-btn" ${task.json_path ? `data-task-id="${task.id}" data-kind="json" data-fallback-name="${slug}.json"` : 'disabled'}>JSON</button>
+                <button class="btn dl-btn" ${task.excel_path ? `data-task-id="${task.id}" data-kind="excel-lv1" data-fallback-name="excel_${slug}_lv1.xlsx"` : 'disabled'}>Excel Gốc</button>
+                <button class="btn dl-btn" ${task.excel_path ? `data-task-id="${task.id}" data-kind="excel" data-fallback-name="excel_${slug}_template.xlsx"` : 'disabled'}>Excel Template</button>
               </div>
             `;
           } else if (task.status === "failed") {
@@ -159,7 +304,7 @@
 
           tr.innerHTML = `
             <td><small>${task.id.split('-')[0]}...</small></td>
-            <td><small style="color: var(--muted); word-break: break-all;">${task.folder_path || "-"}</small></td>
+            <td><small style="color: var(--muted); word-break: break-all;" title="${task.folder_path || ""}">${folderName || "-"}</small></td>
             <td>${task.filename || "-"}</td>
             <td>${task.template || "default"}</td>
             <td>${statusHtml}</td>
@@ -173,6 +318,27 @@
         historyBody.innerHTML = `<tr><td colspan="8" style="color:red">Lỗi tải dữ liệu: ${err.message}</td></tr>`;
       }
     }
+
+    historyBody.addEventListener("click", async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) {
+        return;
+      }
+      if (!target.classList.contains("dl-btn")) {
+        return;
+      }
+      const taskId = target.getAttribute("data-task-id");
+      const kind = target.getAttribute("data-kind");
+      const fallbackName = target.getAttribute("data-fallback-name") || "download.bin";
+      if (!taskId || !kind) {
+        return;
+      }
+      try {
+        await downloadArtifact(taskId, kind, fallbackName);
+      } catch (err) {
+        alert("Lỗi tải file: " + err.message);
+      }
+    });
 
     fetchTasks();
     setInterval(fetchTasks, 5000); // Tự động reload mỗi 5s
