@@ -95,6 +95,10 @@ def map_extracted_data(data, template_id: str):
         day, month, year = parts
         return 1 <= len(day) <= 2 and 1 <= len(month) <= 2 and len(year) == 4
 
+    def _looks_like_degree_number(value: Any) -> bool:
+        text = str(value or "").strip().replace(" ", "")
+        return bool(text) and text.isdigit() and len(text) >= 4
+
     def _extract_with_aliases(record: dict, field_name: str) -> Any:
         wanted = _normalize_key(field_name)
         aliases = [wanted]
@@ -119,10 +123,11 @@ def map_extracted_data(data, template_id: str):
 
         gender = _canonical_gender(mapped.get(gender_key, ""))
         next_gender = _canonical_gender(mapped.get(dob_key, ""))
+        rank_is_date = _looks_like_date(mapped.get(rank_key, ""))
 
         # When gender column accidentally receives the tail of person's name,
         # and the true gender shifts into the next column, shift values right.
-        if not gender and next_gender:
+        if not gender and next_gender and rank_is_date:
             extra_name = str(mapped.get(gender_key, "")).strip()
             base_name = str(mapped.get(name_key, "")).strip()
             if extra_name:
@@ -144,11 +149,28 @@ def map_extracted_data(data, template_id: str):
         if common_error_map.get("carry_date_from_signer_to_issue_date"):
             issue_date_key = "Ngày tháng năm cấp bằng"
             signer_value = str(mapped.get(signer_key, "")).strip()
+            note_value = str(mapped.get(note_key, "")).strip()
+
             if not str(mapped.get(issue_date_key, "")).strip() and _looks_like_date(
                 signer_value
             ):
                 mapped[issue_date_key] = signer_value
                 mapped[signer_key] = ""
+
+            if not str(mapped.get(issue_date_key, "")).strip() and _looks_like_date(
+                note_value
+            ):
+                mapped[issue_date_key] = note_value
+                mapped[note_key] = ""
+
+        # Fallback nhẹ: nếu số bằng bị OCR dạt sang cột người ký,
+        # đổi chỗ để bảo toàn số bằng (không đụng các cột khác).
+        degree_value = str(mapped.get(degree_key, "")).strip()
+        signer_value = str(mapped.get(signer_key, "")).strip()
+        if not _looks_like_degree_number(degree_value) and _looks_like_degree_number(
+            signer_value
+        ):
+            mapped[degree_key], mapped[signer_key] = signer_value, degree_value
 
         return mapped
 
