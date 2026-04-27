@@ -5,6 +5,7 @@ import os
 import json
 from datetime import datetime
 from typing import Any, Dict, Optional
+from pathlib import Path
 
 import pandas as pd
 
@@ -217,6 +218,29 @@ def process_image_task(
 
         return payload
 
+    def _collect_image_paths(folder_path: str) -> list[str]:
+        valid_extensions = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
+        collected = []
+        base_path = Path(folder_path)
+        if not base_path.exists() or not base_path.is_dir():
+            return collected
+
+        for file_path in base_path.rglob("*"):
+            if file_path.is_file() and file_path.suffix.lower() in valid_extensions:
+                collected.append(str(file_path))
+        return sorted(collected)
+
+    def _save_combined_excel(rows: list[dict], excel_path: str) -> Optional[str]:
+        try:
+            if not rows:
+                return None
+            frame = pd.DataFrame(rows)
+            with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
+                frame.to_excel(writer, sheet_name="Sheet1", index=False)
+            return excel_path
+        except Exception:
+            return None
+
     try:
         self.update_state(state="PROGRESS", meta={"message": "Processing started"})
 
@@ -242,6 +266,232 @@ def process_image_task(
             fields = templates[template_id].get("fields", [])
             fields_str = ", ".join([f["name"] for f in fields])
             prompt += f"\n\nIMPORTANT: You must extract EXACTLY the following fields in your JSON output: {fields_str}"
+
+        is_folder_input = os.path.isdir(image_path)
+        if is_folder_input:
+            folder_files = _collect_image_paths(image_path)
+            if not folder_files:
+                from app.core.db import update_task_status
+
+                err_msg = "No valid images found in folder"
+                update_task_status(task_id, "failed", error=err_msg)
+                return {"error": err_msg, "status": "failed"}
+
+            folder_results = []
+            combined_lv1_rows: list[dict] = []
+            combined_template_rows: list[dict] = []
+            combined_content: list[str] = []
+            api_base_url = None
+            api_json_path = None
+            api_excel_path = None
+
+            for index, current_image_path in enumerate(folder_files, start=1):
+                if not os.path.isfile(current_image_path):
+                    continue
+
+                self.update_state(
+                    state="PROGRESS",
+                    meta={
+                        "message": f"Generating content with AI ({index}/{len(folder_files)})",
+                    },
+                )
+
+                try:
+                    content_result = ai_provider.generate_content(
+                        current_image_path, prompt
+                    )
+                except Exception as e:
+                    err_msg = f"AI generation failed for {os.path.basename(current_image_path)}: {str(e)}"
+                    from app.core.db import update_task_status
+
+                    update_task_status(task_id, "failed", error=err_msg)
+                    return {"error": err_msg, "status": "failed"}
+
+                if isinstance(content_result, dict):
+                    content = content_result.get("text", "")
+                    api_base_url = content_result.get("base_url", api_base_url)
+                    api_json_path = content_result.get("api_json_path")
+                    api_excel_path = content_result.get("api_excel_path")
+                else:
+                    content = content_result
+
+                combined_content.append(
+                    f"### {os.path.basename(current_image_path)}\n\n{content}"
+                )
+
+                parsed = None
+                if output_format == "json":
+                    try:
+                        parsed = json.loads(_clean_json_string(content))
+                    except json.JSONDecodeError:
+                        parsed = None
+
+                parsed_lv1 = None
+                if parsed is not None:
+                    parsed_lv1 = json.loads(json.dumps(parsed, ensure_ascii=False))
+
+                def _flatten_mapped_rows(value: Any) -> Any:
+                    if not isinstance(value, list):
+                        return value
+                    flattened = []
+                    for item in value:
+                        if isinstance(item, list):
+                            flattened.extend(
+                                [row for row in item if isinstance(row, dict)]
+                            )
+                        else:
+                            flattened.append(item)
+                    return flattened
+
+                if parsed is not None and template_id != "default":
+                    from app.core.mapper import map_extracted_data
+
+                    parsed = _extract_records_for_mapping(parsed)
+
+                    if isinstance(parsed, list):
+                        parsed = [
+                            map_extracted_data(item, template_id) for item in parsed
+                        ]
+                        parsed = _flatten_mapped_rows(parsed)
+                    elif isinstance(parsed, dict):
+                        if "result" in parsed and isinstance(parsed["result"], list):
+                            parsed["result"] = [
+                                map_extracted_data(item, template_id)
+                                for item in parsed["result"]
+                            ]
+                            parsed["result"] = _flatten_mapped_rows(parsed["result"])
+                        else:
+                            parsed = map_extracted_data(parsed, template_id)
+
+                if parsed_lv1 is not None:
+                    raw_rows = _extract_records_for_mapping(parsed_lv1)
+                    if isinstance(raw_rows, list):
+                        combined_lv1_rows.extend(
+                            [row for row in raw_rows if isinstance(row, dict)]
+                        )
+                    elif isinstance(raw_rows, dict):
+                        combined_lv1_rows.append(raw_rows)
+
+                if parsed is not None:
+                    mapped_rows = _extract_records_for_mapping(parsed)
+                    if isinstance(mapped_rows, list):
+                        combined_template_rows.extend(
+                            [row for row in mapped_rows if isinstance(row, dict)]
+                        )
+                    elif isinstance(mapped_rows, dict):
+                        combined_template_rows.append(mapped_rows)
+
+                folder_results.append(
+                    {
+                        "filename": os.path.basename(current_image_path),
+                        "ocr_text": content,
+                        "tables": (
+                            parsed.get("tables", []) if isinstance(parsed, dict) else []
+                        ),
+                        "text_lines": (
+                            parsed.get("text_lines", [])
+                            if isinstance(parsed, dict)
+                            else []
+                        ),
+                        "kv_pairs": (
+                            parsed.get("kv_pairs", {})
+                            if isinstance(parsed, dict)
+                            else {}
+                        ),
+                        "table_count": (
+                            parsed.get("table_count", 0)
+                            if isinstance(parsed, dict)
+                            else 0
+                        ),
+                    }
+                )
+
+            saved_path = None
+            saved_excel = None
+            saved_excel_lv1 = None
+            saved_excel_template = None
+
+            if save_to_file:
+                from app.core.config import settings
+
+                def _safe_name(value: str) -> str:
+                    cleaned = "".join(
+                        ch if ch not in '<>:"/\\|?*' else "_" for ch in value
+                    )
+                    return cleaned.strip().strip(".") or "output"
+
+                display_filename = resolved_source_filename or os.path.basename(
+                    image_path
+                )
+                base_name = _safe_name(
+                    os.path.splitext(os.path.basename(display_filename))[0]
+                )
+                folder_label = ""
+                if resolved_source_folder:
+                    folder_label = _safe_name(
+                        os.path.basename(os.path.normpath(resolved_source_folder))
+                    )
+                base_slug = f"{folder_label}_{base_name}" if folder_label else base_name
+                ext = "md" if output_format == "markdown" else "json"
+                output_filename = f"{base_slug}.{ext}"
+                now = datetime.now()
+                dated_output_dir = os.path.join(
+                    settings.OUTPUT_DIR,
+                    now.strftime("%Y"),
+                    now.strftime("%m"),
+                    now.strftime("%d"),
+                )
+                os.makedirs(dated_output_dir, exist_ok=True)
+                saved_path = os.path.join(dated_output_dir, output_filename)
+                excel_name_prefix = f"excel_{base_slug}"
+                excel_lv1_path = os.path.join(
+                    dated_output_dir, f"{excel_name_prefix}_lv1.xlsx"
+                )
+                excel_template_path = os.path.join(
+                    dated_output_dir, f"{excel_name_prefix}_template.xlsx"
+                )
+
+                if output_format == "json":
+                    with open(saved_path, "w", encoding="utf-8") as f:
+                        json.dump(folder_results, f, ensure_ascii=False, indent=2)
+
+                    saved_excel_lv1 = _save_combined_excel(
+                        combined_lv1_rows, excel_lv1_path
+                    )
+                    saved_excel_template = _save_combined_excel(
+                        combined_template_rows, excel_template_path
+                    )
+                    saved_excel = saved_excel_template or saved_excel_lv1
+                else:
+                    with open(saved_path, "w", encoding="utf-8") as f:
+                        f.write("\n\n".join(combined_content))
+
+            from app.core.db import update_task_status
+
+            update_task_status(
+                task_id, "success", json_path=saved_path, excel_path=saved_excel
+            )
+
+            return {
+                "status": "success",
+                "agent": agent,
+                "provider": agent,
+                "format": output_format,
+                "filename": resolved_source_filename or os.path.basename(image_path),
+                "folder_name": (
+                    os.path.basename(os.path.normpath(resolved_source_folder))
+                    if resolved_source_folder
+                    else None
+                ),
+                "content": "\n\n".join(combined_content),
+                "saved_to": saved_path,
+                "saved_excel": saved_excel,
+                "saved_excel_lv1": saved_excel_lv1,
+                "saved_excel_template": saved_excel_template,
+                "api_base_url": api_base_url,
+                "api_json_path": api_json_path,
+                "api_excel_path": api_excel_path,
+            }
 
         self.update_state(
             state="PROGRESS", meta={"message": "Generating content with AI"}

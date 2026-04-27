@@ -95,6 +95,42 @@ def map_extracted_data(data, template_id: str):
         day, month, year = parts
         return 1 <= len(day) <= 2 and 1 <= len(month) <= 2 and len(year) == 4
 
+    def _looks_like_flexible_date(value: Any) -> bool:
+        text = str(value or "").strip()
+        if not text:
+            return False
+        parts = text.split("/")
+        if len(parts) not in (2, 3):
+            return False
+        if not all(part.isdigit() for part in parts):
+            return False
+        if len(parts) == 2:
+            day, month = parts
+            return 1 <= len(day) <= 2 and 1 <= len(month) <= 2
+        day, month, year = parts
+        return 1 <= len(day) <= 2 and 1 <= len(month) <= 2 and len(year) in (2, 4)
+
+    def _normalize_flexible_date(value: Any) -> str:
+        text = str(value or "").strip()
+        if not _looks_like_flexible_date(text):
+            return text
+        parts = text.split("/")
+        if len(parts) == 3 and len(parts[2]) == 2:
+            parts[2] = f"20{parts[2]}"
+        return "/".join(parts)
+
+    def _looks_like_rank(value: Any) -> bool:
+        text = _normalize_key(str(value or "").strip())
+        return text in {
+            "xuat sac",
+            "gioi",
+            "kha",
+            "trung binh kha",
+            "trung binh",
+            "yeu",
+            "kem",
+        }
+
     def _looks_like_degree_number(value: Any) -> bool:
         text = str(value or "").strip().replace(" ", "")
         return bool(text) and text.isdigit() and len(text) >= 4
@@ -118,6 +154,7 @@ def map_extracted_data(data, template_id: str):
         dob_key = "Ngày, tháng, năm sinh"
         rank_key = "Xếp loại/hạng tốt nghiệp"
         degree_key = "Số hiệu bằng"
+        issue_date_key = "Ngày tháng năm cấp bằng"
         signer_key = "Họ, chữ đệm, tên người ký bằng"
         note_key = "Ghi chú"
 
@@ -146,8 +183,33 @@ def map_extracted_data(data, template_id: str):
             mapped[signer_key] = old_note
             mapped[note_key] = ""
 
+        # Nếu số hiệu bằng và ngày cấp bằng bị tráo vị trí sau khi shift,
+        # đổi lại: số hiệu bằng phải là chuỗi số, ngày cấp bằng phải giống ngày.
+        degree_value = str(mapped.get(degree_key, "")).strip()
+        issue_date_value = str(mapped.get(issue_date_key, "")).strip()
+        if _looks_like_flexible_date(degree_value) and _looks_like_degree_number(
+            issue_date_value
+        ):
+            mapped[degree_key], mapped[issue_date_key] = (
+                issue_date_value,
+                _normalize_flexible_date(degree_value),
+            )
+
+        # Nếu ngày sinh bị lặp bằng giới tính, bỏ giá trị lỗi để tránh làm bẩn dữ liệu.
+        dob_value = str(mapped.get(dob_key, "")).strip()
+        if _canonical_gender(dob_value) and _canonical_gender(
+            dob_value
+        ) == _canonical_gender(mapped.get(gender_key, "")):
+            mapped[dob_key] = ""
+
+        # Nếu xếp loại trôi sang cột người ký thì kéo về đúng cột.
+        rank_value = str(mapped.get(rank_key, "")).strip()
+        signer_value = str(mapped.get(signer_key, "")).strip()
+        if not rank_value and _looks_like_rank(signer_value):
+            mapped[rank_key] = signer_value
+            mapped[signer_key] = ""
+
         if common_error_map.get("carry_date_from_signer_to_issue_date"):
-            issue_date_key = "Ngày tháng năm cấp bằng"
             signer_value = str(mapped.get(signer_key, "")).strip()
             note_value = str(mapped.get(note_key, "")).strip()
 
@@ -163,6 +225,12 @@ def map_extracted_data(data, template_id: str):
                 mapped[issue_date_key] = note_value
                 mapped[note_key] = ""
 
+        # Chuẩn hoá định dạng ngày cấp bằng (hỗ trợ dd/mm/yy).
+        if str(mapped.get(issue_date_key, "")).strip():
+            mapped[issue_date_key] = _normalize_flexible_date(
+                mapped.get(issue_date_key, "")
+            )
+
         # Fallback nhẹ: nếu số bằng bị OCR dạt sang cột người ký,
         # đổi chỗ để bảo toàn số bằng (không đụng các cột khác).
         degree_value = str(mapped.get(degree_key, "")).strip()
@@ -171,6 +239,13 @@ def map_extracted_data(data, template_id: str):
             signer_value
         ):
             mapped[degree_key], mapped[signer_key] = signer_value, degree_value
+
+        # Sau swap có thể phát sinh xếp loại nằm ở cột người ký.
+        rank_value = str(mapped.get(rank_key, "")).strip()
+        signer_value = str(mapped.get(signer_key, "")).strip()
+        if not rank_value and _looks_like_rank(signer_value):
+            mapped[rank_key] = signer_value
+            mapped[signer_key] = ""
 
         return mapped
 

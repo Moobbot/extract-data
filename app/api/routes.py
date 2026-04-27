@@ -196,48 +196,34 @@ async def extract_folder_task(
     if not os.path.exists(folder_path) or not os.path.isdir(folder_path):
         raise HTTPException(status_code=400, detail="Invalid folder path")
 
-    tasks = []
     agent_config = _build_agent_config(model=model, base_url=base_url, api_key=api_key)
-    valid_extensions = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
-    # Walk through directory
-    for root, dirs, files in os.walk(folder_path):
-        for filename in files:
-            ext = os.path.splitext(filename)[1].lower()
-            if ext in valid_extensions:
-                file_path = os.path.join(root, filename)
+    task = process_image_task.delay(
+        folder_path,
+        agent,
+        output_format,
+        save_to_file,
+        agent_config,
+        template_id=template,
+    )
 
-                # Note: We use the existing file path directly since it's local
-                try:
-                    task = process_image_task.delay(
-                        file_path,
-                        agent,
-                        output_format,
-                        save_to_file,
-                        agent_config,
-                        template_id=template,
-                    )
-                    from app.core.db import insert_task
+    from app.core.db import insert_task
 
-                    insert_task(task.id, filename, template, folder_path=folder_path)
+    insert_task(
+        task.id,
+        os.path.basename(os.path.normpath(folder_path)),
+        template,
+        folder_path=folder_path,
+    )
 
-                    tasks.append(
-                        {
-                            "filename": filename,
-                            "task_id": task.id,
-                            "status": "pending",
-                            "path": file_path,
-                        }
-                    )
-                except Exception as e:
-                    tasks.append(
-                        {"filename": filename, "error": str(e), "status": "failed"}
-                    )
-
-    if not tasks:
-        return [{"message": "No valid images found in folder"}]
-
-    return tasks
+    return [
+        {
+            "filename": os.path.basename(os.path.normpath(folder_path)),
+            "task_id": task.id,
+            "status": "pending",
+            "path": folder_path,
+        }
+    ]
 
 
 @router.post("/extract/json", response_model=Dict[str, Any])

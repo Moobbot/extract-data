@@ -159,6 +159,86 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+
+    .preview-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 19, 31, 0.56);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 1000;
+    }
+
+    .preview-backdrop.open {
+      display: flex;
+    }
+
+    .preview-modal {
+      width: min(980px, 100%);
+      max-height: 86vh;
+      background: #ffffff;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .preview-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: #f7fbff;
+    }
+
+    .preview-title {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .preview-content {
+      padding: 14px 16px;
+      overflow: auto;
+      line-height: 1.6;
+    }
+
+    .preview-content pre,
+    .preview-content code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .preview-content pre {
+      background: #0b1b2d;
+      color: #d8e2f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      overflow: auto;
+    }
+
+    .preview-content table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .preview-content th,
+    .preview-content td {
+      border: 1px solid rgba(20, 32, 51, 0.2);
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .preview-content th {
+      background: #eef4fb;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -201,8 +281,23 @@
     </div>
   </div>
 
+  <div id="previewBackdrop" class="preview-backdrop" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+    <div class="preview-modal">
+      <div class="preview-head">
+        <h3 id="previewTitle" class="preview-title">Kết quả trích xuất</h3>
+        <button id="closePreviewBtn" class="btn" type="button">Đóng</button>
+      </div>
+      <div id="previewContent" class="preview-content"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     const historyBody = document.getElementById("historyBody");
+    const previewBackdrop = document.getElementById("previewBackdrop");
+    const previewContent = document.getElementById("previewContent");
+    const previewTitle = document.getElementById("previewTitle");
+    const closePreviewBtn = document.getElementById("closePreviewBtn");
 
     function formatDate(isoString) {
       if (!isoString) return "-";
@@ -229,6 +324,317 @@
         return decodeURIComponent(encoded);
       } catch (_) {
         return encoded;
+      }
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function openPreview(title, html) {
+      previewTitle.textContent = title;
+      previewContent.innerHTML = html;
+      previewBackdrop.classList.add("open");
+    }
+
+    function closePreview() {
+      previewBackdrop.classList.remove("open");
+      previewContent.innerHTML = "";
+    }
+
+    function renderAsMarkdown(text) {
+      const value = String(text || "").trim();
+      if (!value) {
+        return "<em>(empty content)</em>";
+      }
+      if (window.marked && typeof window.marked.parse === "function") {
+        window.marked.setOptions({ gfm: true, breaks: true });
+        return window.marked.parse(value);
+      }
+      return "<pre>" + escapeHtml(value) + "</pre>";
+    }
+
+    function renderAsJson(value) {
+      return "<pre>" + escapeHtml(JSON.stringify(value, null, 2)) + "</pre>";
+    }
+
+    function extractTablePayloads(payload, defaultTitle = "") {
+      const tables = [];
+
+      function addTable(rows, headers, title) {
+        if (!Array.isArray(rows) || rows.length === 0) {
+          return;
+        }
+        const dictRows = rows.filter((row) => row && typeof row === "object" && !Array.isArray(row));
+        if (dictRows.length === 0) {
+          return;
+        }
+        tables.push({
+          title: title || defaultTitle || "",
+          headers: Array.isArray(headers) ? headers : null,
+          rows: dictRows,
+        });
+      }
+
+      function walk(node, hintTitle = "") {
+        if (!node) {
+          return;
+        }
+
+        if (Array.isArray(node)) {
+          if (node.length > 0 && node.every((item) => item && typeof item === "object" && !Array.isArray(item))) {
+            addTable(node, null, hintTitle);
+            return;
+          }
+          for (const item of node) {
+            const itemTitle = item && typeof item.filename === "string" ? item.filename : hintTitle;
+            walk(item, itemTitle);
+          }
+          return;
+        }
+
+        if (typeof node !== "object") {
+          return;
+        }
+
+        const nodeTitle = typeof node.filename === "string" ? node.filename : hintTitle;
+
+        if (Array.isArray(node.tables)) {
+          for (const table of node.tables) {
+            if (table && typeof table === "object") {
+              addTable(table.rows, table.headers, nodeTitle);
+            }
+          }
+        }
+
+        if (Array.isArray(node.rows)) {
+          addTable(node.rows, node.headers, nodeTitle);
+        }
+
+        if (Array.isArray(node.result)) {
+          walk(node.result, nodeTitle);
+        }
+      }
+
+      walk(payload, defaultTitle);
+      return tables;
+    }
+
+    function extractJsonObjectsFromText(text) {
+      const source = String(text || "");
+      const objects = [];
+      let depth = 0;
+      let startIndex = -1;
+      let inString = false;
+      let escaped = false;
+
+      for (let i = 0; i < source.length; i += 1) {
+        const ch = source[i];
+
+        if (inString) {
+          if (escaped) {
+            escaped = false;
+          } else if (ch === "\\") {
+            escaped = true;
+          } else if (ch === '"') {
+            inString = false;
+          }
+          continue;
+        }
+
+        if (ch === '"') {
+          inString = true;
+          continue;
+        }
+
+        if (ch === "{") {
+          if (depth === 0) {
+            startIndex = i;
+          }
+          depth += 1;
+          continue;
+        }
+
+        if (ch === "}") {
+          if (depth > 0) {
+            depth -= 1;
+            if (depth === 0 && startIndex >= 0) {
+              const snippet = source.slice(startIndex, i + 1).trim();
+              try {
+                objects.push(JSON.parse(snippet));
+              } catch (_) {
+                // Skip invalid object fragments.
+              }
+              startIndex = -1;
+            }
+          }
+        }
+      }
+
+      return objects;
+    }
+
+    function extractImageTitles(text) {
+      const source = String(text || "");
+      const titles = [];
+      const pattern = /^\s*([^\n]+\.(?:jpg|jpeg|png|webp|bmp|pdf))\s*$/gim;
+      let match;
+      while ((match = pattern.exec(source)) !== null) {
+        titles.push(match[1].trim());
+      }
+      return titles;
+    }
+
+    function extractTablesFromMixedText(text) {
+      const parsedObjects = extractJsonObjectsFromText(text);
+      if (parsedObjects.length === 0) {
+        return [];
+      }
+
+      const titles = extractImageTitles(text);
+      const tables = [];
+
+      parsedObjects.forEach((obj, index) => {
+        const title = titles[index] || "";
+        const extracted = extractTablePayloads(obj, title);
+        tables.push(...extracted);
+      });
+
+      return tables;
+    }
+
+    function renderTables(tables) {
+      if (!Array.isArray(tables) || tables.length === 0) {
+        return "<em>(không có dữ liệu bảng)</em>";
+      }
+
+      const blocks = tables.map((table) => {
+        const rows = table.rows || [];
+        const inferredHeaders = Array.from(
+          rows.reduce((set, row) => {
+            Object.keys(row || {}).forEach((key) => set.add(key));
+            return set;
+          }, new Set())
+        );
+        const headers = (Array.isArray(table.headers) && table.headers.length > 0)
+          ? table.headers.filter((h) => inferredHeaders.includes(h)).concat(inferredHeaders.filter((h) => !table.headers.includes(h)))
+          : inferredHeaders;
+
+        const titleHtml = table.title ? `<h4>${escapeHtml(table.title)}</h4>` : "";
+        const thead = `<thead><tr>${headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("")}</tr></thead>`;
+        const tbody = `<tbody>${rows.map((row) => `<tr>${headers.map((h) => `<td>${escapeHtml(row[h] == null ? "" : row[h])}</td>`).join("")}</tr>`).join("")}</tbody>`;
+        return `${titleHtml}<table>${thead}${tbody}</table>`;
+      });
+
+      return blocks.join("<hr />");
+    }
+
+    function extractMarkdownFromArtifact(payload) {
+      if (typeof payload === "string" && payload.trim()) {
+        return payload;
+      }
+
+      if (!payload || typeof payload !== "object") {
+        return "";
+      }
+
+      const directKeys = ["content", "ocr_text", "rendered_text", "raw_text", "markdown"];
+      for (const key of directKeys) {
+        if (typeof payload[key] === "string" && payload[key].trim()) {
+          return payload[key];
+        }
+      }
+
+      if (Array.isArray(payload)) {
+        const chunks = [];
+        for (const item of payload) {
+          if (!item || typeof item !== "object") {
+            continue;
+          }
+          const piece = extractMarkdownFromArtifact(item);
+          if (piece) {
+            const title = typeof item.filename === "string" && item.filename.trim()
+              ? `### ${item.filename}\n\n`
+              : "";
+            chunks.push(title + piece);
+          }
+        }
+        return chunks.join("\n\n").trim();
+      }
+
+      if (Array.isArray(payload.result)) {
+        return extractMarkdownFromArtifact(payload.result);
+      }
+
+      if (Array.isArray(payload.tables) && payload.tables.length > 0) {
+        return "";
+      }
+
+      return "";
+    }
+
+    async function fetchPreviewPayload(taskId) {
+      const statusRes = await fetch(`/api/v1/task-status/${encodeURIComponent(taskId)}`);
+      const statusData = await statusRes.json();
+      let markdownFallback = "";
+
+      if (statusData.status === "SUCCESS" && statusData.result) {
+        const result = statusData.result;
+        if (typeof result.content === "string" && result.content.trim()) {
+          try {
+            const parsedFromContent = JSON.parse(result.content);
+            const tablesFromContent = extractTablePayloads(parsedFromContent, result.filename || "");
+            if (tablesFromContent.length > 0) {
+              return { kind: "table", data: tablesFromContent };
+            }
+          } catch (_) {
+            const tablesFromMixedContent = extractTablesFromMixedText(result.content);
+            if (tablesFromMixedContent.length > 0) {
+              return { kind: "table", data: tablesFromMixedContent };
+            }
+          }
+          markdownFallback = result.content;
+        }
+      }
+
+      const jsonRes = await fetch(`/api/v1/task-artifact/${encodeURIComponent(taskId)}/json`, {
+        method: "POST"
+      });
+      if (!jsonRes.ok) {
+        if (markdownFallback) {
+          return { kind: "markdown", data: markdownFallback };
+        }
+        throw new Error("Không có dữ liệu preview cho task này");
+      }
+      const text = await jsonRes.text();
+      try {
+        const parsed = JSON.parse(text);
+        const tables = extractTablePayloads(parsed);
+        if (tables.length > 0) {
+          return { kind: "table", data: tables };
+        }
+        const markdown = extractMarkdownFromArtifact(parsed);
+        if (markdown) {
+          return { kind: "markdown", data: markdown };
+        }
+        if (markdownFallback) {
+          return { kind: "markdown", data: markdownFallback };
+        }
+        return { kind: "json", data: parsed };
+      } catch (_) {
+        const tablesFromMixedJson = extractTablesFromMixedText(text);
+        if (tablesFromMixedJson.length > 0) {
+          return { kind: "table", data: tablesFromMixedJson };
+        }
+        if (markdownFallback) {
+          return { kind: "markdown", data: markdownFallback };
+        }
+        return { kind: "markdown", data: text };
       }
     }
 
@@ -293,6 +699,7 @@
           if (task.status === "success") {
             downloadHtml = `
               <div style="display:flex; gap: 8px;">
+                <button class="btn pv-btn" data-task-id="${task.id}">Preview</button>
                 <button class="btn dl-btn" ${task.json_path ? `data-task-id="${task.id}" data-kind="json" data-fallback-name="${slug}.json"` : 'disabled'}>JSON</button>
                 <button class="btn dl-btn" ${task.excel_path ? `data-task-id="${task.id}" data-kind="excel-lv1" data-fallback-name="excel_${slug}_lv1.xlsx"` : 'disabled'}>Excel Gốc</button>
                 <button class="btn dl-btn" ${task.excel_path ? `data-task-id="${task.id}" data-kind="excel" data-fallback-name="excel_${slug}_template.xlsx"` : 'disabled'}>Excel Template</button>
@@ -324,6 +731,28 @@
       if (!(target instanceof HTMLElement)) {
         return;
       }
+      if (target.classList.contains("pv-btn")) {
+        const taskId = target.getAttribute("data-task-id");
+        if (!taskId) {
+          return;
+        }
+        target.setAttribute("disabled", "true");
+        try {
+          const payload = await fetchPreviewPayload(taskId);
+          const html = payload.kind === "json"
+            ? renderAsJson(payload.data)
+            : payload.kind === "table"
+              ? renderTables(payload.data)
+              : renderAsMarkdown(payload.data);
+          openPreview(`Preview task ${taskId.split("-")[0]}...`, html);
+        } catch (err) {
+          alert("Lỗi preview: " + err.message);
+        } finally {
+          target.removeAttribute("disabled");
+        }
+        return;
+      }
+
       if (!target.classList.contains("dl-btn")) {
         return;
       }
@@ -337,6 +766,18 @@
         await downloadArtifact(taskId, kind, fallbackName);
       } catch (err) {
         alert("Lỗi tải file: " + err.message);
+      }
+    });
+
+    closePreviewBtn.addEventListener("click", closePreview);
+    previewBackdrop.addEventListener("click", (event) => {
+      if (event.target === previewBackdrop) {
+        closePreview();
+      }
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && previewBackdrop.classList.contains("open")) {
+        closePreview();
       }
     });
 
