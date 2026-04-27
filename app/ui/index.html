@@ -144,6 +144,44 @@
       padding: 18px 20px 0;
     }
 
+    .panel-head-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .view-toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: #edf3fa;
+      border: 1px solid rgba(20, 32, 51, 0.1);
+    }
+
+    .view-toggle button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 140ms ease, color 140ms ease, transform 140ms ease;
+    }
+
+    .view-toggle button:hover {
+      transform: translateY(-1px);
+    }
+
+    .view-toggle button.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.16);
+    }
+
     .panel-body {
       padding: 18px 20px 20px;
     }
@@ -347,8 +385,55 @@
     .content-box {
       min-height: 160px;
       padding: 14px;
-      white-space: pre-wrap;
       background: linear-gradient(180deg, #fff, #fbfdff);
+      line-height: 1.6;
+      overflow: auto;
+    }
+
+    .content-box.is-raw {
+      white-space: pre-wrap;
+      font-family: Consolas, "Courier New", monospace;
+      color: #102036;
+    }
+
+    .content-box :first-child {
+      margin-top: 0;
+    }
+
+    .content-box :last-child {
+      margin-bottom: 0;
+    }
+
+    .content-box pre,
+    .content-box code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .content-box pre {
+      background: #0b1b2d;
+      color: #d8e2f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      overflow: auto;
+    }
+
+    .content-box table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .content-box th,
+    .content-box td {
+      border: 1px solid rgba(20, 32, 51, 0.2);
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .content-box th {
+      background: #eef4fb;
+      font-weight: 700;
     }
 
     pre {
@@ -460,8 +545,16 @@
     <div class="grid" style="margin-top: 16px;">
       <section class="panel">
         <div class="panel-head">
-          <h2 class="section-title">Extracted content</h2>
-          <p class="section-copy">Nội dung đã trích xuất sẽ hiển thị ở đây sau khi task hoàn tất.</p>
+          <div class="panel-head-row">
+            <div>
+              <h2 class="section-title">Extracted content</h2>
+              <p class="section-copy">Nội dung đã trích xuất sẽ hiển thị ở đây sau khi task hoàn tất.</p>
+            </div>
+            <div class="view-toggle" role="tablist" aria-label="Content view mode">
+              <button id="previewModeBtn" class="active" type="button" aria-pressed="true">Markdown Preview</button>
+              <button id="rawModeBtn" type="button" aria-pressed="false">Raw Markdown</button>
+            </div>
+          </div>
         </div>
         <div class="panel-body">
           <div id="contentBox" class="content-box"></div>
@@ -480,6 +573,8 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
   <script>
     const imageFileEl = document.getElementById("imageFile");
     const folderPathEl = document.getElementById("folderPath");
@@ -493,9 +588,47 @@
     const rawResultEl = document.getElementById("rawResult");
     const contentBoxEl = document.getElementById("contentBox");
     const templateSelectEl = document.getElementById("templateSelect");
+    const previewModeBtn = document.getElementById("previewModeBtn");
+    const rawModeBtn = document.getElementById("rawModeBtn");
 
     let lastTaskId = null;
     let lastTaskResult = null;
+    let lastContentRaw = "";
+    let contentViewMode = "preview";
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function renderContentPreview(markdownText) {
+      const text = safeValue(markdownText);
+      lastContentRaw = text;
+
+      contentBoxEl.classList.toggle("is-raw", contentViewMode === "raw");
+
+      if (!text) {
+        contentBoxEl.innerHTML = "<em>(empty content)</em>";
+        return;
+      }
+
+      if (contentViewMode === "raw") {
+        contentBoxEl.textContent = text;
+        return;
+      }
+
+      if (window.marked && typeof window.marked.parse === "function") {
+        window.marked.setOptions({ gfm: true, breaks: true });
+        contentBoxEl.innerHTML = window.marked.parse(text);
+        return;
+      }
+
+      contentBoxEl.innerHTML = "<pre>" + escapeHtml(text) + "</pre>";
+    }
 
     function setStatus(text, kind) {
       statusText.textContent = text;
@@ -517,6 +650,15 @@
 
     function safeValue(value) {
       return value == null ? "" : String(value);
+    }
+
+    function setContentViewMode(mode) {
+      contentViewMode = mode === "raw" ? "raw" : "preview";
+      previewModeBtn.classList.toggle("active", contentViewMode === "preview");
+      rawModeBtn.classList.toggle("active", contentViewMode === "raw");
+      previewModeBtn.setAttribute("aria-pressed", String(contentViewMode === "preview"));
+      rawModeBtn.setAttribute("aria-pressed", String(contentViewMode === "raw"));
+      renderContentPreview(lastContentRaw);
     }
 
     async function pollTask(taskId) {
@@ -546,7 +688,7 @@
           const hasExcelLv1Artifact = savedExcelLv1.endsWith(".xlsx");
           const hasExcelArtifact = savedExcel.endsWith(".xlsx");
 
-          contentBoxEl.textContent = result.content || "(empty content)";
+          renderContentPreview(result.content || "");
           downloadJsonBtn.disabled = !hasJsonArtifact;
           downloadExcelLv1Btn.disabled = !hasExcelLv1Artifact;
           downloadExcelBtn.disabled = !hasExcelArtifact;
@@ -663,7 +805,7 @@
     });
 
     copyContentBtn.addEventListener("click", async () => {
-      const text = (lastTaskResult && lastTaskResult.content) || contentBoxEl.textContent || "";
+      const text = (lastTaskResult && lastTaskResult.content) || lastContentRaw || "";
       if (!text) {
         return;
       }
@@ -674,7 +816,14 @@
     clearBtn.addEventListener("click", () => {
       lastTaskId = null;
       lastTaskResult = null;
-      contentBoxEl.textContent = "";
+      lastContentRaw = "";
+      contentViewMode = "preview";
+      previewModeBtn.classList.add("active");
+      rawModeBtn.classList.remove("active");
+      previewModeBtn.setAttribute("aria-pressed", "true");
+      rawModeBtn.setAttribute("aria-pressed", "false");
+      contentBoxEl.innerHTML = "";
+      contentBoxEl.classList.remove("is-raw");
       rawResultEl.textContent = "{}";
       downloadJsonBtn.disabled = true;
       downloadExcelLv1Btn.disabled = true;
@@ -685,7 +834,14 @@
 
     submitBtn.addEventListener("click", async () => {
       submitBtn.disabled = true;
-      contentBoxEl.textContent = "";
+      lastContentRaw = "";
+      contentViewMode = "preview";
+      previewModeBtn.classList.add("active");
+      rawModeBtn.classList.remove("active");
+      previewModeBtn.setAttribute("aria-pressed", "true");
+      rawModeBtn.setAttribute("aria-pressed", "false");
+      contentBoxEl.innerHTML = "";
+      contentBoxEl.classList.remove("is-raw");
       rawResultEl.textContent = "{}";
 
       try {
@@ -741,6 +897,9 @@
         submitBtn.disabled = false;
       }
     });
+
+    previewModeBtn.addEventListener("click", () => setContentViewMode("preview"));
+    rawModeBtn.addEventListener("click", () => setContentViewMode("raw"));
   </script>
 </body>
 </html>
