@@ -37,7 +37,7 @@ def test_quick_ui_endpoint_served():
 
     assert response.status_code == 200
     assert "text/html" in response.headers.get("content-type", "")
-    assert "Extract PDF - Quick UI" in response.text
+    assert "Extract PDF - TMU Quick UI" in response.text
     assert "Download JSON" in response.text
     assert "Download Excel" in response.text
     assert "Copy Content" in response.text

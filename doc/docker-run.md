@@ -72,7 +72,7 @@ Extract-pdf API:
 
 - Health: `http://127.0.0.1:8000/`
 - Swagger docs: `http://127.0.0.1:8000/docs`
-- Quick UI: `http://127.0.0.1:8000/ui`
+- TMU Quick UI: `http://127.0.0.1:8000/ui`
 - Settings UI: `http://127.0.0.1:8000/ui/settings`
 
 LightOnOCR API (nếu chạy):

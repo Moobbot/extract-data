@@ -6,7 +6,7 @@
       "app/core": "Configuration, Settings, and Interfaces (Abstract Base Classes)",
       "app/services": "Business Logic, AI Providers, Image Processing, Celery Tasks",
       "app/api": "API Routes, Pydantic Models (Request/Response)",
-      "app/ui": "Quick UI static page for manual testing",
+      "app/ui": "TMU static page for manual testing",
       "app/main.py": "Application Entry Point and middleware setup",
       "tests": "Integration tests for API flows and task dispatch",
       "doc": "Split documentation by topic (installation, config, runbook, api, integration, docker)"

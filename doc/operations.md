@@ -101,7 +101,7 @@ Neu task giu `PENDING` qua lau:
 
 Tren Windows local host, worker nen chay voi `-P solo --concurrency=1` de tranh loi SpawnPool.
 
-## Download JSON/Excel tren Quick UI
+## Download JSON/Excel tren TMU Quick UI
 
 - Chon `output_format=json`.
 - Bat `Save output files` truoc khi submit.
