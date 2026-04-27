@@ -96,28 +96,52 @@ def map_extracted_data(data, template_id: str):
         return 1 <= len(day) <= 2 and 1 <= len(month) <= 2 and len(year) == 4
 
     def _looks_like_flexible_date(value: Any) -> bool:
+        return _parse_flexible_date(value) is not None
+
+    def _repair_month(num: int) -> int:
+        if 1 <= num <= 12:
+            return num
+        # # OCR hay thêm nhầm tiền tố '1' cho tháng (vd: 16 thay vì 06).
+        # if 10 <= num <= 19 and 1 <= (num % 10) <= 9:
+        #     return num % 10
+        # return num
+
+    def _parse_flexible_date(value: Any) -> tuple[int, int, str] | None:
         text = str(value or "").strip()
         if not text:
-            return False
+            return None
         parts = text.split("/")
         if len(parts) not in (2, 3):
-            return False
+            return None
         if not all(part.isdigit() for part in parts):
-            return False
-        if len(parts) == 2:
-            day, month = parts
-            return 1 <= len(day) <= 2 and 1 <= len(month) <= 2
-        day, month, year = parts
-        return 1 <= len(day) <= 2 and 1 <= len(month) <= 2 and len(year) in (2, 4)
+            return None
+
+        day = int(parts[0])
+        month = _repair_month(int(parts[1]))
+
+        if not (1 <= day <= 31 and 1 <= month <= 12):
+            return None
+
+        year = ""
+        if len(parts) == 3:
+            year_raw = parts[2]
+            if len(year_raw) == 2:
+                year = f"20{year_raw}"
+            elif len(year_raw) == 4:
+                year = year_raw
+            else:
+                return None
+
+        return day, month, year
 
     def _normalize_flexible_date(value: Any) -> str:
-        text = str(value or "").strip()
-        if not _looks_like_flexible_date(text):
-            return text
-        parts = text.split("/")
-        if len(parts) == 3 and len(parts[2]) == 2:
-            parts[2] = f"20{parts[2]}"
-        return "/".join(parts)
+        parsed = _parse_flexible_date(value)
+        if parsed is None:
+            return str(value or "").strip()
+        day, month, year = parsed
+        if year:
+            return f"{day:02d}/{month:02d}/{year}"
+        return f"{day:02d}/{month:02d}"
 
     def _looks_like_rank(value: Any) -> bool:
         text = _normalize_key(str(value or "").strip())
