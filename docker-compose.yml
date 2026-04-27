@@ -15,7 +15,7 @@ services:
       start_period: 5s
 
   # ── LightOnOCR API Server (tùy chọn) ──────────────────────────────────────
-  # Dùng để extract-pdf gọi OCR qua local_http provider
+  # Dùng để extract-pdf gọi OCR qua profile lightonocr/local_http
   # Khởi động: docker compose up lightonocr
   # Hoặc đặt `profiles: []` để chạy luôn khi `docker compose up`
   lightonocr:
@@ -32,6 +32,8 @@ services:
     environment:
       MODEL_PATH: /weights
       PYTORCH_ENABLE_MPS_FALLBACK: "1"
+      API_HOST: 0.0.0.0
+      API_PORT: "7861"
     deploy:
       resources:
         reservations:
@@ -41,14 +43,21 @@ services:
               capabilities: [ gpu ]
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:7860/health" ]
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request;
+            urllib.request.urlopen('http://127.0.0.1:7861/', timeout=5).read()",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 60s
     profiles:
       - lightonocr # khởi động với: docker compose --profile lightonocr up
-    command: [ "python", "app_server.py", "--host", "0.0.0.0", "--port", "7860" ]
+    command: [ "python", "api.py" ]
 
   api:
     build: .
@@ -64,10 +73,8 @@ services:
       - AI_PROVIDER=${AI_PROVIDER}
       - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
       - LOCAL_HTTP_TIMEOUT=${LOCAL_HTTP_TIMEOUT:-60}
-      # Endpoint LightOnOCR API (nếu dùng local_http provider)
-      # Khi lightonocr service chạy, extract-pdf có thể gọi:
-      #   http://lightonocr:7860/ocr
-      - LOCAL_HTTP_BASE_URL=${LOCAL_HTTP_BASE_URL:-http://lightonocr:7860/ocr}
+      # Endpoint LightOnOCR API trong Docker network
+      - LOCAL_HTTP_BASE_URL=${LOCAL_HTTP_BASE_URL:-http://lightonocr:7861/extract}
       - CORS_ALLOW_ORIGINS=${CORS_ALLOW_ORIGINS:-}
     depends_on:
       redis:

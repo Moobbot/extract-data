@@ -30,9 +30,9 @@ Services sẽ start:
 - `redis:6379`
 - `api:8000` (extract-pdf API)
 - `worker` (Celery)
-- `lightonocr:7860` (LightOnOCR API)
+- `lightonocr:7861` (LightOnOCR API)
 
-Extract-pdf sẽ tự động kết nối tới LightOnOCR qua Docker network: `http://lightonocr:7860/ocr`
+Extract-pdf sẽ tự động kết nối tới LightOnOCR qua Docker network: `http://lightonocr:7861/extract`
 
 ### Phương án 2: Chạy extract-pdf Docker + LightOnOCR host (dễ debug)
 
@@ -47,13 +47,13 @@ Sau đó trên host terminal khác:
 ```bash
 conda activate extract-pdf
 cd LightOnOCR-2-1B
-python app_server.py
+python api.py
 ```
 
 Cấu hình extract-pdf để nó biết LightOnOCR host ở đâu. Mở `.env` và thêm:
 
 ```env
-LOCAL_HTTP_BASE_URL=http://host.docker.internal:7860/ocr
+LOCAL_HTTP_BASE_URL=http://host.docker.internal:7861/extract
 ```
 
 (Trên macOS/Windows, Docker cung cấp `host.docker.internal` để kết nối tới host. Trên Linux, sử dụng IP host thực tế.)
@@ -77,13 +77,14 @@ Extract-pdf API:
 
 LightOnOCR API (nếu chạy):
 
-- Health: `http://127.0.0.1:7860/health`
-- POST endpoint: `http://127.0.0.1:7860/ocr`
+- Health: `http://127.0.0.1:7861/`
+- API docs: `http://127.0.0.1:7861/docs`
+- POST endpoint: `http://127.0.0.1:7861/extract`
 
 Kiểm tra nhanh kết nối:
 
 ```bash
-curl http://127.0.0.1:7860/health
+curl http://127.0.0.1:7861/
 ```
 
 Từ Settings UI → chọn preset `lightonocr-2-1b` → Submit task

@@ -63,13 +63,12 @@ Chay ca hai dich vu trong Docker qua orchestration:
 docker compose --profile lightonocr up -d --build
 ```
 
-→ UI (Gradio) tai `http://127.0.0.1:7860`
+→ LightOnOCR API tai `http://127.0.0.1:7861`
 
 Endpoints:
 
 - Extract-pdf UI: `http://127.0.0.1:8000/ui`
-- LightOnOCR health: `http://127.0.0.1:7860/health`
-
-- LightOnOCR API/UI: `http://127.0.0.1:7860` (hoac `/ocr` endpoint)
-- LightOnOCR health: `http://127.0.0.1:7860/health`
+- LightOnOCR API root: `http://127.0.0.1:7861/`
+- LightOnOCR API docs: `http://127.0.0.1:7861/docs`
+- LightOnOCR extract endpoint: `http://127.0.0.1:7861/extract`
   Xem them: [Docker Runbook](doc/docker-run.md) va [LightOnOCR-2-1B README](LightOnOCR-2-1B/README.md#1-fastapi--gradio-server-chay-ca-ui--rest-api)
