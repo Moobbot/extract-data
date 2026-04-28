@@ -101,6 +101,40 @@ docker compose logs -f redis
 docker compose logs -f lightonocr
 ```
 
+## Lưu ý cấu hình endpoint LightOnOCR (quan trọng)
+
+When running `lightonocr` inside Docker Compose the service listens on `0.0.0.0:7861` in the Compose network. If your `ui-config.json` preset still contains `http://127.0.0.1:7861/extract`, containers (`api`/`worker`) will try to call `127.0.0.1` from inside the container — which refers to the container itself, not `lightonocr` — causing `Connection refused`.
+
+Fix options (choose one):
+
+- Set the Docker-aware endpoint in `.env`:
+
+  ```bash
+  # .env
+  LOCAL_HTTP_BASE_URL=http://lightonocr:7861/extract
+  ```
+
+- Or update the preset in Settings UI / `ui-config.json` so `base_url` for `lightonocr-2-1b` is `http://lightonocr:7861/extract`.
+
+Verify the runtime endpoint used by the `api` container:
+
+```bash
+# Linux/macOS
+docker compose exec api env | grep LOCAL_HTTP_BASE_URL
+
+# Windows PowerShell
+docker compose exec api cmd /c "set LOCAL_HTTP_BASE_URL"
+```
+
+If tasks still fail, check recent logs:
+
+```bash
+docker compose logs --tail=200 api
+docker compose logs --tail=200 worker
+```
+
+Security note: if an API key was accidentally exposed in `.env`, rotate/revoke it immediately.
+
 ## Dung he thong
 
 ```bash

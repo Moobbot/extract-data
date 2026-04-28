@@ -8,6 +8,7 @@ import os
 import json
 import urllib.request
 import urllib.error
+from urllib.parse import urlparse
 
 try:
     from openai import OpenAI
@@ -201,6 +202,35 @@ class LightOnOCRProvider(AIProvider):
 
 class AIProviderFactory:
     @staticmethod
+    def _is_localhost_endpoint(endpoint: str) -> bool:
+        if not endpoint:
+            return False
+        try:
+            parsed = urlparse(endpoint)
+            host = (parsed.hostname or "").lower()
+            return host in {"localhost", "127.0.0.1", "0.0.0.0"}
+        except Exception:
+            return False
+
+    @staticmethod
+    def _resolve_local_http_endpoint(config_endpoint: Optional[str]) -> Optional[str]:
+        endpoint = (config_endpoint or "").strip()
+        env_endpoint = os.getenv("LOCAL_HTTP_BASE_URL", "").strip()
+
+        # In Docker, ui-config often stores localhost values that are invalid
+        # from inside containers. Prefer env endpoint in that case.
+        if env_endpoint and (not endpoint or AIProviderFactory._is_localhost_endpoint(endpoint)):
+            return env_endpoint
+
+        if endpoint:
+            return endpoint
+
+        if env_endpoint:
+            return env_endpoint
+
+        return None
+
+    @staticmethod
     def extract_text_from_response(parsed: Any) -> str:
         if isinstance(parsed, dict):
             for key in (
@@ -235,14 +265,14 @@ class AIProviderFactory:
 
     @staticmethod
     def _build_local_http(config: Dict[str, Any]) -> AIProvider:
-        endpoint = config.get("base_url")
+        endpoint = AIProviderFactory._resolve_local_http_endpoint(config.get("base_url"))
         api_key = config.get("api_key")
         model = config.get("model")
         return LocalHTTPProvider(endpoint=endpoint, api_key=api_key, model=model)
 
     @staticmethod
     def _build_lightonocr(config: Dict[str, Any]) -> AIProvider:
-        endpoint = config.get("base_url")
+        endpoint = AIProviderFactory._resolve_local_http_endpoint(config.get("base_url"))
         return LightOnOCRProvider(endpoint=endpoint)
 
     @staticmethod
