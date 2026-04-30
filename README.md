@@ -63,6 +63,8 @@ Chay ca hai dich vu trong Docker qua orchestration:
 docker compose --profile lightonocr up -d --build
 ```
 
+> **Lưu ý:** Model weights của LightOnOCR (~2GB) hiện đã được cấu hình để tự động tải khi **khởi chạy container** lần đầu tiên (Runtime). Việc tải này sẽ lưu trực tiếp vào thư mục `LightOnOCR-2-1B` trên máy của bạn để có thể tái sử dụng cho các lần chạy sau.
+
 → LightOnOCR API tai `http://127.0.0.1:7861`
 
 Endpoints:

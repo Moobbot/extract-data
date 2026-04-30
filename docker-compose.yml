@@ -27,12 +27,12 @@ services:
     ports:
       - "7861:7861"
     volumes:
-      - ./LightOnOCR-2-1B:/weights:ro
+      - ./LightOnOCR-2-1B:/app/model # Model sẽ được tải vào đây nếu chưa có
       - ./LightOnOCR-2-1B/outputs:/app/outputs
       - ./LightOnOCR-2-1B/api.py:/app/api.py:ro
       - ./LightOnOCR-2-1B/pipeline:/app/pipeline:ro
     environment:
-      MODEL_PATH: /weights
+      MODEL_PATH: /app/model
       PYTORCH_ENABLE_MPS_FALLBACK: "1"
       # auto|cpu — set cpu on low-VRAM hosts to force CPU inference
       LIGHTONOCR_DEVICE: ${LIGHTONOCR_DEVICE:-auto}
