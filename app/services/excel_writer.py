@@ -198,50 +198,64 @@ def write_rows_to_template(
         return None
 
 
+def _get_base_dir() -> str:
+    """Trả về thư mục gốc project (chứa app/, config/, templates/)."""
+    from app.core.config import settings
+    return settings.BASE_DIR
+
+
 def get_template_excel_path(template_id: str) -> Optional[str]:
-    """Trả về đường dẫn tuyệt đối tới file Excel template theo template_id.
-
-    Đọc từ config/templates.json, trường excel_template_file.
-    """
-    import os
+    """Trả về đường dẫn tuyệt đối tới file Excel template theo template_id."""
     import json
+    from app.core.config import settings
 
-    config_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "config", "templates.json"
-    )
-    templates_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "templates"
+    config_path = os.path.join(settings.BASE_DIR, "config", "templates.json")
+    templates_dir = settings.TEMPLATES_DIR
+
+    logger.debug(
+        "BASE_DIR=%s | templates_dir=%s | template_id=%s",
+        settings.BASE_DIR, templates_dir, template_id
     )
 
     try:
         with open(config_path, "r", encoding="utf-8") as f:
             templates = json.load(f)
-    except Exception:
+    except Exception as e:
+        logger.error("Không đọc được config/templates.json: %s", e)
         return None
 
     template_config = templates.get(template_id, {})
     filename = template_config.get("excel_template_file")
     if not filename:
+        logger.warning(
+            "template_id='%s' không có excel_template_file trong config.", template_id
+        )
         return None
 
     full_path = os.path.join(templates_dir, filename)
-    return full_path if os.path.exists(full_path) else None
+    if not os.path.exists(full_path):
+        logger.error(
+            "File template không tìm thấy: %s\n"
+            "Kiểm tra volume mount './templates:/app/templates:ro' trong docker-compose.yml.",
+            full_path
+        )
+        return None
+
+    logger.info("Dùng template Excel: %s", full_path)
+    return full_path
 
 
 def get_template_sheet_name(template_id: str) -> str:
     """Trả về tên sheet Data theo template_id (mặc định: 'Data')."""
-    import os
     import json
 
-    config_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "config", "templates.json"
-    )
+    base_dir = _get_base_dir()
+    config_path = os.path.join(base_dir, "config", "templates.json")
     try:
         with open(config_path, "r", encoding="utf-8") as f:
             templates = json.load(f)
         return templates.get(template_id, {}).get("excel_data_sheet", "Data")
     except Exception:
         return "Data"
+
+

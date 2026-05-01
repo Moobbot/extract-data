@@ -30,7 +30,20 @@ class Settings:
     OUTPUT_DIR: str = os.getenv("OUTPUT_DIR", "outputs")
 
 
+    # ── Paths ─────────────────────────────────────────────────────────────────
+    # Thư mục gốc project (chứa app/, config/, templates/)
+    # Trong Docker: /app | Local: thư mục chứa app/
+    BASE_DIR: str = os.getenv(
+        "BASE_DIR",
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    )
+    TEMPLATES_DIR: str = os.getenv("TEMPLATES_DIR", "")  # override nếu cần
+
+
 settings = Settings()
+# Resolve TEMPLATES_DIR sau khi BASE_DIR được set
+if not settings.TEMPLATES_DIR:
+    settings.TEMPLATES_DIR = os.path.join(settings.BASE_DIR, "templates")
 
 # Ensure required directories exist
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
