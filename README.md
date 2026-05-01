@@ -1,76 +1,82 @@
-# Extract PDF API
+# Extract-PDF API
 
-Service trich xuat bang du lieu/structured text tu anh, ho tro nhieu AI agent qua mot API thong nhat.
+Service trích xuất bảng dữ liệu / structured text từ ảnh, hỗ trợ nhiều AI agent qua một API thống nhất.
 
-## Muc luc tai lieu
+## Mục lục tài liệu
 
-- [Cai dat](doc/installation.md)
-- [Cau hinh](doc/configuration.md)
-- [Khoi dong he thong](doc/runbook.md)
-- [Chay bang Docker](doc/docker-run.md)
-- [API va agent](doc/api-reference.md)
-- [Tich hop plugin web khac](doc/plugin-integration.md)
-- [Mau React/Next.js](doc/react-nextjs-integration.md)
-- [CLI usage](doc/cli-usage.md)
-- [Van hanh va troubleshooting](doc/operations.md)
+| Tài liệu                                             | Mô tả                                |
+| ---------------------------------------------------- | ------------------------------------ |
+| [Cài đặt](doc/installation.md)                       | Môi trường Conda, requirements       |
+| [Cấu hình](doc/configuration.md)                     | Biến môi trường, env vars, UI config |
+| [Khởi động hệ thống](doc/runbook.md)                 | Chạy local (Conda)                   |
+| [Chạy bằng Docker](doc/docker-run.md)                | Docker Compose — CPU & GPU           |
+| [API & Agent](doc/api-reference.md)                  | Endpoints, schema, ví dụ             |
+| [Kiến trúc Provider](doc/architecture.md)            | Cấu trúc code providers              |
+| [CLI usage](doc/cli-usage.md)                        | Chạy script dòng lệnh                |
+| [Tích hợp plugin web](doc/plugin-integration.md)     | Nhúng API vào web khác               |
+| [Mẫu React/Next.js](doc/react-nextjs-integration.md) | Frontend integration                 |
+| [Vận hành & Troubleshooting](doc/operations.md)      | Log, lỗi thường gặp                  |
+
+---
 
 ## Quick Start
 
-1. Cai dat phu thuoc theo [Cai dat](doc/installation.md).
-2. Tao `.env` theo [Cau hinh](doc/configuration.md).
-3. Chay API + worker theo [Khoi dong he thong](doc/runbook.md).
-   - Lenh nhanh API: `conda activate extract-pdf` va `python -m app.main`.
-4. Mo nhanh:
-
-- UI: `http://127.0.0.1:8000/ui`
-- Settings: `http://127.0.0.1:8000/ui/settings`
-- Swagger: `http://127.0.0.1:8000/docs`
-
-Preset UI config is stored in `ui-config.json` at the repository root.
-
-## Dung LightOnOCR-2-1B (Recommended)
-
-Mac dinh UI su dung `LightOnOCR-2-1B` (model OCR cuc bo co suc manh 83% overall score).
-
-### Setup (Local)
-
-1. Tab 1 — Chay FastAPI + Gradio server LightOnOCR:
-
-   ```bash
-   conda activate extract-pdf
-   cd LightOnOCR-2-1B
-   python app_server.py
-   ```
-
-   → API tai `http://127.0.0.1:7860/ocr`
-
-2. Tab 2 — Chay extract-pdf:
-
-   ```bash
-   conda activate extract-pdf
-   python -m app.main
-   ```
-
-   → Webapp tai `http://127.0.0.1:8000/ui`
-
-3. Tren UI, chon preset `lightonocr-2-1b` va submit task.
-
-### Setup (Docker)
-
-Chay ca hai dich vu trong Docker qua orchestration:
+### Chạy bằng Docker (khuyến nghị)
 
 ```bash
+# 1. Tạo .env từ mẫu
+cp .env.example .env
+# Điền GOOGLE_API_KEY hoặc giữ AI_PROVIDER=lightonocr
+
+# 2. Khởi động extract-pdf + LightOnOCR cùng nhau
 docker compose --profile lightonocr up -d --build
+
+# 3. Mở UI
+# http://localhost:8000/ui
 ```
 
-> **Lưu ý:** Model weights của LightOnOCR (~2GB) hiện đã được cấu hình để tự động tải khi **khởi chạy container** lần đầu tiên (Runtime). Việc tải này sẽ lưu trực tiếp vào thư mục `LightOnOCR-2-1B` trên máy của bạn để có thể tái sử dụng cho các lần chạy sau.
+> ⚠️ **LightOnOCR trên CPU cần ≥ 12 GB RAM cho Docker.**  
+> Xem hướng dẫn cấu hình WSL2 trong [doc/docker-run.md](doc/docker-run.md).
 
-→ LightOnOCR API tai `http://127.0.0.1:7861`
+### Chạy local (Conda)
 
-Endpoints:
+```bash
+conda activate extract-pdf
+python -m app.main
+# → http://localhost:8000/ui
+```
 
-- Extract-pdf UI: `http://127.0.0.1:8000/ui`
-- LightOnOCR API root: `http://127.0.0.1:7861/`
-- LightOnOCR API docs: `http://127.0.0.1:7861/docs`
-- LightOnOCR extract endpoint: `http://127.0.0.1:7861/extract`
-  Xem them: [Docker Runbook](doc/docker-run.md) va [LightOnOCR-2-1B README](LightOnOCR-2-1B/README.md#1-fastapi--gradio-server-chay-ca-ui--rest-api)
+LightOnOCR chạy riêng:
+
+```bash
+conda activate extract-pdf
+cd LightOnOCR-2-1B
+python api.py
+# → http://localhost:7861
+```
+
+---
+
+## Endpoints chính
+
+| URL                                 | Mô tả                   |
+| ----------------------------------- | ----------------------- |
+| `http://localhost:8000/ui`          | Web UI trích xuất       |
+| `http://localhost:8000/ui/settings` | Cấu hình agent          |
+| `http://localhost:8000/docs`        | Swagger API docs        |
+| `http://localhost:7861/`            | LightOnOCR health check |
+| `http://localhost:7861/docs`        | LightOnOCR API docs     |
+
+---
+
+## AI Providers hỗ trợ
+
+| Agent               | Mô tả                  | Yêu cầu                        |
+| ------------------- | ---------------------- | ------------------------------ |
+| `gemini`            | Google Gemini (cloud)  | `GOOGLE_API_KEY`               |
+| `openai`            | OpenAI GPT-4o (cloud)  | `OPENAI_API_KEY`               |
+| `openai_compatible` | Ollama, vLLM, Azure... | `api_key`, `base_url`, `model` |
+| `local_http`        | API HTTP tùy ý (JSON)  | `base_url`                     |
+| `lightonocr`        | LightOnOCR-2-1B local  | `LOCAL_HTTP_BASE_URL`          |
+
+Xem chi tiết: [doc/api-reference.md](doc/api-reference.md)

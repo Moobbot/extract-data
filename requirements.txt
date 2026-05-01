@@ -1,12 +1,11 @@
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv
 google-genai
 openai
-python-dotenv
 pillow
 pandas
 openpyxl
-fastapi
-uvicorn
-celery
-redis
-python-multipart
+psutil
 pytest

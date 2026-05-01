@@ -1,28 +1,58 @@
-# API va agent
+# API Reference
 
-## API chinh
+## Endpoints
 
-- `GET /api/v1/agents`
-- `GET /api/v1/ui-config`
-- `PUT /api/v1/ui-config`
-- `POST /api/v1/extract`
-- `POST /api/v1/extract/batch`
-- `POST /api/v1/extract/folder`
-- `POST /api/v1/extract/json`
-- `GET /api/v1/task-status/{task_id}`
-- `GET /api/v1/task-artifact/{task_id}/json`
-- `GET /api/v1/task-artifact/{task_id}/excel`
+| Method | Path                                             | Mô tả                                   |
+| ------ | ------------------------------------------------ | --------------------------------------- |
+| `GET`  | `/api/v1/agents`                                 | Liệt kê tất cả agent có sẵn             |
+| `GET`  | `/api/v1/ui-config`                              | Đọc cấu hình UI                         |
+| `PUT`  | `/api/v1/ui-config`                              | Cập nhật cấu hình UI                    |
+| `POST` | `/api/v1/extract`                                | OCR 1 file (multipart/form-data)        |
+| `POST` | `/api/v1/extract/batch`                          | OCR nhiều file                          |
+| `POST` | `/api/v1/extract/folder`                         | OCR cả thư mục                          |
+| `POST` | `/api/v1/extract/json`                           | OCR qua JSON payload (base64 hoặc path) |
+| `GET`  | `/api/v1/task-status/{task_id}`                  | Polling kết quả task                    |
+| `GET`  | `/api/v1/tasks`                                  | Lịch sử tất cả task (từ SQLite)         |
+| `GET`  | `/api/v1/task-artifact/{task_id}/json`           | Tải file JSON output                    |
+| `GET`  | `/api/v1/task-artifact/{task_id}/excel`          | Tải file Excel output                   |
+| `GET`  | `/api/v1/task-artifact/{task_id}/excel-lv1`      | Tải Excel level 1                       |
+| `GET`  | `/api/v1/task-artifact/{task_id}/excel-template` | Tải Excel template                      |
 
-## JSON schema cho /extract/json
+---
+
+## Luồng xử lý
+
+```
+POST /extract (hoặc /extract/json)
+    ↓
+task_id trả về ngay (status: "pending")
+    ↓ (background)
+FastAPI BackgroundTask → process_image_task()
+    ↓
+AIProviderFactory.get_provider(agent)
+    ↓
+provider.generate_content(image, prompt)
+    ↓
+Kết quả lưu vào _TASK_RESULTS + SQLite
+    ↓
+GET /task-status/{task_id} → "SUCCESS" / "FAILURE"
+    ↓
+GET /task-artifact/{task_id}/json|excel → tải file
+```
+
+---
+
+## Schema `/extract/json`
 
 ```json
 {
   "image_path": null,
-  "image_base64": "<base64-image>",
+  "image_base64": "<base64-string>",
   "filename": "sample.jpg",
-  "agent": "gemini",
-  "output_format": "markdown",
-  "save_to_file": false,
+  "agent": "lightonocr",
+  "output_format": "json",
+  "save_to_file": true,
+  "template": "default",
   "options": {
     "model": null,
     "base_url": null,
@@ -31,166 +61,126 @@
 }
 ```
 
-Neu `save_to_file=true` va `output_format=json`, worker se luu ca `*.json` va `*.xlsx` trong `outputs/`.
+| Field           | Mặc định         | Mô tả                                               |
+| --------------- | ---------------- | --------------------------------------------------- |
+| `image_path`    | null             | Đường dẫn file local (thay thế cho base64)          |
+| `image_base64`  | null             | Chuỗi base64 của ảnh                                |
+| `filename`      | null             | Tên file gốc (dùng đặt tên output)                  |
+| `agent`         | _(từ ui-config)_ | Tên provider: `gemini`, `openai`, `lightonocr`, ... |
+| `output_format` | `markdown`       | `markdown` hoặc `json`                              |
+| `save_to_file`  | `false`          | Lưu JSON + Excel ra thư mục `outputs/`              |
+| `template`      | `default`        | Template mapping cho loại tài liệu                  |
 
-## Cach chon agent
+---
 
-### Gemini
+## Chọn agent
 
-- Dat `agent = gemini` hoac bo trong de dung mac dinh.
+### `gemini`
 
-### OpenAI
+```json
+{ "agent": "gemini" }
+```
 
-- Dat `agent = openai`.
-- Co the override `options.model`.
+Yêu cầu: `GOOGLE_API_KEY` trong `.env`.
 
-### OpenAI-compatible
+### `openai`
 
-- Dat `agent = openai_compatible`.
-- Bat buoc co `options.base_url`, `options.api_key`, `options.model`.
+```json
+{ "agent": "openai", "options": { "model": "gpt-4o" } }
+```
 
-### Local HTTP (generic)
+Yêu cầu: `OPENAI_API_KEY` trong `.env`.
 
-- Dat `agent = local_http`.
-- Bat buoc co `options.base_url`.
-- `options.api_key` la tuy chon.
+### `openai_compatible` (Ollama, vLLM, Azure...)
 
-Adapter gui payload:
+```json
+{
+  "agent": "openai_compatible",
+  "options": {
+    "base_url": "http://127.0.0.1:1234/v1",
+    "api_key": "local",
+    "model": "qwen2.5-vl"
+  }
+}
+```
 
-- `image_base64`
-- `prompt`
+### `local_http` (API HTTP bất kỳ — JSON payload)
 
-Parser uu tien field: `content`, `text`, `result`, `markdown`, `output`.
+```json
+{
+  "agent": "local_http",
+  "options": { "base_url": "http://127.0.0.1:7861/ocr" }
+}
+```
 
-## Goi LightOnOCR (he ben ngoai)
+Gửi payload: `{ "image_base64": "...", "prompt": "..." }`  
+Parse response theo key: `content` → `text` → `result` → `markdown` → `output`.
 
-- Chay LightOnOCR trong env/doc vu rieng.
-- Trong `extract-pdf`, goi bang `agent = local_http`.
-- Set `options.base_url` toi endpoint OCR cua LightOnOCR.
-- Neu muon chon model theo preset UI, `local_http` se gui them field `model` trong payload body.
+### `lightonocr` (LightOnOCR-2-1B — multipart/form-data)
 
-## Huong dan setup API Agent cho nguoi dung
+```json
+{ "agent": "lightonocr" }
+```
 
-Muc tieu: nguoi dung co the tu chon agent khi goi API ma khong can sua code backend.
+Gửi file thật qua multipart. Yêu cầu: `LOCAL_HTTP_BASE_URL` trong `.env`.
 
-### Buoc 1: Chuan bi env
+---
 
-Them cac bien can thiet vao `.env`:
+## Agent động từ env
 
 ```env
-# Agent mac dinh
-AI_PROVIDER=gemini
-
-# Built-in keys
-GOOGLE_API_KEY=your_google_key
-OPENAI_API_KEY=your_openai_key
-
-# OpenAI-compatible agent tuy bien qua env
 AGENT_QWEN_TYPE=openai_compatible
 AGENT_QWEN_BASE_URL=http://127.0.0.1:1234/v1
 AGENT_QWEN_API_KEY=local
 AGENT_QWEN_MODEL=qwen2.5-vl
-
-# LightOnOCR endpoint ngoai (goi theo local_http)
-AGENT_LIGHTONOCR_TYPE=local_http
-AGENT_LIGHTONOCR_BASE_URL=http://127.0.0.1:7860/ocr
-AGENT_LIGHTONOCR_API_KEY=
 ```
 
-Sau khi doi env, restart API + worker.
+Gọi với `"agent": "qwen"`. Kiểm tra: `GET /api/v1/agents`.
 
-### Buoc 2: Kiem tra agent da nap
+---
 
-Goi:
-
-- `GET /api/v1/agents`
-
-Neu setup dung, danh sach se co them agent tu env nhu `qwen` va `lightonocr`.
-
-### Buoc 3: Goi extract voi agent
-
-Vi du goi agent da khai bao san trong env (`lightonocr`):
-
-```json
-{
-  "image_base64": "<base64-image>",
-  "filename": "sample.jpg",
-  "agent": "lightonocr",
-  "output_format": "markdown",
-  "save_to_file": false,
-  "options": {
-    "model": null,
-    "base_url": null,
-    "api_key": null
-  }
-}
-```
-
-Vi du override runtime khong can env (local_http):
-
-```json
-{
-  "image_base64": "<base64-image>",
-  "filename": "sample.jpg",
-  "agent": "local_http",
-  "output_format": "markdown",
-  "save_to_file": false,
-  "options": {
-    "base_url": "http://127.0.0.1:7860/ocr",
-    "api_key": "optional-token",
-    "model": null
-  }
-}
-```
-
-## Huong dan nhung API vao web/app khac
-
-Khuyen nghi luong nhung:
-
-1. Frontend gui `POST /api/v1/extract/json`.
-2. Luu `task_id` tu response submit.
-3. Poll `GET /api/v1/task-status/{task_id}` den khi `SUCCESS` hoac `FAILURE`.
-4. Neu co artifact, tai file qua:
-   - `GET /api/v1/task-artifact/{task_id}/json`
-   - `GET /api/v1/task-artifact/{task_id}/excel`
-
-### Mau fetch submit + poll
+## Polling kết quả
 
 ```js
-const submitRes = await fetch("http://127.0.0.1:8000/api/v1/extract/json", {
+// 1. Submit task
+const res = await fetch("http://localhost:8000/api/v1/extract/json", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     image_base64: base64Image,
-    filename: "invoice.jpg",
+    filename: "scan.jpg",
     agent: "lightonocr",
     output_format: "json",
     save_to_file: true,
-    options: {},
   }),
 });
+const { task_id } = await res.json();
 
-const submitData = await submitRes.json();
-const taskId = submitData.task_id;
-
-let done = false;
-while (!done) {
-  const statusRes = await fetch(
-    `http://127.0.0.1:8000/api/v1/task-status/${taskId}`,
+// 2. Poll status
+let result;
+while (true) {
+  const status = await fetch(
+    `http://localhost:8000/api/v1/task-status/${task_id}`,
   );
-  const statusData = await statusRes.json();
-
-  if (statusData.status === "SUCCESS" || statusData.status === "FAILURE") {
-    done = true;
-    console.log(statusData);
-  } else {
-    await new Promise((r) => setTimeout(r, 2000));
+  const data = await status.json();
+  if (data.status === "SUCCESS" || data.status === "FAILURE") {
+    result = data;
+    break;
   }
+  await new Promise((r) => setTimeout(r, 2000));
+}
+
+// 3. Tải artifact
+if (result.status === "SUCCESS") {
+  window.open(`http://localhost:8000/api/v1/task-artifact/${task_id}/excel`);
 }
 ```
 
-Ghi chu production:
+---
 
-- Khong expose API key trong frontend public.
-- Nen goi extract-pdf thong qua backend trung gian neu can bao mat key.
-- Cau hinh CORS dung domain web thuc te truoc khi mo truy cap.
+## Lưu ý production
+
+- Không expose API key trong frontend public — dùng backend proxy nếu cần.
+- Cấu hình `CORS_ALLOW_ORIGINS` với domain thực tế trước khi deploy.
+- Task result lưu trong memory (`_TASK_RESULTS`) — mất khi restart container.  
+  Lịch sử vẫn có trong SQLite (`outputs/tasks.sqlite3`).

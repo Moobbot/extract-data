@@ -1,156 +1,169 @@
-# Chay bang Docker
+# Chạy bằng Docker
 
-## Muc tieu
+## Tổng quan services
 
-Dung Docker Compose de chay:
+| Service      | Port | Mô tả                                          |
+| ------------ | ---- | ---------------------------------------------- |
+| `api`        | 8000 | FastAPI extract-pdf (luôn chạy)                |
+| `lightonocr` | 7861 | LightOnOCR-2-1B REST API (profile: lightonocr) |
 
-- `redis` (broker/result backend)
-- `api` (FastAPI extract-pdf)
-- `worker` (Celery async tasks)
-- `lightonocr` (LightOnOCR-2-1B REST API) — tùy chọn
+> Redis và Celery worker đã được loại bỏ. Hệ thống dùng FastAPI `BackgroundTasks` + SQLite.
 
-## Dieu kien can
+---
 
-- Da cai Docker Desktop (hoac Docker Engine + Compose plugin)
-- GPU + nvidia-container-toolkit (tuong tai, nhung khuyến nghị)
-- Co file `.env` o root project (tham khao [configuration.md](configuration.md))
+## Điều kiện tiên quyết
 
-## Chay he thong
+- Docker Desktop (hoặc Docker Engine + Compose plugin)
+- File `.env` ở root project — xem [configuration.md](configuration.md)
+- **Nếu dùng GPU:** [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
+- **Nếu chạy LightOnOCR trên CPU:** Docker cần ≥ 12 GB RAM — xem hướng dẫn WSL2 bên dưới
 
-### Phương án 1: Chạy extract-pdf + LightOnOCR Docker (khuyến nghị)
+---
 
-Chạy cả extract-pdf và LightOnOCR API qua Docker:
+## Chạy hệ thống
+
+### Phương án 1 — extract-pdf + LightOnOCR (Docker, khuyến nghị)
 
 ```bash
 docker compose --profile lightonocr up -d --build
 ```
 
-Services sẽ start:
+Services khởi động:
 
-- `redis:6379`
-- `api:8000` (extract-pdf API)
-- `worker` (Celery)
-- `lightonocr:7861` (LightOnOCR API)
+- `api:8000` — extract-pdf API
+- `lightonocr:7861` — LightOnOCR API
 
-Extract-pdf sẽ tự động kết nối tới LightOnOCR qua Docker network: `http://lightonocr:7861/extract`
+extract-pdf kết nối tới LightOnOCR qua Docker network: `http://lightonocr:7861/extract`
 
-### Phương án 2: Chạy extract-pdf Docker + LightOnOCR host (dễ debug)
-
-Nếu chỉ chạy extract-pdf trong Docker, còn LightOnOCR chạy trên host:
+### Phương án 2 — Chỉ extract-pdf trong Docker, LightOnOCR local
 
 ```bash
+# Terminal 1: Extract-pdf trong Docker
 docker compose up -d --build
-```
 
-Sau đó trên host terminal khác:
-
-```bash
+# Terminal 2: LightOnOCR trên host
 conda activate extract-pdf
 cd LightOnOCR-2-1B
 python api.py
 ```
 
-Cấu hình extract-pdf để nó biết LightOnOCR host ở đâu. Mở `.env` và thêm:
+Trong `.env`:
 
 ```env
 LOCAL_HTTP_BASE_URL=http://host.docker.internal:7861/extract
 ```
 
-(Trên macOS/Windows, Docker cung cấp `host.docker.internal` để kết nối tới host. Trên Linux, sử dụng IP host thực tế.)
+> `host.docker.internal` — trỏ từ container về host (macOS/Windows).  
+> Trên Linux: thay bằng IP thực của host.
 
-## Kiem tra trang thai
+### Phương án 3 — LightOnOCR chạy riêng (CPU mode)
+
+Từ thư mục `LightOnOCR-2-1B`:
+
+```bash
+# CPU (không cần GPU)
+docker compose -f docker-compose.cpu.yml up -d --build
+
+# GPU (cần nvidia-container-toolkit)
+docker compose up -d --build
+```
+
+Rồi chạy extract-pdf bình thường:
+
+```bash
+cd ..
+docker compose up -d --build
+```
+
+---
+
+## Yêu cầu RAM cho LightOnOCR CPU mode
+
+| Giai đoạn               | RAM cần     |
+| ----------------------- | ----------- |
+| Model weights (float32) | ~4.6 GB     |
+| KV cache khi inference  | ~1.8 GB     |
+| OS + Docker overhead    | ~0.5 GB     |
+| **Tổng tối thiểu**      | **~7 GB**   |
+| **Khuyến nghị Docker**  | **≥ 12 GB** |
+
+### Cấu hình WSL2 (Windows)
+
+Tạo/sửa `C:\Users\<user>\.wslconfig`:
+
+```ini
+[wsl2]
+memory=12GB
+processors=4
+swap=8GB
+```
+
+Áp dụng:
+
+```powershell
+wsl --shutdown
+# Mở lại Docker Desktop
+docker info --format "{{.MemTotal}}"
+# Kết quả mong đợi: ≥ 12548165632
+```
+
+---
+
+## Kiểm tra trạng thái
 
 ```bash
 docker compose ps
-```
-
-Bạn sẽ thấy cột `STATUS` với `(healthy)` cho `redis`, `api`, `worker` khi hệ thống sẵn sàng. `lightonocr` cũng sẽ `(healthy)` nếu được khởi động.
-
-## Kiem tra nhanh
-
-Extract-pdf API:
-
-- Health: `http://127.0.0.1:8000/`
-- Swagger docs: `http://127.0.0.1:8000/docs`
-- TMU Quick UI: `http://127.0.0.1:8000/ui`
-- Settings UI: `http://127.0.0.1:8000/ui/settings`
-
-LightOnOCR API (nếu chạy):
-
-- Health: `http://127.0.0.1:7861/`
-- API docs: `http://127.0.0.1:7861/docs`
-- POST endpoint: `http://127.0.0.1:7861/extract`
-
-Kiểm tra nhanh kết nối:
-
-```bash
-curl http://127.0.0.1:7861/
-```
-
-Từ Settings UI → chọn preset `lightonocr-2-1b` → Submit task
-
-## Xem logs
-
-```bash
-# Extract-pdf services
 docker compose logs -f api
-docker compose logs -f worker
-docker compose logs -f redis
-
-# LightOnOCR service (nếu chạy)
 docker compose logs -f lightonocr
 ```
 
-## Lưu ý cấu hình endpoint LightOnOCR (quan trọng)
+### Các URL sau khi khởi động
 
-When running `lightonocr` inside Docker Compose the service listens on `0.0.0.0:7861` in the Compose network. If your `ui-config.json` preset still contains `http://127.0.0.1:7861/extract`, containers (`api`/`worker`) will try to call `127.0.0.1` from inside the container — which refers to the container itself, not `lightonocr` — causing `Connection refused`.
+| URL                                 | Mô tả                    |
+| ----------------------------------- | ------------------------ |
+| `http://localhost:8000/`            | Extract-pdf health check |
+| `http://localhost:8000/ui`          | Web UI trích xuất        |
+| `http://localhost:8000/ui/settings` | Cấu hình agent           |
+| `http://localhost:8000/docs`        | Swagger API docs         |
+| `http://localhost:7861/`            | LightOnOCR health check  |
+| `http://localhost:7861/docs`        | LightOnOCR API docs      |
 
-Fix options (choose one):
+---
 
-- Set the Docker-aware endpoint in `.env`:
+## Lưu ý endpoint LightOnOCR (quan trọng)
 
-  ```bash
-  # .env
-  LOCAL_HTTP_BASE_URL=http://lightonocr:7861/extract
-  ```
+Khi `lightonocr` chạy trong Docker Compose, `api` phải dùng tên service để kết nối:
 
-- Or update the preset in Settings UI / `ui-config.json` so `base_url` for `lightonocr-2-1b` is `http://lightonocr:7861/extract`.
+```env
+# ✅ Đúng (Docker network)
+LOCAL_HTTP_BASE_URL=http://lightonocr:7861/extract
 
-Verify the runtime endpoint used by the `api` container:
+# ❌ Sai (127.0.0.1 trong container = container chính nó)
+LOCAL_HTTP_BASE_URL=http://127.0.0.1:7861/extract
+```
+
+Kiểm tra endpoint đang dùng:
 
 ```bash
-# Linux/macOS
 docker compose exec api env | grep LOCAL_HTTP_BASE_URL
-
-# Windows PowerShell
-docker compose exec api cmd /c "set LOCAL_HTTP_BASE_URL"
 ```
 
-If tasks still fail, check recent logs:
+---
 
-```bash
-docker compose logs --tail=200 api
-docker compose logs --tail=200 worker
-```
-
-Security note: if an API key was accidentally exposed in `.env`, rotate/revoke it immediately.
-
-## Dung he thong
+## Dừng hệ thống
 
 ```bash
 docker compose down
 ```
 
-Nếu muốn xóa volume Redis:
+---
 
-```bash
-docker compose down -v
-```
+## Troubleshooting nhanh
 
-## Luu y
-
-- Worker lấy task qua Redis, nên nếu `redis` chưa healthy thì `worker` sẽ chưa sang healthy.
-- Healthcheck của worker dùng `celery inspect ping`, vì vậy cần đợi worker khởi động xong (có `start_period`).
-- Trên Windows host, worker trong container Linux không cần `-P solo`.
-- File `ui-config.json` được mount vào cả `api` và `worker`, nên thay đổi từ trang settings sẽ được giữ lại trên host.
-- LightOnOCR service (nếu chạy) cần khoảng 60 giây để load model — kiên nhẫn chờ `(healthy)` trước khi submit task.
+| Vấn đề                          | Nguyên nhân                 | Cách sửa                                      |
+| ------------------------------- | --------------------------- | --------------------------------------------- |
+| LightOnOCR tự restart khi OCR   | OOM — thiếu RAM             | Tăng WSL2 memory lên ≥ 12 GB                  |
+| `Connection refused`            | Container chưa chạy         | `docker compose ps` kiểm tra                  |
+| `Name not known` (hostname lỗi) | Dùng localhost trong Docker | Đổi sang `http://lightonocr:7861/extract`     |
+| Timeout khi OCR                 | CPU chậm                    | Tăng `LOCAL_HTTP_TIMEOUT=300`                 |
+| `lightonocr` chưa healthy       | Model đang load             | Chờ ~60s, `docker compose logs -f lightonocr` |

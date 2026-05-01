@@ -1,10 +1,10 @@
-from abc import ABC, abstractmethod
+"""
+app/core/interfaces.py
 
+Backward-compatibility shim.
+AIProvider đã được chuyển sang app/services/providers/base.py.
+"""
 
-class AIProvider(ABC):
-    @abstractmethod
-    def generate_content(self, image_path: str, prompt: str) -> str:
-        """
-        Generates content from an image based on the prompt.
-        """
-        pass
+from app.services.providers.base import AIProvider  # noqa: F401
+
+__all__ = ["AIProvider"]

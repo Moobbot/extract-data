@@ -1,4 +1,12 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Body
+from fastapi import (
+    APIRouter,
+    UploadFile,
+    File,
+    Form,
+    HTTPException,
+    Body,
+    BackgroundTasks,
+)
 from fastapi.responses import FileResponse
 from typing import List, Dict, Any, Optional
 import shutil
@@ -6,11 +14,10 @@ import os
 import uuid
 import base64
 from pathlib import Path
-from celery.result import AsyncResult
 from app.core.config import settings
 from app.core.ui_config import load_ui_config, save_ui_config
-from app.services.tasks import process_image_task
 from app.services.ai_providers import AIProviderFactory
+from app.services.tasks import process_image_task
 from app.api.models import (
     AgentsListResponse,
     ExtractionJsonRequest,
@@ -18,6 +25,66 @@ from app.api.models import (
 )
 
 router = APIRouter()
+
+# In-memory task store for small deployments without Redis
+_TASK_RESULTS: Dict[str, Any] = {}
+
+
+def _start_background_processing(
+    background_tasks: BackgroundTasks,
+    image_path: str,
+    agent: str,
+    output_format: str,
+    save_to_file: bool,
+    agent_config: Dict[str, Any],
+    template_id: str = "default",
+    source_filename: Optional[str] = None,
+    source_folder: Optional[str] = None,
+) -> str:
+    task_id = str(uuid.uuid4())
+    _TASK_RESULTS[task_id] = {"status": "PENDING"}
+
+    def run_and_store_result(
+        tid: str,
+        path: str,
+        ag: str,
+        fmt: str,
+        save: bool,
+        config: Dict[str, Any],
+        template: str,
+        filename: Optional[str],
+        folder: Optional[str],
+    ) -> None:
+        try:
+            _TASK_RESULTS[tid]["status"] = "STARTED"
+            result = process_image_task(
+                path,
+                ag,
+                fmt,
+                save,
+                config,
+                template_id=template,
+                source_filename=filename,
+                source_folder=folder,
+                task_id=tid,
+            )
+            _TASK_RESULTS[tid] = {"status": "SUCCESS", "result": result}
+        except Exception as exc:
+            _TASK_RESULTS[tid] = {"status": "FAILURE", "result": str(exc)}
+
+    background_tasks.add_task(
+        run_and_store_result,
+        task_id,
+        image_path,
+        agent,
+        output_format,
+        save_to_file,
+        agent_config,
+        template_id,
+        source_filename,
+        source_folder,
+    )
+    return task_id
 
 
 def _build_agent_config(
@@ -85,6 +152,7 @@ async def update_ui_config(payload: UIConfigPayload):
 
 @router.post("/extract", response_model=Dict[str, Any])
 async def extract_table_task(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     agent: str = Form(settings.DEFAULT_PROVIDER),
     output_format: str = Form("markdown"),
@@ -94,7 +162,7 @@ async def extract_table_task(
     api_key: Optional[str] = Form(None),
 ):
     """
-    Submits an image for background processing via Celery.
+    Submits an image for background processing via FastAPI BackgroundTasks.
     Returns a task_id to poll for results.
     """
     # Save file to a persistent upload directory for the worker to access
@@ -110,22 +178,23 @@ async def extract_table_task(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save file: {e}")
 
-    # Dispatch Task
     agent_config = _build_agent_config(model=model, base_url=base_url, api_key=api_key)
-    task = process_image_task.delay(
+    task_id = _start_background_processing(
+        background_tasks,
         file_path,
         agent,
         output_format,
         save_to_file,
         agent_config,
+        source_filename=file.filename,
     )
 
     from app.core.db import insert_task
 
-    insert_task(task.id, file.filename, "default")
+    insert_task(task_id, file.filename, "default")
 
     return {
-        "task_id": task.id,
+        "task_id": task_id,
         "message": "Task submitted successfully",
         "status": "pending",
     }
@@ -133,6 +202,7 @@ async def extract_table_task(
 
 @router.post("/extract/batch", response_model=List[Dict[str, Any]])
 async def extract_batch_task(
+    background_tasks: BackgroundTasks,
     files: List[UploadFile] = File(...),
     agent: str = Form(settings.DEFAULT_PROVIDER),
     output_format: str = Form("markdown"),
@@ -157,19 +227,20 @@ async def extract_batch_task(
             with open(file_path, "wb") as buffer:
                 shutil.copyfileobj(file.file, buffer)
 
-            # Dispatch Task
-            task = process_image_task.delay(
+            task_id = _start_background_processing(
+                background_tasks,
                 file_path,
                 agent,
                 output_format,
                 save_to_file,
                 agent_config,
+                source_filename=file.filename,
             )
             from app.core.db import insert_task
 
-            insert_task(task.id, file.filename, "default")
+            insert_task(task_id, file.filename, "default")
             tasks.append(
-                {"filename": file.filename, "task_id": task.id, "status": "pending"}
+                {"filename": file.filename, "task_id": task_id, "status": "pending"}
             )
         except Exception as e:
             tasks.append(
@@ -181,6 +252,7 @@ async def extract_batch_task(
 
 @router.post("/extract/folder", response_model=List[Dict[str, Any]])
 async def extract_folder_task(
+    background_tasks: BackgroundTasks,
     folder_path: str = Form(...),
     agent: str = Form(settings.DEFAULT_PROVIDER),
     output_format: str = Form("markdown"),
@@ -198,19 +270,22 @@ async def extract_folder_task(
 
     agent_config = _build_agent_config(model=model, base_url=base_url, api_key=api_key)
 
-    task = process_image_task.delay(
+    task_id = _start_background_processing(
+        background_tasks,
         folder_path,
         agent,
         output_format,
         save_to_file,
         agent_config,
         template_id=template,
+        source_filename=os.path.basename(os.path.normpath(folder_path)),
+        source_folder=folder_path,
     )
 
     from app.core.db import insert_task
 
     insert_task(
-        task.id,
+        task_id,
         os.path.basename(os.path.normpath(folder_path)),
         template,
         folder_path=folder_path,
@@ -219,7 +294,7 @@ async def extract_folder_task(
     return [
         {
             "filename": os.path.basename(os.path.normpath(folder_path)),
-            "task_id": task.id,
+            "task_id": task_id,
             "status": "pending",
             "path": folder_path,
         }
@@ -227,7 +302,9 @@ async def extract_folder_task(
 
 
 @router.post("/extract/json", response_model=Dict[str, Any])
-async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
+async def extract_table_task_json(
+    background_tasks: BackgroundTasks, payload: ExtractionJsonRequest = Body(...)
+):
     """
     Submits an extraction task using a JSON payload.
     Supports either a local image_path or image_base64.
@@ -268,6 +345,7 @@ async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
     # If folder path is provided, redirect to folder task handler
     if payload.image_path and os.path.isdir(payload.image_path):
         tasks = await extract_folder_task(
+            background_tasks=background_tasks,
             folder_path=payload.image_path,
             agent=agent,
             output_format=output_format,
@@ -293,26 +371,29 @@ async def extract_table_task_json(payload: ExtractionJsonRequest = Body(...)):
     )
 
     agent_config = _build_agent_config(model=model, base_url=base_url, api_key=api_key)
-    task = process_image_task.delay(
+    task_id = _start_background_processing(
+        background_tasks,
         file_path,
         agent,
         output_format,
         save_to_file,
         agent_config,
         template_id=payload.template or "default",
+        source_filename=source_filename,
+        source_folder=source_folder,
     )
 
     from app.core.db import insert_task
 
     insert_task(
-        task.id,
+        task_id,
         source_filename,
         payload.template or "default",
         folder_path=source_folder,
     )
 
     return {
-        "task_id": task.id,
+        "task_id": task_id,
         "message": "Task submitted successfully",
         "status": "pending",
     }
@@ -349,22 +430,31 @@ async def get_tasks():
 async def get_task_status(task_id: str):
     """
     Get the status and result of a background task.
+    Kiểm tra in-memory store trước, sau đó fallback về SQLite DB.
     """
-    task = AsyncResult(task_id)
+    if task_id in _TASK_RESULTS:
+        return _TASK_RESULTS[task_id]
 
-    response = {
-        "task_id": task_id,
-        "status": task.state,
-    }
+    # Fallback: đọc từ DB (task đã hoàn thành trước khi restart)
+    from app.core.db import get_task_by_id
+    task_row = get_task_by_id(task_id)
+    if task_row:
+        return {
+            "status": task_row.get("status", "UNKNOWN").upper(),
+            "task_id": task_id,
+            "result": {
+                "saved_to": task_row.get("json_path"),
+                "saved_excel": task_row.get("excel_path"),
+                "status": task_row.get("status"),
+                "filename": task_row.get("filename"),
+            } if task_row.get("status") == "success" else None,
+            "error": task_row.get("error"),
+        }
 
-    if task.state == "SUCCESS":
-        response["result"] = task.result
-    elif task.state == "FAILURE":
-        response["error"] = str(task.result)  # Use str() for safety or task.info
-
-    return response
+    return {"task_id": task_id, "status": "UNKNOWN", "message": "Task not found"}
 
 
+@router.get("/task-artifact/{task_id}/{artifact_kind}")
 @router.post("/task-artifact/{task_id}/{artifact_kind}")
 async def download_task_artifact(task_id: str, artifact_kind: str):
     """
@@ -383,11 +473,16 @@ async def download_task_artifact(task_id: str, artifact_kind: str):
     result_key = result_key_map[artifact_kind]
     artifact_path = None
 
-    task = AsyncResult(task_id)
-    if task.state == "SUCCESS" and isinstance(task.result, dict):
-        artifact_path = task.result.get(result_key)
+    if task_id in _TASK_RESULTS:
+        res_entry = _TASK_RESULTS[task_id]
+        if res_entry.get("status") == "SUCCESS" and isinstance(
+            res_entry.get("result"), dict
+        ):
+            artifact_path = res_entry["result"].get(result_key)
 
-    # Fallback to persisted DB record in case Celery backend result is gone.
+    # (AsyncResult fallback removed — no Redis in this deployment)
+
+    # Fallback to persisted DB record in case result backend is gone.
     if not artifact_path:
         from app.core.db import get_task_by_id
 

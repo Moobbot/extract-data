@@ -1,4 +1,3 @@
-from app.core.celery_app import celery_app
 from app.services.ai_providers import AIProviderFactory
 from app.services.prompt_manager import PromptManager
 import os
@@ -10,9 +9,7 @@ from pathlib import Path
 import pandas as pd
 
 
-@celery_app.task(bind=True)
 def process_image_task(
-    self,
     image_path: str,
     agent: str,
     output_format: str,
@@ -21,18 +18,11 @@ def process_image_task(
     template_id: str = "default",
     source_filename: Optional[str] = None,
     source_folder: Optional[str] = None,
+    task_id: str = "unknown",
 ):
     """
     Background task to process an image.
     """
-    # `self.request.id` may be unavailable in some early-failure scenarios.
-    # Keep a safe fallback so error handling never raises NameError.
-    task_id = None
-    try:
-        task_id = self.request.id
-    except Exception:
-        task_id = "unknown"
-
     resolved_source_filename = source_filename
     resolved_source_folder = source_folder
     if task_id != "unknown" and (
@@ -242,8 +232,6 @@ def process_image_task(
             return None
 
     try:
-        self.update_state(state="PROGRESS", meta={"message": "Processing started"})
-
         # 1. Get Provider
         try:
             ai_provider = AIProviderFactory.get_provider(agent, agent_config)
@@ -288,13 +276,6 @@ def process_image_task(
             for index, current_image_path in enumerate(folder_files, start=1):
                 if not os.path.isfile(current_image_path):
                     continue
-
-                self.update_state(
-                    state="PROGRESS",
-                    meta={
-                        "message": f"Generating content with AI ({index}/{len(folder_files)})",
-                    },
-                )
 
                 try:
                     content_result = ai_provider.generate_content(
@@ -492,10 +473,6 @@ def process_image_task(
                 "api_json_path": api_json_path,
                 "api_excel_path": api_excel_path,
             }
-
-        self.update_state(
-            state="PROGRESS", meta={"message": "Generating content with AI"}
-        )
 
         # 3. Generate
         try:

@@ -1,18 +1,20 @@
+# docker-compose.cpu.yml — CPU mode (không cần GPU)
+# Dùng khi không có GPU hoặc nvidia-container-toolkit.
+#
+# Khởi động:
+#   docker compose -f docker-compose.cpu.yml --profile lightonocr up -d
+#
+# Tự động (đọc LIGHTONOCR_DEVICE từ .env):
+#   PowerShell: .\start.ps1
+#
+# ⚠️ Yêu cầu RAM: Docker Desktop cần ≥ 12 GB (WSL2)
+#    Xem: doc/docker-run.md
+
 name: extract-pdf
 
 services:
 
-  # ── LightOnOCR API Server (tùy chọn) ────────────────────────────────────────
-  # Dùng khi AI_PROVIDER=lightonocr hoặc local_http.
-  #
-  # GPU (mặc định, yêu cầu nvidia-container-toolkit):
-  #   docker compose --profile lightonocr up -d
-  #
-  # CPU (không cần GPU):
-  #   docker compose -f docker-compose.cpu.yml --profile lightonocr up -d
-  #
-  # Tự động theo LIGHTONOCR_DEVICE trong .env:
-  #   PowerShell: .\start.ps1
+  # ── LightOnOCR — CPU mode ────────────────────────────────────────────────────
   lightonocr:
     build:
       context: ./LightOnOCR-2-1B
@@ -26,20 +28,14 @@ services:
       - ./LightOnOCR-2-1B/outputs:/app/outputs
     environment:
       MODEL_PATH: /app/model
-      LIGHTONOCR_DEVICE: ${LIGHTONOCR_DEVICE:-auto}
-      LIGHTONOCR_DTYPE: ${LIGHTONOCR_DTYPE:-auto}
+      LIGHTONOCR_DEVICE: cpu        # ← Ép CPU, bỏ qua GPU
+      LIGHTONOCR_DTYPE: float32     # ← float32 cho CPU
       API_HOST: 0.0.0.0
       API_PORT: "7861"
       CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-*}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       PYTORCH_ENABLE_MPS_FALLBACK: "1"
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    # Không có deploy.resources → Docker bỏ qua nvidia runtime
     healthcheck:
       test:
         [
@@ -49,7 +45,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 120s
+      start_period: 180s    # CPU load model chậm hơn GPU (~60s)
     restart: unless-stopped
     profiles:
       - lightonocr
@@ -66,7 +62,7 @@ services:
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - AI_PROVIDER=${AI_PROVIDER:-gemini}
+      - AI_PROVIDER=${AI_PROVIDER:-lightonocr}
       - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
       - LOCAL_HTTP_TIMEOUT=${LOCAL_HTTP_TIMEOUT:-300}
       - LOCAL_HTTP_BASE_URL=${LOCAL_HTTP_BASE_URL:-http://lightonocr:7861/extract}
