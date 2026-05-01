@@ -3,6 +3,8 @@
     "id": "chung_chi_so",
     "name": "Chứng Chỉ Số",
     "description": "Template trích xuất dữ liệu Chứng Chỉ Số",
+    "excel_template_file": "Import_Chung_Chi_So_13042026.xlsx",
+    "excel_data_sheet": "Data",
     "fields": [
       {"name": "STT", "type": "string", "category": null},
       {"name": "Số hiệu chứng chỉ", "type": "string", "category": null},
@@ -36,6 +38,8 @@
     "id": "van_bang_dai_hoc",
     "name": "Văn Bằng Đại Học",
     "description": "Template trích xuất dữ liệu Văn Bằng Đại Học",
+    "excel_template_file": "Import_Van_Bang_DaiHoc_13042026.xlsx",
+    "excel_data_sheet": "Data",
     "fields": [
       {"name": "STT", "type": "string", "category": null},
       {"name": "Số hiệu bằng", "type": "string", "category": null},

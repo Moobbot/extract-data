@@ -439,9 +439,32 @@ def process_image_task(
                     saved_excel_lv1 = _save_combined_excel(
                         combined_lv1_rows, excel_lv1_path
                     )
-                    saved_excel_template = _save_combined_excel(
-                        combined_template_rows, excel_template_path
-                    )
+
+                    # Ghi vào template Excel nếu template_id có cấu hình file template
+                    if template_id != "default" and combined_template_rows:
+                        from app.services.excel_writer import (
+                            write_rows_to_template,
+                            get_template_excel_path,
+                            get_template_sheet_name,
+                        )
+                        tmpl_file = get_template_excel_path(template_id)
+                        tmpl_sheet = get_template_sheet_name(template_id)
+                        if tmpl_file:
+                            saved_excel_template = write_rows_to_template(
+                                rows=combined_template_rows,
+                                template_path=tmpl_file,
+                                output_path=excel_template_path,
+                                sheet_name=tmpl_sheet,
+                            )
+                        else:
+                            saved_excel_template = _save_combined_excel(
+                                combined_template_rows, excel_template_path
+                            )
+                    elif combined_template_rows:
+                        saved_excel_template = _save_combined_excel(
+                            combined_template_rows, excel_template_path
+                        )
+
                     saved_excel = saved_excel_template or saved_excel_lv1
                 else:
                     with open(saved_path, "w", encoding="utf-8") as f:
@@ -624,9 +647,34 @@ def process_image_task(
 
                 # Build template excel from mapped/final JSON.
                 if parsed is not None:
-                    saved_excel_template = _save_excel_from_json(
-                        parsed, excel_template_path
-                    )
+                    rows_for_excel = _extract_records_for_mapping(parsed)
+                    if not isinstance(rows_for_excel, list):
+                        rows_for_excel = [rows_for_excel] if isinstance(rows_for_excel, dict) else []
+                    rows_for_excel = [r for r in rows_for_excel if isinstance(r, dict)]
+
+                    if template_id != "default" and rows_for_excel:
+                        from app.services.excel_writer import (
+                            write_rows_to_template,
+                            get_template_excel_path,
+                            get_template_sheet_name,
+                        )
+                        tmpl_file = get_template_excel_path(template_id)
+                        tmpl_sheet = get_template_sheet_name(template_id)
+                        if tmpl_file:
+                            saved_excel_template = write_rows_to_template(
+                                rows=rows_for_excel,
+                                template_path=tmpl_file,
+                                output_path=excel_template_path,
+                                sheet_name=tmpl_sheet,
+                            )
+                        else:
+                            saved_excel_template = _save_excel_from_json(
+                                parsed, excel_template_path
+                            )
+                    else:
+                        saved_excel_template = _save_excel_from_json(
+                            parsed, excel_template_path
+                        )
                     saved_excel = saved_excel_template
 
                 # Fallback: if JSON parsing fails entirely, try downloading API Excel.
