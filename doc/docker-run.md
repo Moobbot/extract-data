@@ -35,6 +35,8 @@ Services khởi động:
 
 extract-pdf kết nối tới LightOnOCR qua Docker network: `http://lightonocr:7861/extract`
 
+Model weights của `lightonocr` được lưu trong Docker volume `model_data`, không bind-mount từ source tree. Lần chạy đầu tiên container sẽ tự tải model vào volume này.
+
 ### Phương án 2 — Chỉ extract-pdf trong Docker, LightOnOCR local
 
 ```bash
@@ -160,10 +162,11 @@ docker compose down
 
 ## Troubleshooting nhanh
 
-| Vấn đề                          | Nguyên nhân                 | Cách sửa                                      |
-| ------------------------------- | --------------------------- | --------------------------------------------- |
-| LightOnOCR tự restart khi OCR   | OOM — thiếu RAM             | Tăng WSL2 memory lên ≥ 12 GB                  |
-| `Connection refused`            | Container chưa chạy         | `docker compose ps` kiểm tra                  |
-| `Name not known` (hostname lỗi) | Dùng localhost trong Docker | Đổi sang `http://lightonocr:7861/extract`     |
-| Timeout khi OCR                 | CPU chậm                    | Tăng `LOCAL_HTTP_TIMEOUT=300`                 |
-| `lightonocr` chưa healthy       | Model đang load             | Chờ ~60s, `docker compose logs -f lightonocr` |
+| Vấn đề                                            | Nguyên nhân                   | Cách sửa                                                                         |
+| ------------------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------- |
+| LightOnOCR tự restart khi OCR                     | OOM — thiếu RAM               | Tăng WSL2 memory lên ≥ 12 GB                                                     |
+| `Connection refused`                              | Container chưa chạy           | `docker compose ps` kiểm tra                                                     |
+| `Name not known` (hostname lỗi)                   | Dùng localhost trong Docker   | Đổi sang `http://lightonocr:7861/extract`                                        |
+| Timeout khi OCR                                   | CPU chậm                      | Tăng `LOCAL_HTTP_TIMEOUT=300`                                                    |
+| `lightonocr` chưa healthy                         | Model đang load               | Chờ ~60s, `docker compose logs -f lightonocr`                                    |
+| Thiếu `generation_config.json` hoặc tokenizer lỗi | Model volume bị thiếu/corrupt | `docker compose down -v` rồi `docker compose --profile lightonocr up -d --build` |

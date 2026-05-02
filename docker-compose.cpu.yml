@@ -24,12 +24,12 @@ services:
     ports:
       - "${LIGHTONOCR_PORT:-7861}:7861"
     volumes:
-      - ./LightOnOCR-2-1B:/app/model
+      - model_data:/app/model
       - ./LightOnOCR-2-1B/outputs:/app/outputs
     environment:
       MODEL_PATH: /app/model
-      LIGHTONOCR_DEVICE: cpu        # ← Ép CPU, bỏ qua GPU
-      LIGHTONOCR_DTYPE: float32     # ← float32 cho CPU
+      LIGHTONOCR_DEVICE: cpu # ← Ép CPU, bỏ qua GPU
+      LIGHTONOCR_DTYPE: float32 # ← float32 cho CPU
       API_HOST: 0.0.0.0
       API_PORT: "7861"
       CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-*}
@@ -39,17 +39,20 @@ services:
     healthcheck:
       test:
         [
-          "CMD", "python", "-c",
-          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:7861/', timeout=5).read()",
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request;
+            urllib.request.urlopen('http://127.0.0.1:7861/', timeout=5).read()",
         ]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 180s    # CPU load model chậm hơn GPU (~60s)
+      start_period: 180s # CPU load model chậm hơn GPU (~60s)
     restart: unless-stopped
     profiles:
       - lightonocr
-    command: ["python", "api.py"]
+    command: [ "python", "api.py" ]
 
   # ── Extract-PDF API ──────────────────────────────────────────────────────────
   api:
@@ -77,8 +80,11 @@ services:
     healthcheck:
       test:
         [
-          "CMD", "python", "-c",
-          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=5).read()",
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request;
+            urllib.request.urlopen('http://127.0.0.1:8000/', timeout=5).read()",
         ]
       interval: 15s
       timeout: 5s
