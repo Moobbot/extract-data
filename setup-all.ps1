@@ -34,8 +34,14 @@ Write-Host "==============================================="
 Write-Host ""
 
 # Step 1: Build/update env cho extract-pdf
-$buildArgs = @("-Name", $Name, "-PythonVersion", $PythonVersion)
-if ($ForceRecreate) { $buildArgs += "-ForceRecreate" }
+# Dung hashtable splatting de dam bao bind dung named parameters.
+$buildArgs = @{
+  Name = $Name
+  PythonVersion = $PythonVersion
+}
+if ($ForceRecreate) {
+  $buildArgs.ForceRecreate = $true
+}
 
 Write-Host "> Step 1/2: Build conda env cho extract-pdf"
 & $buildScript @buildArgs
