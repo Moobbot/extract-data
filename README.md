@@ -40,6 +40,22 @@ docker compose --profile lightonocr up -d --build
 
 ### Chạy local (Conda)
 
+```powershell
+# Setup 1 lan cho ca extract-pdf + LightOnOCR-2-1B
+.\setup-all.ps1
+
+# Tuy chon
+.\setup-all.ps1 -Device cpu
+.\setup-all.ps1 -PythonVersion 3.10.19 -ForceRecreate
+```
+
+Script tren se:
+
+- Tao/cap nhat env Conda cho extract-pdf
+- Cai dependencies va model cho LightOnOCR-2-1B
+
+Sau khi setup xong:
+
 ```bash
 conda activate extract-pdf
 python -m app.main
