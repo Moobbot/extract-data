@@ -17,6 +17,30 @@ function Require-CondaEnv {
   return $false
 }
 
+function Show-LightOnOCRRuntimeInfo {
+  $modelPath = if ($env:MODEL_PATH) { $env:MODEL_PATH } else { Join-Path $root "LightOnOCR-2-1B" }
+  $device = if ($env:LIGHTONOCR_DEVICE) { $env:LIGHTONOCR_DEVICE } else { "auto" }
+  $dtype = if ($env:LIGHTONOCR_DTYPE) { $env:LIGHTONOCR_DTYPE } else { "auto" }
+  $logLevel = if ($env:LOG_LEVEL) { $env:LOG_LEVEL } else { "INFO" }
+
+  Write-Host "[LightOnOCR Runtime]"
+  Write-Host "  MODEL_PATH        = $modelPath"
+  Write-Host "  LIGHTONOCR_DEVICE = $device"
+  Write-Host "  LIGHTONOCR_DTYPE  = $dtype"
+  Write-Host "  LOG_LEVEL         = $logLevel"
+
+  $weights = Join-Path $modelPath "model.safetensors"
+  if (-not (Test-Path $weights)) {
+    Write-Host "[WARN] Khong tim thay file weights: $weights"
+    Write-Host "       Server co the se khong khoi dong duoc neu MODEL_PATH sai."
+  }
+
+  Write-Host ""
+  Write-Host "Luu y: lan dau load model co the mat vai phut tuy theo CPU/GPU."
+  Write-Host "      Hay doi den khi thay log: 'Model san sang ...'"
+  Write-Host ""
+}
+
 if (-not (Require-CondaEnv -Name $EnvName)) {
   Write-Host "[ERROR] Env '$EnvName' khong ton tai."
   Write-Host "Chay setup-all.ps1 truoc de tao env."
@@ -38,14 +62,15 @@ switch ($Service.ToLower()) {
   "app" {
     Write-Host "> Chay extract-pdf app server (port 8000)"
     Write-Host ""
-    conda run -n $EnvName python -m app.main
+    conda run --no-capture-output -n $EnvName python -m app.main
   }
   "lightonocr" {
     Write-Host "> Chay LightOnOCR API server (port 7861)"
     Write-Host ""
+    Show-LightOnOCRRuntimeInfo
     Push-Location "LightOnOCR-2-1B"
     try {
-      conda run -n $EnvName python api.py
+      conda run --no-capture-output -n $EnvName python api.py
     }
     finally {
       Pop-Location
@@ -56,12 +81,13 @@ switch ($Service.ToLower()) {
     Write-Host "  - extract-pdf:  http://localhost:8000/ui"
     Write-Host "  - LightOnOCR:   http://localhost:7861/"
     Write-Host ""
+    Show-LightOnOCRRuntimeInfo
     
     # Start extract-pdf in background
     Write-Host "Khoi dong extract-pdf..."
     $appJob = Start-Job -ScriptBlock {
       Set-Location $using:root
-      conda run -n $using:EnvName python -m app.main
+      conda run --no-capture-output -n $using:EnvName python -m app.main
     }
     
     Start-Sleep -Seconds 2
@@ -70,7 +96,7 @@ switch ($Service.ToLower()) {
     Write-Host "Khoi dong LightOnOCR..."
     Push-Location "LightOnOCR-2-1B"
     try {
-      conda run -n $EnvName python api.py
+      conda run --no-capture-output -n $EnvName python api.py
     }
     finally {
       Pop-Location
