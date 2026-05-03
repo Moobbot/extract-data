@@ -6,7 +6,7 @@
       "label": "LightOnOCR-2-1B",
       "agent": "lightonocr",
       "model": "LightOnOCR-2-1B",
-      "base_url": "http://lightonocr:7861/extract",
+      "base_url": "http://localhost:7861/extract",
       "api_key": "",
       "output_format": "json",
       "save_to_file": true,

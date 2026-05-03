@@ -537,6 +537,7 @@ async def download_task_artifact(task_id: str, artifact_kind: str):
     Download a saved task artifact from the outputs directory.
     artifact_kind can be 'json', 'excel', 'excel_lv1', or 'excel_template'.
     """
+    artifact_kind = artifact_kind.replace("-", "_")
     if artifact_kind not in {"json", "excel", "excel_lv1", "excel_template"}:
         raise HTTPException(status_code=400, detail="Invalid artifact kind")
 

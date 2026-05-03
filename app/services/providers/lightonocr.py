@@ -70,8 +70,8 @@ class LightOnOCRProvider(AIProvider):
         body = (
             _field("prompt", prompt)
             + _field("page_num", "1")
-            + _field("temperature", "0.2")
-            + _field("max_tokens", "4096")
+            + _field("temperature", str(settings.DEFAULT_LIGHTONOCR_TEMPERATURE))
+            + _field("max_tokens", str(settings.DEFAULT_LIGHTONOCR_MAX_TOKENS))
             + file_part
             + f"--{boundary}--\r\n".encode("utf-8")
         )

@@ -18,6 +18,8 @@ class Settings:
         "LOCAL_HTTP_BASE_URL", "http://localhost:7861/extract"
     )
     DEFAULT_LOCAL_HTTP_TIMEOUT: int = int(os.getenv("LOCAL_HTTP_TIMEOUT", "300"))
+    DEFAULT_LIGHTONOCR_MAX_TOKENS: int = int(os.getenv("LIGHTONOCR_MAX_TOKENS", "4096"))
+    DEFAULT_LIGHTONOCR_TEMPERATURE: float = float(os.getenv("LIGHTONOCR_TEMPERATURE", "0.2"))
 
     # ── Output ────────────────────────────────────────────────────────────────
     DEFAULT_OUTPUT_FORMAT: str = "markdown"
