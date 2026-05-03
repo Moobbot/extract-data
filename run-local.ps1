@@ -1,0 +1,84 @@
+param(
+  [ValidateSet("app", "lightonocr", "both")]
+  [string]$Service = "app",
+  [string]$EnvName = "extract-pdf"
+)
+
+$ErrorActionPreference = "Stop"
+
+function Require-CondaEnv {
+  param([string]$Name)
+  $json = conda env list --json | ConvertFrom-Json
+  foreach ($prefix in $json.envs) {
+    if ([System.IO.Path]::GetFileName($prefix) -eq $Name) {
+      return $true
+    }
+  }
+  return $false
+}
+
+if (-not (Require-CondaEnv -Name $EnvName)) {
+  Write-Host "[ERROR] Env '$EnvName' khong ton tai."
+  Write-Host "Chay setup-all.ps1 truoc de tao env."
+  exit 1
+}
+
+$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location $root
+
+Write-Host ""
+Write-Host "==============================================="
+Write-Host "  Extract-PDF + LightOnOCR Local Runner"
+Write-Host "  ENV_NAME = $EnvName"
+Write-Host "  SERVICE  = $Service"
+Write-Host "==============================================="
+Write-Host ""
+
+switch ($Service.ToLower()) {
+  "app" {
+    Write-Host "> Chay extract-pdf app server (port 8000)"
+    Write-Host ""
+    conda run -n $EnvName python -m app.main
+  }
+  "lightonocr" {
+    Write-Host "> Chay LightOnOCR API server (port 7861)"
+    Write-Host ""
+    Push-Location "LightOnOCR-2-1B"
+    try {
+      conda run -n $EnvName python api.py
+    }
+    finally {
+      Pop-Location
+    }
+  }
+  "both" {
+    Write-Host "> Chay extract-pdf + LightOnOCR cung luc"
+    Write-Host "  - extract-pdf:  http://localhost:8000/ui"
+    Write-Host "  - LightOnOCR:   http://localhost:7861/"
+    Write-Host ""
+    
+    # Start extract-pdf in background
+    Write-Host "Khoi dong extract-pdf..."
+    $appJob = Start-Job -ScriptBlock {
+      Set-Location $using:root
+      conda run -n $using:EnvName python -m app.main
+    }
+    
+    Start-Sleep -Seconds 2
+    
+    # Start LightOnOCR in foreground
+    Write-Host "Khoi dong LightOnOCR..."
+    Push-Location "LightOnOCR-2-1B"
+    try {
+      conda run -n $EnvName python api.py
+    }
+    finally {
+      Pop-Location
+      Stop-Job -Job $appJob
+    }
+  }
+  default {
+    Write-Host "Dung: .\run-local.ps1 [app|lightonocr|both] [-EnvName <env>]"
+    exit 1
+  }
+}
