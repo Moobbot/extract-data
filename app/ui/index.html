@@ -718,6 +718,20 @@
       setStatus("Đã hết thời gian chờ tự động tải trên giao diện. Tác vụ vẫn đang chạy ngầm, bạn có thể kiểm tra kết quả trong trang Quản lý sau.", "ok");
     }
 
+    async function waitForTaskResult(taskId, maxAttempts = 120) {
+      let attempts = 0;
+      while (attempts < maxAttempts) {
+        attempts += 1;
+        const res = await fetch("/api/v1/task-status/" + encodeURIComponent(taskId));
+        const data = await res.json();
+        if (data.status === "SUCCESS" || data.status === "FAILURE") {
+          return data;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+      return { task_id: taskId, status: "TIMEOUT" };
+    }
+
     function getFilenameFromContentDisposition(value, fallbackName) {
       if (!value) {
         return fallbackName;
@@ -835,6 +849,8 @@
     submitBtn.addEventListener("click", async () => {
       submitBtn.disabled = true;
       lastContentRaw = "";
+      lastTaskId = null;
+      lastTaskResult = null;
       contentViewMode = "preview";
       previewModeBtn.classList.add("active");
       rawModeBtn.classList.remove("active");
@@ -843,13 +859,84 @@
       contentBoxEl.innerHTML = "";
       contentBoxEl.classList.remove("is-raw");
       rawResultEl.textContent = "{}";
+      downloadJsonBtn.disabled = true;
+      downloadExcelLv1Btn.disabled = true;
+      downloadExcelBtn.disabled = true;
+      copyContentBtn.disabled = true;
 
       try {
-        const file = imageFileEl.files && imageFileEl.files[0];
+        const selectedFiles = Array.from(imageFileEl.files || []);
+        const file = selectedFiles[0] || null;
         const folderPath = folderPathEl.value.trim();
 
-        if (!file && !folderPath) {
+        if (!selectedFiles.length && !folderPath) {
           throw new Error("Vui lòng chọn Ảnh/PDF hoặc nhập đường dẫn thư mục.");
+        }
+
+        if (selectedFiles.length > 1 && folderPath) {
+          throw new Error("Chỉ chọn một kiểu input: nhiều file upload hoặc đường dẫn thư mục.");
+        }
+
+        if (selectedFiles.length > 1) {
+          setStatus("Đang gửi batch " + selectedFiles.length + " file...", "");
+
+          const formData = new FormData();
+          selectedFiles.forEach((currentFile) => formData.append("files", currentFile));
+          formData.append("output_format", "json");
+          formData.append("save_to_file", "true");
+          formData.append("template", templateSelectEl.value);
+
+          const batchRes = await fetch("/api/v1/extract/batch", {
+            method: "POST",
+            body: formData
+          });
+          const batchData = await batchRes.json();
+          if (!batchRes.ok) {
+            throw new Error(batchData.detail || "Batch request thất bại");
+          }
+          if (!Array.isArray(batchData) || !batchData.length) {
+            throw new Error("Không nhận được danh sách task batch.");
+          }
+
+          const finalResults = [];
+          for (let i = 0; i < batchData.length; i += 1) {
+            const item = batchData[i];
+            if (!item.task_id) {
+              finalResults.push({ ...item, final_status: "FAILED_TO_SUBMIT" });
+              continue;
+            }
+
+            setStatus(
+              "Đang xử lý batch: " + (i + 1) + "/" + batchData.length + " (" + item.filename + ")",
+              ""
+            );
+
+            const finished = await waitForTaskResult(item.task_id);
+            finalResults.push({ ...item, task_result: finished });
+          }
+
+          rawResultEl.textContent = JSON.stringify(finalResults, null, 2);
+
+          const renderedParts = finalResults
+            .filter((entry) => entry.task_result && entry.task_result.status === "SUCCESS")
+            .map((entry) => {
+              const result = entry.task_result.result || {};
+              const content = safeValue(result.content || "");
+              return "### " + safeValue(result.filename || entry.filename || entry.task_id) + "\n\n" + content;
+            });
+
+          renderContentPreview(renderedParts.join("\n\n"));
+          copyContentBtn.disabled = renderedParts.length === 0;
+
+          const successCount = finalResults.filter(
+            (entry) => entry.task_result && entry.task_result.status === "SUCCESS"
+          ).length;
+          const failCount = finalResults.length - successCount;
+          setStatus(
+            "Batch hoàn tất: " + successCount + " thành công, " + failCount + " thất bại. Xem raw result để biết chi tiết từng file.",
+            failCount ? "err" : "ok"
+          );
+          return;
         }
 
         const payload = {

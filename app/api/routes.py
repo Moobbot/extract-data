@@ -210,6 +210,7 @@ async def extract_batch_task(
     model: Optional[str] = Form(None),
     base_url: Optional[str] = Form(None),
     api_key: Optional[str] = Form(None),
+    template: str = Form("default"),
 ):
     """
     Submits multiple images for background processing.
@@ -234,11 +235,12 @@ async def extract_batch_task(
                 output_format,
                 save_to_file,
                 agent_config,
+                template_id=template,
                 source_filename=file.filename,
             )
             from app.core.db import insert_task
 
-            insert_task(task_id, file.filename, "default")
+            insert_task(task_id, file.filename, template)
             tasks.append(
                 {"filename": file.filename, "task_id": task_id, "status": "pending"}
             )
@@ -437,17 +439,22 @@ async def get_task_status(task_id: str):
 
     # Fallback: đọc từ DB (task đã hoàn thành trước khi restart)
     from app.core.db import get_task_by_id
+
     task_row = get_task_by_id(task_id)
     if task_row:
         return {
             "status": task_row.get("status", "UNKNOWN").upper(),
             "task_id": task_id,
-            "result": {
-                "saved_to": task_row.get("json_path"),
-                "saved_excel": task_row.get("excel_path"),
-                "status": task_row.get("status"),
-                "filename": task_row.get("filename"),
-            } if task_row.get("status") == "success" else None,
+            "result": (
+                {
+                    "saved_to": task_row.get("json_path"),
+                    "saved_excel": task_row.get("excel_path"),
+                    "status": task_row.get("status"),
+                    "filename": task_row.get("filename"),
+                }
+                if task_row.get("status") == "success"
+                else None
+            ),
             "error": task_row.get("error"),
         }
 
