@@ -109,7 +109,7 @@ Yêu cầu: `OPENAI_API_KEY` trong `.env`.
 ```json
 {
   "agent": "local_http",
-  "options": { "base_url": "http://127.0.0.1:7861/ocr" }
+  "options": { "base_url": "http://127.0.0.1:7861/extract" }
 }
 ```
 

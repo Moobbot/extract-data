@@ -6,7 +6,7 @@
 python simple_extractor.py path/to/image.png --agent gemini
 python simple_extractor.py path/to/image.png --agent openai --model gpt-4o
 python simple_extractor.py path/to/image.png --agent openai_compatible --base-url http://127.0.0.1:1234/v1 --api-key local --model qwen2.5-vl
-python simple_extractor.py path/to/image.png --agent local_http --base-url http://127.0.0.1:8080/ocr
+python simple_extractor.py path/to/image.png --agent local_http --base-url http://127.0.0.1:7861/extract
 ```
 
 ## Output format
