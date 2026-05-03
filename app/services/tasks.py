@@ -266,6 +266,7 @@ def process_image_task(
                 return {"error": err_msg, "status": "failed"}
 
             folder_results = []
+            failed_files = []
             combined_lv1_rows: list[dict] = []
             combined_template_rows: list[dict] = []
             combined_content: list[str] = []
@@ -283,10 +284,13 @@ def process_image_task(
                     )
                 except Exception as e:
                     err_msg = f"AI generation failed for {os.path.basename(current_image_path)}: {str(e)}"
-                    from app.core.db import update_task_status
-
-                    update_task_status(task_id, "failed", error=err_msg)
-                    return {"error": err_msg, "status": "failed"}
+                    failed_files.append(
+                        {
+                            "filename": os.path.basename(current_image_path),
+                            "error": err_msg,
+                        }
+                    )
+                    continue
 
                 if isinstance(content_result, dict):
                     content = content_result.get("text", "")
@@ -387,6 +391,24 @@ def process_image_task(
                     }
                 )
 
+            if not folder_results:
+                from app.core.db import update_task_status
+
+                first_error = (
+                    failed_files[0]["error"]
+                    if failed_files
+                    else "Folder processing failed"
+                )
+                update_task_status(task_id, "failed", error=first_error)
+                return {
+                    "error": first_error,
+                    "status": "failed",
+                    "failed_files": failed_files,
+                    "total_files": len(folder_files),
+                    "success_count": 0,
+                    "failed_count": len(failed_files),
+                }
+
             saved_path = None
             saved_excel = None
             saved_excel_lv1 = None
@@ -476,8 +498,10 @@ def process_image_task(
                 task_id, "success", json_path=saved_path, excel_path=saved_excel
             )
 
+            result_status = "partial_success" if failed_files else "success"
+
             return {
-                "status": "success",
+                "status": result_status,
                 "agent": agent,
                 "provider": agent,
                 "format": output_format,
@@ -495,6 +519,10 @@ def process_image_task(
                 "api_base_url": api_base_url,
                 "api_json_path": api_json_path,
                 "api_excel_path": api_excel_path,
+                "total_files": len(folder_files),
+                "success_count": len(folder_results),
+                "failed_count": len(failed_files),
+                "failed_files": failed_files,
             }
 
         # 3. Generate

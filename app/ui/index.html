@@ -198,6 +198,39 @@
       line-height: 1.5;
     }
 
+    .failed-files {
+      margin-top: 12px;
+      border: 1px solid rgba(180, 35, 24, 0.24);
+      background: rgba(180, 35, 24, 0.06);
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #7a1e17;
+      font-size: 13px;
+      line-height: 1.45;
+      display: none;
+    }
+
+    .failed-files.show {
+      display: block;
+    }
+
+    .failed-files h4 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #7a1e17;
+    }
+
+    .failed-files ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .failed-files li {
+      margin: 2px 0;
+      word-break: break-word;
+    }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -523,6 +556,11 @@
             </div>
 
             <div class="field full">
+              <label for="folderUpload">Hoặc chọn Thư mục từ máy hiện tại</label>
+              <input id="folderUpload" type="file" accept="image/*,application/pdf" multiple webkitdirectory directory>
+            </div>
+
+            <div class="field full">
               <label for="folderPath">Hoặc nhập đường dẫn Thư mục trên server</label>
               <input id="folderPath" placeholder="Ví dụ: D:/data/images">
             </div>
@@ -538,6 +576,7 @@
           </div>
 
           <div id="statusText" class="status">Ready</div>
+          <div id="failedFilesBox" class="failed-files"></div>
         </div>
       </section>
     </div>
@@ -577,6 +616,7 @@
 
   <script>
     const imageFileEl = document.getElementById("imageFile");
+    const folderUploadEl = document.getElementById("folderUpload");
     const folderPathEl = document.getElementById("folderPath");
     const submitBtn = document.getElementById("submitBtn");
     const downloadJsonBtn = document.getElementById("downloadJsonBtn");
@@ -587,6 +627,7 @@
     const statusText = document.getElementById("statusText");
     const rawResultEl = document.getElementById("rawResult");
     const contentBoxEl = document.getElementById("contentBox");
+    const failedFilesBoxEl = document.getElementById("failedFilesBox");
     const templateSelectEl = document.getElementById("templateSelect");
     const previewModeBtn = document.getElementById("previewModeBtn");
     const rawModeBtn = document.getElementById("rawModeBtn");
@@ -635,6 +676,40 @@
       statusText.className = "status" + (kind ? " " + kind : "");
     }
 
+    function clearFailedFilesView() {
+      failedFilesBoxEl.classList.remove("show");
+      failedFilesBoxEl.innerHTML = "";
+    }
+
+    function renderFailedFilesView(failedFiles, meta = {}) {
+      const normalized = Array.isArray(failedFiles) ? failedFiles : [];
+      if (!normalized.length) {
+        clearFailedFilesView();
+        return;
+      }
+
+      const total = Number(meta.total_files || 0);
+      const success = Number(meta.success_count || 0);
+      const failed = Number(meta.failed_count || normalized.length);
+      const summary = total
+        ? "Tổng: " + total + " | Thành công: " + success + " | Thất bại: " + failed
+        : "Số file lỗi: " + normalized.length;
+
+      const items = normalized
+        .map((item) => {
+          const name = safeValue(item && item.filename ? item.filename : "(unknown)");
+          const err = safeValue(item && item.error ? item.error : "Lỗi không xác định");
+          return "<li><strong>" + escapeHtml(name) + "</strong>: " + escapeHtml(err) + "</li>";
+        })
+        .join("");
+
+      failedFilesBoxEl.innerHTML =
+        "<h4>Danh sách file lỗi</h4>" +
+        "<div>" + escapeHtml(summary) + "</div>" +
+        "<ul>" + items + "</ul>";
+      failedFilesBoxEl.classList.add("show");
+    }
+
     async function toBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -668,6 +743,7 @@
       downloadExcelLv1Btn.disabled = true;
       downloadExcelBtn.disabled = true;
       copyContentBtn.disabled = true;
+      clearFailedFilesView();
 
       const maxAttempts = 120;
       let attempts = 0;
@@ -689,6 +765,11 @@
           const hasExcelArtifact = savedExcel.endsWith(".xlsx");
 
           renderContentPreview(result.content || "");
+          renderFailedFilesView(result.failed_files, {
+            total_files: result.total_files,
+            success_count: result.success_count,
+            failed_count: result.failed_count
+          });
           downloadJsonBtn.disabled = !hasJsonArtifact;
           downloadExcelLv1Btn.disabled = !hasExcelLv1Artifact;
           downloadExcelBtn.disabled = !hasExcelArtifact;
@@ -703,8 +784,16 @@
         }
 
         if (data.status === "FAILURE") {
+          const failureResult = data.result && typeof data.result === "object" ? data.result : {};
+          renderFailedFilesView(failureResult.failed_files, {
+            total_files: failureResult.total_files,
+            success_count: failureResult.success_count,
+            failed_count: failureResult.failed_count
+          });
           setStatus("Task failed", "err");
           return;
+          clearFailedFilesView();
+          clearFailedFilesView();
         }
 
         if (data.status === "PENDING" || data.status === "STARTED") {
@@ -730,6 +819,14 @@
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
       return { task_id: taskId, status: "TIMEOUT" };
+    }
+
+    function isBatchTaskSuccess(entry) {
+      const wrapper = entry && entry.task_result ? entry.task_result : {};
+      const result = wrapper.result && typeof wrapper.result === "object" ? wrapper.result : {};
+      const innerStatus = safeValue(result.status).toLowerCase();
+      const hasInnerError = !!safeValue(result.error).trim();
+      return wrapper.status === "SUCCESS" && innerStatus !== "failed" && !hasInnerError;
     }
 
     function getFilenameFromContentDisposition(value, fallbackName) {
@@ -828,6 +925,9 @@
     });
 
     clearBtn.addEventListener("click", () => {
+      imageFileEl.value = "";
+      folderUploadEl.value = "";
+      folderPathEl.value = "";
       lastTaskId = null;
       lastTaskResult = null;
       lastContentRaw = "";
@@ -866,25 +966,32 @@
 
       try {
         const selectedFiles = Array.from(imageFileEl.files || []);
+        const selectedFolderFiles = Array.from(folderUploadEl.files || []);
+        const batchFiles = selectedFolderFiles.length ? selectedFolderFiles : selectedFiles;
         const file = selectedFiles[0] || null;
         const folderPath = folderPathEl.value.trim();
 
-        if (!selectedFiles.length && !folderPath) {
-          throw new Error("Vui lòng chọn Ảnh/PDF hoặc nhập đường dẫn thư mục.");
+        if (!selectedFiles.length && !selectedFolderFiles.length && !folderPath) {
+          throw new Error("Vui lòng chọn Ảnh/PDF, chọn thư mục, hoặc nhập đường dẫn thư mục.");
         }
 
-        if (selectedFiles.length > 1 && folderPath) {
-          throw new Error("Chỉ chọn một kiểu input: nhiều file upload hoặc đường dẫn thư mục.");
+        if (selectedFiles.length && selectedFolderFiles.length) {
+          throw new Error("Chỉ dùng một kiểu upload: chọn file riêng lẻ hoặc chọn cả thư mục.");
         }
 
-        if (selectedFiles.length > 1) {
-          setStatus("Đang gửi batch " + selectedFiles.length + " file...", "");
+        if (batchFiles.length && folderPath) {
+          throw new Error("Chỉ chọn một kiểu input: upload từ máy hoặc đường dẫn thư mục trên server.");
+        }
+
+        if (selectedFolderFiles.length || selectedFiles.length > 1) {
+          setStatus("Đang gửi batch " + batchFiles.length + " file dưới dạng 1 task...", "");
 
           const formData = new FormData();
-          selectedFiles.forEach((currentFile) => formData.append("files", currentFile));
+          batchFiles.forEach((currentFile) => formData.append("files", currentFile));
           formData.append("output_format", "json");
           formData.append("save_to_file", "true");
           formData.append("template", templateSelectEl.value);
+          formData.append("merge_as_folder", "true");
 
           const batchRes = await fetch("/api/v1/extract/batch", {
             method: "POST",
@@ -916,9 +1023,35 @@
           }
 
           rawResultEl.textContent = JSON.stringify(finalResults, null, 2);
+          const aggregatedFailedFiles = [];
+          finalResults.forEach((entry) => {
+            const wrapper = entry && entry.task_result ? entry.task_result : {};
+            const result = wrapper.result && typeof wrapper.result === "object" ? wrapper.result : {};
+            const failedFiles = Array.isArray(result.failed_files) ? result.failed_files : [];
+            failedFiles.forEach((failedItem) => {
+              aggregatedFailedFiles.push({
+                filename: failedItem && failedItem.filename ? failedItem.filename : entry.filename,
+                error: failedItem && failedItem.error ? failedItem.error : "Lỗi không xác định"
+              });
+            });
+
+            if (!failedFiles.length && wrapper.status === "FAILURE") {
+              const fallbackError = safeValue(result.error || wrapper.result || "Task failed");
+              aggregatedFailedFiles.push({
+                filename: safeValue(entry.filename || entry.task_id || "(unknown)"),
+                error: fallbackError
+              });
+            }
+          });
+
+          renderFailedFilesView(aggregatedFailedFiles, {
+            total_files: aggregatedFailedFiles.length + finalResults.filter((entry) => isBatchTaskSuccess(entry)).length,
+            success_count: finalResults.filter((entry) => isBatchTaskSuccess(entry)).length,
+            failed_count: aggregatedFailedFiles.length
+          });
 
           const renderedParts = finalResults
-            .filter((entry) => entry.task_result && entry.task_result.status === "SUCCESS")
+            .filter((entry) => isBatchTaskSuccess(entry))
             .map((entry) => {
               const result = entry.task_result.result || {};
               const content = safeValue(result.content || "");
@@ -928,9 +1061,7 @@
           renderContentPreview(renderedParts.join("\n\n"));
           copyContentBtn.disabled = renderedParts.length === 0;
 
-          const successCount = finalResults.filter(
-            (entry) => entry.task_result && entry.task_result.status === "SUCCESS"
-          ).length;
+          const successCount = finalResults.filter((entry) => isBatchTaskSuccess(entry)).length;
           const failCount = finalResults.length - successCount;
           setStatus(
             "Batch hoàn tất: " + successCount + " thành công, " + failCount + " thất bại. Xem raw result để biết chi tiết từng file.",

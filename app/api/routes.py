@@ -68,7 +68,20 @@ def _start_background_processing(
                 source_folder=folder,
                 task_id=tid,
             )
-            _TASK_RESULTS[tid] = {"status": "SUCCESS", "result": result}
+            is_failed_result = False
+            if isinstance(result, dict):
+                inner_status = str(result.get("status", "")).strip().lower()
+                inner_error = result.get("error")
+                is_failed_result = inner_status in {
+                    "failed",
+                    "failure",
+                    "error",
+                } or bool(inner_error)
+
+            _TASK_RESULTS[tid] = {
+                "status": "FAILURE" if is_failed_result else "SUCCESS",
+                "result": result,
+            }
         except Exception as exc:
             _TASK_RESULTS[tid] = {"status": "FAILURE", "result": str(exc)}
 
@@ -211,6 +224,7 @@ async def extract_batch_task(
     base_url: Optional[str] = Form(None),
     api_key: Optional[str] = Form(None),
     template: str = Form("default"),
+    merge_as_folder: bool = Form(False),
 ):
     """
     Submits multiple images for background processing.
@@ -218,6 +232,61 @@ async def extract_batch_task(
     """
     tasks = []
     agent_config = _build_agent_config(model=model, base_url=base_url, api_key=api_key)
+
+    if merge_as_folder:
+        from datetime import datetime
+        _ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        batch_folder_name = f"folder_{template}_{_ts}"
+        batch_folder_path = os.path.join(settings.UPLOAD_DIR, batch_folder_name)
+        os.makedirs(batch_folder_path, exist_ok=True)
+
+        saved_count = 0
+        for file in files:
+            file_ext = os.path.splitext(file.filename)[1]
+            safe_filename = f"{uuid.uuid4()}{file_ext}"
+            file_path = os.path.join(batch_folder_path, safe_filename)
+            try:
+                with open(file_path, "wb") as buffer:
+                    shutil.copyfileobj(file.file, buffer)
+                saved_count += 1
+            except Exception as e:
+                tasks.append(
+                    {"filename": file.filename, "error": str(e), "status": "failed"}
+                )
+
+        if saved_count == 0:
+            return (
+                tasks
+                if tasks
+                else [{"error": "No files were saved", "status": "failed"}]
+            )
+
+        task_id = _start_background_processing(
+            background_tasks,
+            batch_folder_path,
+            agent,
+            output_format,
+            save_to_file,
+            agent_config,
+            template_id=template,
+            source_filename=batch_folder_name,
+            source_folder=batch_folder_path,
+        )
+
+        from app.core.db import insert_task
+
+        insert_task(task_id, batch_folder_name, template, folder_path=batch_folder_path)
+        tasks.insert(
+            0,
+            {
+                "filename": batch_folder_name,
+                "task_id": task_id,
+                "status": "pending",
+                "path": batch_folder_path,
+                "total_files": saved_count,
+            },
+        )
+        return tasks
 
     for file in files:
         file_ext = os.path.splitext(file.filename)[1]
