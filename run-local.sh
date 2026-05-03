@@ -73,6 +73,9 @@ case "$SERVICE" in
         ;;
     *)
         echo "Dung: bash run-local.sh [app|lightonocr|both] [--name <env>]"
+        read -p "Press Enter to exit"
         exit 1
         ;;
 esac
+
+read -p "Press Enter to exit"

@@ -79,6 +79,9 @@ switch ($Service.ToLower()) {
   }
   default {
     Write-Host "Dung: .\run-local.ps1 [app|lightonocr|both] [-EnvName <env>]"
+    Read-Host "Press Enter to exit"
     exit 1
   }
 }
+
+Read-Host "Press Enter to exit"
