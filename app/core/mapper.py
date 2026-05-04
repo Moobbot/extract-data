@@ -101,10 +101,10 @@ def map_extracted_data(data, template_id: str):
     def _repair_month(num: int) -> int:
         if 1 <= num <= 12:
             return num
-        # # OCR hay thêm nhầm tiền tố '1' cho tháng (vd: 16 thay vì 06).
-        # if 10 <= num <= 19 and 1 <= (num % 10) <= 9:
-        #     return num % 10
-        # return num
+        # OCR hay thêm nhầm tiền tố '1' cho tháng (vd: 16 thay vì 06).
+        if 10 <= num <= 19 and 1 <= (num % 10) <= 9:
+            return num % 10
+        return num
 
     def _parse_flexible_date(value: Any) -> tuple[int, int, str] | None:
         text = str(value or "").strip()
@@ -181,6 +181,17 @@ def map_extracted_data(data, template_id: str):
         issue_date_key = "Ngày tháng năm cấp bằng"
         signer_key = "Họ, chữ đệm, tên người ký bằng"
         note_key = "Ghi chú"
+
+        # Một số bảng OCR nhầm header, đưa tên người vào cột "Tên văn bằng"
+        # với tiền tố Ông/Bà. Chỉ sửa khi field họ tên đang rỗng để tránh
+        # ghi đè tên văn bằng thật.
+        degree_name_value = str(mapped.get("Tên văn bằng", "")).strip()
+        if (
+            not str(mapped.get(name_key, "")).strip()
+            and _normalize_key(degree_name_value).startswith(("ong ", "ba "))
+        ):
+            mapped[name_key] = degree_name_value
+            mapped["Tên văn bằng"] = ""
 
         gender = _canonical_gender(mapped.get(gender_key, ""))
         next_gender = _canonical_gender(mapped.get(dob_key, ""))
