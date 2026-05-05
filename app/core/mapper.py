@@ -168,6 +168,14 @@ def map_extracted_data(data, template_id: str):
             "K" in compact and any(ch.isdigit() for ch in compact)
         )
 
+    def _has_person_title(value: Any) -> bool:
+        normalized = _normalize_key(str(value or "").strip())
+        for title in ("ong", "ba"):
+            if normalized.startswith(title):
+                tail = normalized[len(title) :]
+                return not tail or tail[0].isspace() or not ("a" <= tail[0] <= "z")
+        return False
+
     def _field_aliases(field_name: str) -> list[str]:
         aliases = [_normalize_key(field_name)]
         aliases.extend(_normalize_key(a) for a in alias_map.get(field_name, []))
@@ -243,7 +251,7 @@ def map_extracted_data(data, template_id: str):
         degree_name_value = str(mapped.get("Tên văn bằng", "")).strip()
         if (
             not str(mapped.get(name_key, "")).strip()
-            and _normalize_key(degree_name_value).startswith(("ong ", "ba "))
+            and _has_person_title(degree_name_value)
         ):
             mapped[name_key] = degree_name_value
             mapped["Tên văn bằng"] = ""

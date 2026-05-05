@@ -22,6 +22,27 @@ def test_maps_book_number_when_ocr_header_says_degree_number():
     assert mapped["Họ, chữ đệm, tên người ký bằng"] == ""
 
 
+def test_moves_name_with_title_without_space_from_degree_name_column():
+    row = {
+        "STT": "36",
+        "Số hiệu bằng": "36-LKTQ K5",
+        "Tên văn bằng": "Ông宋国",
+        "Tên phiên âm": "Mr Song Guo",
+        "GIỚI": "Nam",
+        "NGÀY SINH": "03/06/1988",
+        "XẾP LOẠI": "Khá",
+        "SỐ BẰNG": "506094",
+        "NGÀY NHẬN": "04/06/2013",
+        "KÝ, GHI TÊN": "孙国",
+    }
+
+    mapped = map_extracted_data(row, "van_bang_dai_hoc")
+
+    assert mapped["Tên văn bằng"] == ""
+    assert mapped["Họ, chữ đệm và tên"] == "Ông宋国"
+    assert mapped["Số hiệu bằng"] == "506094"
+
+
 def test_repairs_shift_when_name_tail_looks_like_gender():
     row = {
         "STT": "77",

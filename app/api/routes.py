@@ -30,6 +30,24 @@ router = APIRouter()
 _TASK_RESULTS: Dict[str, Any] = {}
 
 
+def _safe_batch_filename(original_filename: str, index: int) -> str:
+    """Return a deterministic flat filename for uploaded batch files."""
+    normalized = (original_filename or "").replace("\\", "/")
+    basename = os.path.basename(normalized) or f"file_{index}"
+    stem, ext = os.path.splitext(basename)
+    safe_stem = "".join(
+        ch if ch.isalnum() or ch in {"-", "_", "."} else "_"
+        for ch in (stem or f"file_{index}")
+    ).strip("._")
+    safe_ext = "".join(
+        ch.lower() if ch.isalnum() or ch == "." else ""
+        for ch in (ext or ".jpg")
+    )
+    if not safe_ext.startswith("."):
+        safe_ext = f".{safe_ext}"
+    return f"{index:05d}_{safe_stem or f'file_{index}'}{safe_ext}"
+
+
 def _start_background_processing(
     background_tasks: BackgroundTasks,
     image_path: str,
@@ -241,9 +259,8 @@ async def extract_batch_task(
         os.makedirs(batch_folder_path, exist_ok=True)
 
         saved_count = 0
-        for file in files:
-            file_ext = os.path.splitext(file.filename)[1]
-            safe_filename = f"{uuid.uuid4()}{file_ext}"
+        for index, file in enumerate(files, start=1):
+            safe_filename = _safe_batch_filename(file.filename, index)
             file_path = os.path.join(batch_folder_path, safe_filename)
             try:
                 with open(file_path, "wb") as buffer:

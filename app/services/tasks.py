@@ -231,6 +231,31 @@ def process_image_task(
         except Exception:
             return None
 
+    def _numeric_stt(value: Any) -> Optional[int]:
+        text = str(value or "").strip()
+        return int(text) if text.isdigit() else None
+
+    def _sort_rows_by_stt(rows: list[dict]) -> list[dict]:
+        indexed_rows = [(idx, row) for idx, row in enumerate(rows)]
+        numeric_count = sum(
+            1
+            for _, row in indexed_rows
+            if _numeric_stt(row.get("STT")) is not None
+        )
+        if numeric_count < 2:
+            return rows
+        return [
+            row
+            for _, row in sorted(
+                indexed_rows,
+                key=lambda item: (
+                    _numeric_stt(item[1].get("STT")) is None,
+                    _numeric_stt(item[1].get("STT")) or 0,
+                    item[0],
+                ),
+            )
+        ]
+
     try:
         # 1. Get Provider
         try:
@@ -452,6 +477,12 @@ def process_image_task(
                 )
 
                 if output_format == "json":
+                    if template_id == "van_bang_dai_hoc":
+                        combined_lv1_rows = _sort_rows_by_stt(combined_lv1_rows)
+                        combined_template_rows = _sort_rows_by_stt(
+                            combined_template_rows
+                        )
+
                     with open(saved_path, "w", encoding="utf-8") as f:
                         json.dump(folder_results, f, ensure_ascii=False, indent=2)
 

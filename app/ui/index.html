@@ -967,7 +967,21 @@
       try {
         const selectedFiles = Array.from(imageFileEl.files || []);
         const selectedFolderFiles = Array.from(folderUploadEl.files || []);
-        const batchFiles = selectedFolderFiles.length ? selectedFolderFiles : selectedFiles;
+        const batchFiles = selectedFolderFiles.length
+          ? Array.from(selectedFolderFiles).sort((a, b) =>
+              (a.webkitRelativePath || a.name).localeCompare(
+                b.webkitRelativePath || b.name,
+                undefined,
+                { numeric: true, sensitivity: "base" }
+              )
+            )
+          : Array.from(selectedFiles).sort((a, b) =>
+              a.name.localeCompare(
+                b.name,
+                undefined,
+                { numeric: true, sensitivity: "base" }
+              )
+            );
         const file = selectedFiles[0] || null;
         const folderPath = folderPathEl.value.trim();
 
@@ -987,7 +1001,13 @@
           setStatus("Đang gửi batch " + batchFiles.length + " file dưới dạng 1 task...", "");
 
           const formData = new FormData();
-          batchFiles.forEach((currentFile) => formData.append("files", currentFile));
+          batchFiles.forEach((currentFile) => {
+            formData.append(
+              "files",
+              currentFile,
+              currentFile.webkitRelativePath || currentFile.name
+            );
+          });
           formData.append("output_format", "json");
           formData.append("save_to_file", "true");
           formData.append("template", templateSelectEl.value);
