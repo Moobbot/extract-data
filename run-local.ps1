@@ -1,7 +1,12 @@
 param(
   [ValidateSet("app", "lightonocr", "both")]
   [string]$Service = "app",
-  [string]$EnvName = "extract-pdf"
+  [string]$EnvName = "extract-pdf",
+  [AllowEmptyString()]
+  [ValidateSet("", "cpu", "gpu", "cuda", "auto")]
+  [string]$Device = "",
+  [switch]$Cpu,
+  [switch]$Gpu
 )
 
 $ErrorActionPreference = "Stop"
@@ -50,11 +55,28 @@ if (-not (Require-CondaEnv -Name $EnvName)) {
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $root
 
+$deviceArgs = @()
+if ($Device) { $deviceArgs += $Device }
+if ($Cpu) { $deviceArgs += "cpu" }
+if ($Gpu) { $deviceArgs += "gpu" }
+
+if ($deviceArgs.Count -gt 1) {
+  Write-Host "[ERROR] Chi duoc chon mot device: -Device <cpu|gpu|cuda|auto>, -Cpu, hoac -Gpu."
+  exit 1
+}
+
+if ($deviceArgs.Count -eq 1) {
+  $env:LIGHTONOCR_DEVICE = $deviceArgs[0]
+}
+
 Write-Host ""
 Write-Host "==============================================="
 Write-Host "  Extract-PDF + LightOnOCR Local Runner"
 Write-Host "  ENV_NAME = $EnvName"
 Write-Host "  SERVICE  = $Service"
+if ($deviceArgs.Count -eq 1) {
+  Write-Host "  DEVICE   = $($deviceArgs[0])"
+}
 Write-Host "==============================================="
 Write-Host ""
 
@@ -104,7 +126,7 @@ switch ($Service.ToLower()) {
     }
   }
   default {
-    Write-Host "Dung: .\run-local.ps1 [app|lightonocr|both] [-EnvName <env>]"
+    Write-Host "Dung: .\run-local.ps1 [app|lightonocr|both] [-EnvName <env>] [-Cpu|-Gpu|-Device cpu|gpu|cuda|auto]"
     Read-Host "Press Enter to exit"
     exit 1
   }

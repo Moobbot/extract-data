@@ -3,11 +3,24 @@ set -euo pipefail
 
 SERVICE="app"
 ENV_NAME="extract-pdf"
+DEVICE_MODE=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
         app|lightonocr|both)
             SERVICE="$1"
+            shift
+            ;;
+        --device)
+            DEVICE_MODE="${2:-}"
+            shift 2
+            ;;
+        --cpu)
+            DEVICE_MODE="cpu"
+            shift
+            ;;
+        --gpu)
+            DEVICE_MODE="gpu"
             shift
             ;;
         --name)
@@ -16,11 +29,17 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
             echo "[ERROR] Tham so khong hop le: $1"
-            echo "Dung: bash run-local.sh [app|lightonocr|both] [--name <env>]"
+            echo "Dung: bash run-local.sh [app|lightonocr|both] [--name <env>] [--cpu|--gpu|--device cpu|gpu|auto]"
             exit 1
             ;;
     esac
 done
+
+if [[ -n "$DEVICE_MODE" && "$DEVICE_MODE" != "cpu" && "$DEVICE_MODE" != "gpu" && "$DEVICE_MODE" != "cuda" && "$DEVICE_MODE" != "auto" ]]; then
+    echo "[ERROR] DEVICE khong hop le: $DEVICE_MODE"
+    echo "Dung: --device cpu|gpu|cuda|auto"
+    exit 1
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
@@ -37,8 +56,16 @@ echo "==============================================="
 echo "  Extract-PDF + LightOnOCR Local Runner"
 echo "  ENV_NAME = $ENV_NAME"
 echo "  SERVICE  = $SERVICE"
+if [[ -n "$DEVICE_MODE" ]]; then
+    echo "  DEVICE   = $DEVICE_MODE"
+fi
 echo "==============================================="
 echo ""
+
+LIGHTONOCR_ENV=()
+if [[ -n "$DEVICE_MODE" ]]; then
+    LIGHTONOCR_ENV=("LIGHTONOCR_DEVICE=$DEVICE_MODE")
+fi
 
 case "$SERVICE" in
     app)
@@ -50,7 +77,7 @@ case "$SERVICE" in
         echo "> Chay LightOnOCR API server (port 7861)"
         echo ""
         cd LightOnOCR-2-1B
-        conda run -n "$ENV_NAME" python api.py
+        env "${LIGHTONOCR_ENV[@]}" conda run -n "$ENV_NAME" python api.py
         ;;
     both)
         echo "> Chay extract-pdf + LightOnOCR cung luc"
@@ -69,10 +96,10 @@ case "$SERVICE" in
         echo "Khoi dong LightOnOCR..."
         cd LightOnOCR-2-1B
         trap "kill $APP_PID 2>/dev/null || true" EXIT
-        conda run -n "$ENV_NAME" python api.py
+        env "${LIGHTONOCR_ENV[@]}" conda run -n "$ENV_NAME" python api.py
         ;;
     *)
-        echo "Dung: bash run-local.sh [app|lightonocr|both] [--name <env>]"
+        echo "Dung: bash run-local.sh [app|lightonocr|both] [--name <env>] [--cpu|--gpu|--device cpu|gpu|auto]"
         read -p "Press Enter to exit"
         exit 1
         ;;

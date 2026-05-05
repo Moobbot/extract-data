@@ -10,12 +10,22 @@
         "số hiệu bằng",
         "so bang nganh nhan",
         "số bằng ngành nhân",
+        "so bang ngay nhan",
+        "số bằng ngày nhận",
+        "so bang ngay nhân",
+        "số bằng ngày nhân",
+        "so bang ngay nhẫn",
+        "số bằng ngày nhẫn",
         "so bang",
         "số bằng"
       ],
       "Số vào sổ gốc cấp văn bằng": [
         "so vao so",
         "số vào sổ",
+        "so vao so goc",
+        "số vào sổ gốc",
+        "so vao so goc cap bang",
+        "số vào sổ gốc cấp bằng",
         "so vao so goc cap van bang",
         "số vào sổ gốc cấp văn bằng"
       ],
@@ -28,7 +38,9 @@
         "t tiếng trung",
         "hồ và tên",
         "hồ và tên",
-        "hộ và tên"
+        "hộ và tên",
+        "ho van bang",
+        "hộ văn bằng"
       ],
       "Giới tính": [
         "gioi",
@@ -40,6 +52,8 @@
       "Ngày, tháng, năm sinh": [
         "ngay sinh",
         "ngày sinh",
+        "ngay singh",
+        "ngày singh",
         "nam sinh"
       ],
       "Xếp loại/hạng tốt nghiệp": [

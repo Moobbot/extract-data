@@ -334,16 +334,13 @@ def process_image_task(
                     parsed = _extract_records_for_mapping(parsed)
 
                     if isinstance(parsed, list):
-                        parsed = [
-                            map_extracted_data(item, template_id) for item in parsed
-                        ]
+                        parsed = map_extracted_data(parsed, template_id)
                         parsed = _flatten_mapped_rows(parsed)
                     elif isinstance(parsed, dict):
                         if "result" in parsed and isinstance(parsed["result"], list):
-                            parsed["result"] = [
-                                map_extracted_data(item, template_id)
-                                for item in parsed["result"]
-                            ]
+                            parsed["result"] = map_extracted_data(
+                                parsed["result"], template_id
+                            )
                             parsed["result"] = _flatten_mapped_rows(parsed["result"])
                         else:
                             parsed = map_extracted_data(parsed, template_id)
@@ -650,17 +647,14 @@ def process_image_task(
                     parsed = _extract_records_for_mapping(parsed)
 
                     if isinstance(parsed, list):
-                        parsed = [
-                            map_extracted_data(item, template_id) for item in parsed
-                        ]
+                        parsed = map_extracted_data(parsed, template_id)
                         parsed = _flatten_mapped_rows(parsed)
                     elif isinstance(parsed, dict):
                         # Đôi khi LightOnOCR trả về dict chứa key "result" -> list
                         if "result" in parsed and isinstance(parsed["result"], list):
-                            parsed["result"] = [
-                                map_extracted_data(item, template_id)
-                                for item in parsed["result"]
-                            ]
+                            parsed["result"] = map_extracted_data(
+                                parsed["result"], template_id
+                            )
                             parsed["result"] = _flatten_mapped_rows(parsed["result"])
                         else:
                             parsed = map_extracted_data(parsed, template_id)

@@ -164,17 +164,17 @@ def write_rows_to_template(
         for col_name, col_idx in header_map.items():
             cell = ws.cell(row=excel_row, column=col_idx + 1)
 
-            # Tự động điền STT
-            if col_name in stt_keys:
-                cell.value = start_stt + row_offset
-                continue
-
             # Tìm giá trị trong record (khớp không phân biệt hoa thường)
             value = None
             for record_key, record_val in record.items():
                 if record_key.strip().lower() == col_name:
                     value = record_val
                     break
+
+            # Ưu tiên STT đã extract từ ảnh; chỉ tự điền khi record không có STT.
+            if col_name in stt_keys and (value is None or value == ""):
+                cell.value = start_stt + row_offset
+                continue
 
             if value is not None:
                 cell.value = value if value != "" else None
@@ -258,5 +258,4 @@ def get_template_sheet_name(template_id: str) -> str:
         return templates.get(template_id, {}).get("excel_data_sheet", "Data")
     except Exception:
         return "Data"
-
 
