@@ -52,7 +52,7 @@ else {
 }
 
 Write-Host "> Cai dependencies chinh tu requirements.txt"
-conda run -n $Name python -m pip install --upgrade pip
+# conda run -n $Name python -m pip install --upgrade pip
 conda run -n $Name python -m pip install -r requirements.txt
 
 if ($WithLightOnOCR) {

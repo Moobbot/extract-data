@@ -73,27 +73,24 @@ def map_extracted_data(data, template_id: str):
     def _normalize_key(text: str) -> str:
         return unaccent_and_lower(text or "")
 
+    def _compact_key(text: str) -> str:
+        normalized = _normalize_key(text)
+        return "".join(ch for ch in normalized if ch.isalnum())
+
     def _canonical_gender(value: Any) -> str:
         normalized = _normalize_key(str(value).strip())
         if normalized == "nam":
             return "Nam"
-        if normalized == "nu":
+        # OCR thường đọc "Nữ" thành "Ng", "Ngữ" hoặc "Ngu".
+        if normalized in {"nu", "ng", "ngu"}:
             return "Nữ"
         if normalized == "khac":
             return "Khác"
         return ""
 
     def _looks_like_date(value: Any) -> bool:
-        text = str(value or "").strip()
-        if not text:
-            return False
-        parts = text.split("/")
-        if len(parts) != 3:
-            return False
-        if not all(part.isdigit() for part in parts):
-            return False
-        day, month, year = parts
-        return 1 <= len(day) <= 2 and 1 <= len(month) <= 2 and len(year) == 4
+        parsed = _parse_flexible_date(value)
+        return parsed is not None and bool(parsed[2])
 
     def _looks_like_flexible_date(value: Any) -> bool:
         return _parse_flexible_date(value) is not None
@@ -107,7 +104,7 @@ def map_extracted_data(data, template_id: str):
         return num
 
     def _parse_flexible_date(value: Any) -> tuple[int, int, str] | None:
-        text = str(value or "").strip()
+        text = str(value or "").strip().replace("-", "/")
         if not text:
             return None
         parts = text.split("/")
@@ -127,6 +124,9 @@ def map_extracted_data(data, template_id: str):
             year_raw = parts[2]
             if len(year_raw) == 2:
                 year = f"20{year_raw}"
+            elif len(year_raw) == 3 and year_raw.startswith("1"):
+                # OCR hay mất chữ số đầu của năm: 2013 -> 113.
+                year = f"20{year_raw[-2:]}"
             elif len(year_raw) == 4:
                 year = year_raw
             else:
@@ -159,17 +159,72 @@ def map_extracted_data(data, template_id: str):
         text = str(value or "").strip().replace(" ", "")
         return bool(text) and text.isdigit() and len(text) >= 4
 
-    def _extract_with_aliases(record: dict, field_name: str) -> Any:
-        wanted = _normalize_key(field_name)
-        aliases = [wanted]
+    def _looks_like_book_number(value: Any) -> bool:
+        text = str(value or "").strip()
+        if not text:
+            return False
+        compact = text.replace(" ", "").upper()
+        return "/" in text or "-LKTQ" in compact or (
+            "K" in compact and any(ch.isdigit() for ch in compact)
+        )
+
+    def _field_aliases(field_name: str) -> list[str]:
+        aliases = [_normalize_key(field_name)]
         aliases.extend(_normalize_key(a) for a in alias_map.get(field_name, []))
+        return aliases
 
-        for k, v in record.items():
-            if _normalize_key(str(k)) in aliases:
-                return v
-        return ""
+    def _candidate_values(record: dict, field_name: str) -> list[tuple[str, Any]]:
+        aliases = set(_field_aliases(field_name))
+        return [
+            (str(k), v)
+            for k, v in record.items()
+            if _normalize_key(str(k)) in aliases
+        ]
 
-    def _fix_van_bang_shift(mapped: dict) -> dict:
+    def _raw_values_by_compact_aliases(
+        record: dict, aliases: set[str]
+    ) -> list[tuple[str, Any]]:
+        return [
+            (str(k), v)
+            for k, v in record.items()
+            if _compact_key(str(k)) in aliases
+        ]
+
+    def _extract_with_aliases(record: dict, field_name: str) -> Any:
+        candidates = _candidate_values(record, field_name)
+        return candidates[0][1] if candidates else ""
+
+    def _extract_template_value(record: dict, field_name: str) -> Any:
+        if template_id != "van_bang_dai_hoc":
+            return _extract_with_aliases(record, field_name)
+
+        degree_key = "Số hiệu bằng"
+        book_key = "Số vào sổ gốc cấp văn bằng"
+
+        if field_name == degree_key:
+            candidates = _candidate_values(record, field_name)
+            for _, value in candidates:
+                if _looks_like_degree_number(value):
+                    return value
+            return candidates[0][1] if candidates else ""
+
+        if field_name == book_key:
+            candidates = _candidate_values(record, field_name)
+            for _, value in candidates:
+                if _looks_like_book_number(value):
+                    return value
+
+            # Một vài trang OCR nhầm header cột "Số vào sổ" thành
+            # "Số hiệu bằng"; chỉ dùng làm số vào sổ nếu value có dạng sổ.
+            for _, value in _raw_values_by_compact_aliases(record, {"sohieubang"}):
+                if _looks_like_book_number(value):
+                    return value
+
+            return candidates[0][1] if candidates else ""
+
+        return _extract_with_aliases(record, field_name)
+
+    def _fix_van_bang_shift(mapped: dict, record: dict | None = None) -> dict:
         if template_id != "van_bang_dai_hoc":
             return mapped
 
@@ -199,7 +254,13 @@ def map_extracted_data(data, template_id: str):
 
         # When gender column accidentally receives the tail of person's name,
         # and the true gender shifts into the next column, shift values right.
-        if not gender and next_gender and rank_is_date:
+        shifted_columns = next_gender and rank_is_date and (
+            not gender
+            or _looks_like_rank(mapped.get(degree_key, ""))
+            or _looks_like_degree_number(mapped.get(issue_date_key, ""))
+            or _looks_like_flexible_date(mapped.get(signer_key, ""))
+        )
+        if shifted_columns:
             extra_name = str(mapped.get(gender_key, "")).strip()
             base_name = str(mapped.get(name_key, "")).strip()
             if extra_name:
@@ -215,8 +276,31 @@ def map_extracted_data(data, template_id: str):
             mapped[dob_key] = old_rank
             mapped[rank_key] = old_degree
             mapped[degree_key] = old_signer
-            mapped[signer_key] = old_note
+            mapped[signer_key] = (
+                old_note
+                if (
+                    _looks_like_flexible_date(old_note)
+                    or _looks_like_degree_number(old_note)
+                    or _looks_like_rank(old_note)
+                )
+                else ""
+            )
             mapped[note_key] = ""
+
+        # Một biến thể nhẹ hơn: cột giới tính chứa phần cuối của họ tên,
+        # nhưng các cột sau đó không bị shift. Khi đó chỉ ghép tên và để
+        # giới tính trống, không đoán giới tính nếu OCR không cung cấp.
+        elif (
+            not gender
+            and not next_gender
+            and str(mapped.get(gender_key, "")).strip()
+            and _looks_like_date(mapped.get(dob_key, ""))
+            and _looks_like_rank(mapped.get(rank_key, ""))
+        ):
+            extra_name = str(mapped.get(gender_key, "")).strip()
+            base_name = str(mapped.get(name_key, "")).strip()
+            mapped[name_key] = (base_name + " " + extra_name).strip()
+            mapped[gender_key] = ""
 
         # Nếu số hiệu bằng và ngày cấp bằng bị tráo vị trí sau khi shift,
         # đổi lại: số hiệu bằng phải là chuỗi số, ngày cấp bằng phải giống ngày.
@@ -248,17 +332,21 @@ def map_extracted_data(data, template_id: str):
             signer_value = str(mapped.get(signer_key, "")).strip()
             note_value = str(mapped.get(note_key, "")).strip()
 
-            if not str(mapped.get(issue_date_key, "")).strip() and _looks_like_date(
-                signer_value
-            ):
+            if not str(
+                mapped.get(issue_date_key, "")
+            ).strip() and _looks_like_flexible_date(signer_value):
                 mapped[issue_date_key] = signer_value
                 mapped[signer_key] = ""
 
-            if not str(mapped.get(issue_date_key, "")).strip() and _looks_like_date(
-                note_value
-            ):
+            if not str(
+                mapped.get(issue_date_key, "")
+            ).strip() and _looks_like_flexible_date(note_value):
                 mapped[issue_date_key] = note_value
                 mapped[note_key] = ""
+
+        # Chuẩn hoá định dạng ngày sinh nếu nhận được ngày hợp lệ.
+        if str(mapped.get(dob_key, "")).strip():
+            mapped[dob_key] = _normalize_flexible_date(mapped.get(dob_key, ""))
 
         # Chuẩn hoá định dạng ngày cấp bằng (hỗ trợ dd/mm/yy).
         if str(mapped.get(issue_date_key, "")).strip():
@@ -282,7 +370,49 @@ def map_extracted_data(data, template_id: str):
             mapped[rank_key] = signer_value
             mapped[signer_key] = ""
 
+        canonical_gender = _canonical_gender(mapped.get(gender_key, ""))
+        if canonical_gender:
+            mapped[gender_key] = canonical_gender
+
+        # Cột OCR "Ký, ghi tên" là chữ ký/người nhận trong danh sách,
+        # không phải "Họ, chữ đệm, tên người ký bằng" của template import.
+        if record:
+            signature_values = [
+                str(value).strip()
+                for _, value in _raw_values_by_compact_aliases(
+                    record, {"kyghiten", "kyhenten"}
+                )
+                if str(value or "").strip()
+            ]
+            signer_value = str(mapped.get(signer_key, "")).strip()
+            if signer_value and signer_value in signature_values:
+                mapped[signer_key] = ""
+
         return mapped
+
+    def _postprocess_mapped_rows(rows: list[dict]) -> list[dict]:
+        if template_id != "van_bang_dai_hoc":
+            return rows
+
+        issue_date_key = "Ngày tháng năm cấp bằng"
+        year_counts: dict[str, int] = {}
+
+        for row in rows:
+            parsed = _parse_flexible_date(row.get(issue_date_key, ""))
+            if parsed and parsed[2]:
+                year_counts[parsed[2]] = year_counts.get(parsed[2], 0) + 1
+
+        if not year_counts:
+            return rows
+
+        common_year = max(year_counts.items(), key=lambda item: item[1])[0]
+        for row in rows:
+            parsed = _parse_flexible_date(row.get(issue_date_key, ""))
+            if parsed and not parsed[2]:
+                day, month, _ = parsed
+                row[issue_date_key] = f"{day:02d}/{month:02d}/{common_year}"
+
+        return rows
 
     def _extract_rows_from_ocr_payload(obj: Any) -> list:
         rows = []
@@ -312,14 +442,14 @@ def map_extracted_data(data, template_id: str):
                 continue
 
             category_name = field.get("category")
-            raw_value = _extract_with_aliases(record, field_name)
+            raw_value = _extract_template_value(record, field_name)
 
             if raw_value is None:
                 raw_value = ""
 
             mapped[field_name] = raw_value
 
-        mapped = _fix_van_bang_shift(mapped)
+        mapped = _fix_van_bang_shift(mapped, record)
 
         for field in template_fields:
             field_name = field.get("name", "")
@@ -349,16 +479,23 @@ def map_extracted_data(data, template_id: str):
             extracted_rows.extend(_extract_rows_from_ocr_payload(item))
 
         if extracted_rows:
-            return [_map_one_record(row) for row in extracted_rows]
+            return _postprocess_mapped_rows(
+                [_map_one_record(row) for row in extracted_rows]
+            )
 
-        return [
+        mapped_rows = [
             _map_one_record(item) if isinstance(item, dict) else item for item in data
         ]
+        if all(isinstance(row, dict) for row in mapped_rows):
+            return _postprocess_mapped_rows(mapped_rows)
+        return mapped_rows
 
     if isinstance(data, dict):
         extracted_rows = _extract_rows_from_ocr_payload(data)
         if extracted_rows:
-            return [_map_one_record(row) for row in extracted_rows]
+            return _postprocess_mapped_rows(
+                [_map_one_record(row) for row in extracted_rows]
+            )
         return _map_one_record(data)
 
     return data
