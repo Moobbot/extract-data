@@ -2,6 +2,8 @@ from app.services.ai_providers import AIProviderFactory
 from app.services.prompt_manager import PromptManager
 import os
 import json
+import shutil
+import tempfile
 from datetime import datetime
 from typing import Any, Dict, Optional
 from pathlib import Path
@@ -23,6 +25,23 @@ def process_image_task(
     """
     Background task to process an image.
     """
+    folder_content_spool_path: Optional[str] = None
+
+    def _int_env(name: str, default: int) -> int:
+        try:
+            return max(0, int(os.getenv(name, str(default))))
+        except ValueError:
+            return default
+
+    content_preview_limit = _int_env("TASK_RESULT_CONTENT_PREVIEW_CHARS", 12000)
+    per_file_ocr_preview_limit = _int_env("TASK_RESULT_OCR_TEXT_PREVIEW_CHARS", 2000)
+
+    def _truncate_text(text: Any, limit: int) -> tuple[str, bool]:
+        value = "" if text is None else str(text)
+        if limit and len(value) > limit:
+            return value[:limit], True
+        return value, False
+
     resolved_source_filename = source_filename
     resolved_source_folder = source_folder
     if task_id != "unknown" and (
@@ -294,10 +313,20 @@ def process_image_task(
             failed_files = []
             combined_lv1_rows: list[dict] = []
             combined_template_rows: list[dict] = []
-            combined_content: list[str] = []
+            content_preview_parts: list[str] = []
+            content_preview_chars = 0
+            content_preview_truncated = False
             api_base_url = None
             api_json_path = None
             api_excel_path = None
+
+            if save_to_file and output_format != "json":
+                fd, folder_content_spool_path = tempfile.mkstemp(
+                    prefix="extract_folder_content_",
+                    suffix=".md",
+                    text=True,
+                )
+                os.close(fd)
 
             for index, current_image_path in enumerate(folder_files, start=1):
                 if not os.path.isfile(current_image_path):
@@ -325,9 +354,24 @@ def process_image_task(
                 else:
                     content = content_result
 
-                combined_content.append(
-                    f"### {os.path.basename(current_image_path)}\n\n{content}"
+                content_block = f"### {os.path.basename(current_image_path)}\n\n{content}"
+                if folder_content_spool_path:
+                    with open(folder_content_spool_path, "a", encoding="utf-8") as f:
+                        if os.path.getsize(folder_content_spool_path) > 0:
+                            f.write("\n\n")
+                        f.write(content_block)
+
+                preview_block = (
+                    f"\n\n{content_block}" if content_preview_parts else content_block
                 )
+                remaining_preview = content_preview_limit - content_preview_chars
+                if remaining_preview > 0:
+                    content_preview_parts.append(preview_block[:remaining_preview])
+                    content_preview_chars += min(len(preview_block), remaining_preview)
+                    if len(preview_block) > remaining_preview:
+                        content_preview_truncated = True
+                else:
+                    content_preview_truncated = True
 
                 parsed = None
                 if output_format == "json":
@@ -388,10 +432,14 @@ def process_image_task(
                     elif isinstance(mapped_rows, dict):
                         combined_template_rows.append(mapped_rows)
 
+                ocr_text_preview, ocr_text_truncated = _truncate_text(
+                    content, per_file_ocr_preview_limit
+                )
                 folder_results.append(
                     {
                         "filename": os.path.basename(current_image_path),
-                        "ocr_text": content,
+                        "ocr_text": ocr_text_preview,
+                        "ocr_text_truncated": ocr_text_truncated,
                         "tables": (
                             parsed.get("tables", []) if isinstance(parsed, dict) else []
                         ),
@@ -517,8 +565,13 @@ def process_image_task(
 
                     saved_excel = saved_excel_template or saved_excel_lv1
                 else:
-                    with open(saved_path, "w", encoding="utf-8") as f:
-                        f.write("\n\n".join(combined_content))
+                    if folder_content_spool_path and os.path.exists(
+                        folder_content_spool_path
+                    ):
+                        shutil.copyfile(folder_content_spool_path, saved_path)
+                    else:
+                        with open(saved_path, "w", encoding="utf-8") as f:
+                            f.write("".join(content_preview_parts))
 
             from app.core.db import update_task_status
 
@@ -539,7 +592,8 @@ def process_image_task(
                     if resolved_source_folder
                     else None
                 ),
-                "content": "\n\n".join(combined_content),
+                "content": "".join(content_preview_parts),
+                "content_truncated": content_preview_truncated,
                 "saved_to": saved_path,
                 "saved_excel": saved_excel,
                 "saved_excel_lv1": saved_excel_lv1,
@@ -787,6 +841,11 @@ def process_image_task(
         # Let Celery record the real exception payload (exc_type, traceback, ...).
         raise
     finally:
+        if folder_content_spool_path and os.path.exists(folder_content_spool_path):
+            try:
+                os.remove(folder_content_spool_path)
+            except Exception:
+                pass
         # Cleanup uploaded file if needed?
         # For now, let's keep it or manage cleanup policy separately
         # os.remove(image_path)

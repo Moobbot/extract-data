@@ -48,6 +48,62 @@ def _safe_batch_filename(original_filename: str, index: int) -> str:
     return f"{index:05d}_{safe_stem or f'file_{index}'}{safe_ext}"
 
 
+def _task_result_content_limit() -> int:
+    try:
+        return max(0, int(os.getenv("TASK_RESULT_CONTENT_PREVIEW_CHARS", "12000")))
+    except ValueError:
+        return 12000
+
+
+def _compact_task_result(result: Any) -> Any:
+    """Keep task status payload small; full outputs stay in saved artifacts."""
+    if not isinstance(result, dict):
+        return result
+
+    keep_keys = {
+        "status",
+        "agent",
+        "provider",
+        "format",
+        "filename",
+        "folder_name",
+        "saved_to",
+        "saved_excel",
+        "saved_excel_lv1",
+        "saved_excel_template",
+        "api_base_url",
+        "api_json_path",
+        "api_excel_path",
+        "total_files",
+        "success_count",
+        "failed_count",
+        "failed_files",
+        "error",
+    }
+    compact = {key: result[key] for key in keep_keys if key in result}
+
+    content = result.get("content")
+    if isinstance(content, str):
+        limit = _task_result_content_limit()
+        truncated_by_task = bool(result.get("content_truncated"))
+        if limit <= 0:
+            compact["content"] = ""
+            compact["content_truncated"] = bool(content) or truncated_by_task
+        elif len(content) > limit:
+            compact["content"] = (
+                content[:limit]
+                + "\n\n[Output truncated in task status. Download the saved artifact for the full result.]"
+            )
+            compact["content_truncated"] = True
+        else:
+            compact["content"] = content
+            compact["content_truncated"] = truncated_by_task
+    elif "content" in result:
+        compact["content"] = content
+
+    return compact
+
+
 def _start_background_processing(
     background_tasks: BackgroundTasks,
     image_path: str,
@@ -98,7 +154,7 @@ def _start_background_processing(
 
             _TASK_RESULTS[tid] = {
                 "status": "FAILURE" if is_failed_result else "SUCCESS",
-                "result": result,
+                "result": _compact_task_result(result),
             }
         except Exception as exc:
             _TASK_RESULTS[tid] = {"status": "FAILURE", "result": str(exc)}
