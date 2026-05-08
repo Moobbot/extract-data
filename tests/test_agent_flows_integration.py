@@ -250,26 +250,54 @@ def test_download_task_artifact_endpoint(monkeypatch, tmp_path):
 
     client = get_test_client()
     json_file = tmp_path / "sample.json"
+    raw_file = tmp_path / "sample_raw_lightonocr.json"
+    lv1_json_file = tmp_path / "sample_lv1.json"
     excel_file = tmp_path / "sample.xlsx"
+    zip_dir = tmp_path / "per_image_zips"
+    zip_file = zip_dir / "task-123_per_image_artifacts.zip"
     json_file.write_text('{"name": "Alice"}', encoding="utf-8")
+    raw_file.write_text('{"raw": true}', encoding="utf-8")
+    lv1_json_file.write_text('{"lv1": true}', encoding="utf-8")
     excel_file.write_bytes(b"fake-xlsx")
+    zip_dir.mkdir()
+    zip_file.write_bytes(b"fake-zip")
 
     monkeypatch.setattr(routes.settings, "OUTPUT_DIR", str(tmp_path))
-
-    class DummyAsyncResult:
-        state = "SUCCESS"
-        result = {"saved_to": str(json_file), "saved_excel": str(excel_file)}
-
-    monkeypatch.setattr(routes, "AsyncResult", lambda task_id: DummyAsyncResult())
+    routes._TASK_RESULTS["task-123"] = {
+        "status": "SUCCESS",
+        "result": {
+            "saved_to": str(json_file),
+            "saved_raw_lightonocr_json": str(raw_file),
+            "saved_lv1_json": str(lv1_json_file),
+            "saved_excel": str(excel_file),
+            "saved_per_image_zip": str(zip_file),
+        },
+    }
 
     json_response = client.get("/api/v1/task-artifact/task-123/json")
+    raw_response = client.get("/api/v1/task-artifact/task-123/raw-json")
+    lv1_json_response = client.get("/api/v1/task-artifact/task-123/lv1-json")
     excel_response = client.get("/api/v1/task-artifact/task-123/excel")
+    zip_response = client.get("/api/v1/task-artifact/task-123/per-image-zip")
 
     assert json_response.status_code == 200
+    assert raw_response.status_code == 200
+    assert lv1_json_response.status_code == 200
     assert excel_response.status_code == 200
+    assert zip_response.status_code == 200
     assert json_response.headers["content-disposition"].endswith(
         'filename="sample.json"'
+    )
+    assert raw_response.headers["content-disposition"].endswith(
+        'filename="sample_raw_lightonocr.json"'
+    )
+    assert lv1_json_response.headers["content-disposition"].endswith(
+        'filename="sample_lv1.json"'
     )
     assert excel_response.headers["content-disposition"].endswith(
         'filename="sample.xlsx"'
     )
+    assert zip_response.headers["content-disposition"].endswith(
+        'filename="task-123_per_image_artifacts.zip"'
+    )
+    routes._TASK_RESULTS.pop("task-123", None)

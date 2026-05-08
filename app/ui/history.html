@@ -703,6 +703,7 @@
                 <button class="btn dl-btn" ${task.json_path ? `data-task-id="${task.id}" data-kind="json" data-fallback-name="${slug}.json"` : 'disabled'}>JSON</button>
                 <button class="btn dl-btn" ${task.excel_path ? `data-task-id="${task.id}" data-kind="excel-lv1" data-fallback-name="excel_${slug}_lv1.xlsx"` : 'disabled'}>Excel Gốc</button>
                 <button class="btn dl-btn" ${task.excel_path ? `data-task-id="${task.id}" data-kind="excel" data-fallback-name="excel_${slug}_template.xlsx"` : 'disabled'}>Excel Template</button>
+                <button class="btn dl-btn" ${task.folder_path ? `data-task-id="${task.id}" data-kind="per-image-zip" data-fallback-name="${slug}_per_image_artifacts.zip"` : 'disabled'}>Từng ảnh ZIP</button>
               </div>
             `;
           } else if (task.status === "failed") {

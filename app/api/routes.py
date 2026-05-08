@@ -71,6 +71,10 @@ def _compact_task_result(result: Any) -> Any:
         "saved_excel",
         "saved_excel_lv1",
         "saved_excel_template",
+        "saved_raw_lightonocr_json",
+        "saved_lv1_json",
+        "saved_per_image_zip",
+        "per_image_artifact_count",
         "api_base_url",
         "api_json_path",
         "api_excel_path",
@@ -563,6 +567,11 @@ async def get_task_artifact_excel_template(task_id: str):
     return await download_task_artifact(task_id, "excel_template")
 
 
+@router.post("/task-artifact/{task_id}/per-image-zip")
+async def get_task_artifact_per_image_zip(task_id: str):
+    return await download_task_artifact(task_id, "per_image_zip")
+
+
 @router.get("/tasks")
 async def get_tasks():
     from app.core.db import get_all_tasks
@@ -608,17 +617,29 @@ async def get_task_status(task_id: str):
 async def download_task_artifact(task_id: str, artifact_kind: str):
     """
     Download a saved task artifact from the outputs directory.
-    artifact_kind can be 'json', 'excel', 'excel_lv1', or 'excel_template'.
+    artifact_kind can be 'json', 'raw_json', 'lv1_json', 'excel',
+    'excel_lv1', 'excel_template', or 'per_image_zip'.
     """
     artifact_kind = artifact_kind.replace("-", "_")
-    if artifact_kind not in {"json", "excel", "excel_lv1", "excel_template"}:
+    if artifact_kind not in {
+        "json",
+        "raw_json",
+        "lv1_json",
+        "excel",
+        "excel_lv1",
+        "excel_template",
+        "per_image_zip",
+    }:
         raise HTTPException(status_code=400, detail="Invalid artifact kind")
 
     result_key_map = {
         "json": "saved_to",
+        "raw_json": "saved_raw_lightonocr_json",
+        "lv1_json": "saved_lv1_json",
         "excel": "saved_excel",
         "excel_lv1": "saved_excel_lv1",
         "excel_template": "saved_excel_template",
+        "per_image_zip": "saved_per_image_zip",
     }
     result_key = result_key_map[artifact_kind]
     artifact_path = None
@@ -640,6 +661,17 @@ async def download_task_artifact(task_id: str, artifact_kind: str):
         if task_row:
             if artifact_kind == "json":
                 artifact_path = task_row.get("json_path")
+            elif artifact_kind in {"raw_json", "lv1_json"}:
+                json_path = task_row.get("json_path")
+                if isinstance(json_path, str) and json_path.endswith(".json"):
+                    suffix = (
+                        "_raw_lightonocr.json"
+                        if artifact_kind == "raw_json"
+                        else "_lv1.json"
+                    )
+                    candidate = json_path[:-5] + suffix
+                    if os.path.exists(candidate):
+                        artifact_path = candidate
             elif artifact_kind in {"excel", "excel_template"}:
                 artifact_path = task_row.get("excel_path")
             elif artifact_kind == "excel_lv1":
@@ -650,6 +682,14 @@ async def download_task_artifact(task_id: str, artifact_kind: str):
                     candidate = template_path.replace("_template.xlsx", "_lv1.xlsx")
                     if os.path.exists(candidate):
                         artifact_path = candidate
+            elif artifact_kind == "per_image_zip":
+                candidate = (
+                    Path(settings.OUTPUT_DIR)
+                    / "per_image_zips"
+                    / f"{task_id}_per_image_artifacts.zip"
+                )
+                if candidate.exists():
+                    artifact_path = str(candidate)
 
     if not artifact_path:
         raise HTTPException(
@@ -659,7 +699,7 @@ async def download_task_artifact(task_id: str, artifact_kind: str):
     artifact_file = Path(artifact_path).resolve()
     outputs_dir = Path(settings.OUTPUT_DIR).resolve()
 
-    if artifact_file.suffix.lower() not in {".json", ".xlsx"}:
+    if artifact_file.suffix.lower() not in {".json", ".xlsx", ".zip"}:
         raise HTTPException(status_code=400, detail="Unsupported artifact type")
 
     try:
@@ -670,11 +710,11 @@ async def download_task_artifact(task_id: str, artifact_kind: str):
     if not artifact_file.exists():
         raise HTTPException(status_code=404, detail="Artifact file not found")
 
-    media_type = (
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        if artifact_file.suffix.lower() == ".xlsx"
-        else "application/json"
-    )
+    media_type = {
+        ".json": "application/json",
+        ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        ".zip": "application/zip",
+    }[artifact_file.suffix.lower()]
     return FileResponse(
         path=str(artifact_file),
         media_type=media_type,

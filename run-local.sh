@@ -67,11 +67,16 @@ if [[ -n "$DEVICE_MODE" ]]; then
     LIGHTONOCR_ENV=("LIGHTONOCR_DEVICE=$DEVICE_MODE")
 fi
 
+# Local runner starts the API app on the host, not inside Docker network.
+# Hostname "lightonocr" only resolves inside docker compose, so override .env here.
+APP_ENV=("LOCAL_HTTP_BASE_URL=${LOCAL_HTTP_BASE_URL:-http://127.0.0.1:7861/extract}")
+
 case "$SERVICE" in
     app)
         echo "> Chay extract-pdf app server (port 8000)"
+        echo "  LOCAL_HTTP_BASE_URL=${APP_ENV[0]#LOCAL_HTTP_BASE_URL=}"
         echo ""
-        conda run -n "$ENV_NAME" python -m app.main
+        env "${APP_ENV[@]}" conda run -n "$ENV_NAME" python -m app.main
         ;;
     lightonocr)
         echo "> Chay LightOnOCR API server (port 7861)"
@@ -87,7 +92,8 @@ case "$SERVICE" in
         
         # Start extract-pdf in background
         echo "Khoi dong extract-pdf..."
-        conda run -n "$ENV_NAME" python -m app.main &
+        echo "  LOCAL_HTTP_BASE_URL=${APP_ENV[0]#LOCAL_HTTP_BASE_URL=}"
+        env "${APP_ENV[@]}" conda run -n "$ENV_NAME" python -m app.main &
         APP_PID=$!
         
         sleep 2
