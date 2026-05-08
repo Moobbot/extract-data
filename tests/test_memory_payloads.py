@@ -154,3 +154,90 @@ def test_process_image_task_single_outputs_are_task_unique(monkeypatch, tmp_path
     assert template_path.exists()
     assert Path(default_result["saved_raw_lightonocr_json"]).exists()
     assert Path(template_result["saved_raw_lightonocr_json"]).exists()
+
+
+def test_process_image_task_folder_template_excel_preserves_image_order(
+    monkeypatch, tmp_path
+):
+    from app.core import config as core_config
+    from app.core import db
+    from app.services import tasks
+
+    captured_prompts = []
+
+    class FakeProvider:
+        def generate_content(self, image_path: str, prompt: str) -> dict:
+            captured_prompts.append(prompt)
+            image_name = Path(image_path).name
+            if image_name.startswith("001_"):
+                stt = "9"
+                student_name = "first-image"
+            else:
+                stt = "1"
+                student_name = "second-image"
+
+            raw_response = {
+                "data": {
+                    "tables": [
+                        {
+                            "headers": ["STT", "Họ, chữ đệm và tên"],
+                            "rows": [
+                                {
+                                    "STT": stt,
+                                    "Họ, chữ đệm và tên": student_name,
+                                }
+                            ],
+                        }
+                    ]
+                },
+                "raw_text": image_name,
+            }
+            return {
+                "text": json.dumps(raw_response["data"], ensure_ascii=False),
+                "raw_response": raw_response,
+                "base_url": "http://127.0.0.1:7861",
+                "api_json_path": None,
+                "api_excel_path": None,
+            }
+
+    batch_dir = tmp_path / "batch"
+    batch_dir.mkdir()
+    (batch_dir / "001_first.jpg").write_bytes(b"same-image")
+    (batch_dir / "002_second.jpg").write_bytes(b"same-image")
+
+    output_dir = tmp_path / "outputs"
+    monkeypatch.setattr(core_config.settings, "OUTPUT_DIR", str(output_dir))
+    monkeypatch.setattr(
+        tasks.AIProviderFactory, "get_provider", lambda *a, **k: FakeProvider()
+    )
+    monkeypatch.setattr(tasks.PromptManager, "get_prompt", lambda fmt: "prompt")
+    monkeypatch.setattr(db, "update_task_status", lambda *a, **k: None)
+
+    result = tasks.process_image_task(
+        str(batch_dir),
+        agent="lightonocr",
+        output_format="json",
+        save_to_file=True,
+        template_id="van_bang_dai_hoc",
+        task_id="folder-order-test",
+    )
+
+    assert result["status"] == "success"
+    assert result["saved_excel_template"]
+    assert captured_prompts
+    assert all("IMPORTANT: You must extract EXACTLY" not in p for p in captured_prompts)
+
+    import openpyxl
+
+    workbook = openpyxl.load_workbook(result["saved_excel_template"], data_only=True)
+    worksheet = workbook["Data"]
+    headers = [cell.value for cell in worksheet[2]]
+    name_col = headers.index("Họ, chữ đệm và tên") + 1
+    stt_col = headers.index("STT") + 1
+
+    assert worksheet.cell(row=4, column=name_col).value == "first-image"
+    assert worksheet.cell(row=4, column=stt_col).value == "9"
+    assert worksheet.cell(row=5, column=name_col).value == "second-image"
+    assert worksheet.cell(row=5, column=stt_col).value == "1"
+
+    workbook.close()

@@ -259,31 +259,6 @@ def process_image_task(
         except Exception:
             return None
 
-    def _numeric_stt(value: Any) -> Optional[int]:
-        text = str(value or "").strip()
-        return int(text) if text.isdigit() else None
-
-    def _sort_rows_by_stt(rows: list[dict]) -> list[dict]:
-        indexed_rows = [(idx, row) for idx, row in enumerate(rows)]
-        numeric_count = sum(
-            1
-            for _, row in indexed_rows
-            if _numeric_stt(row.get("STT")) is not None
-        )
-        if numeric_count < 2:
-            return rows
-        return [
-            row
-            for _, row in sorted(
-                indexed_rows,
-                key=lambda item: (
-                    _numeric_stt(item[1].get("STT")) is None,
-                    _numeric_stt(item[1].get("STT")) or 0,
-                    item[0],
-                ),
-            )
-        ]
-
     try:
         # 1. Get Provider
         try:
@@ -294,19 +269,9 @@ def process_image_task(
             update_task_status(task_id, "failed", error=str(e))
             return {"error": str(e), "status": "failed"}
 
-        # 2. Get Prompt (Truyền cấu trúc template vào nếu có)
-        from app.core.reference_data import get_reference_data
-
-        ref_data = get_reference_data()
-        templates = ref_data.get("templates", {})
-
+        # 2. Get Prompt. Keep OCR prompt template-agnostic; field mapping happens
+        # after the raw/LV1 response is parsed.
         prompt = PromptManager.get_prompt(output_format)
-
-        if template_id != "default" and template_id in templates:
-            # Gắn thêm cấu trúc mẫu vào prompt để AI xuất ra đúng field
-            fields = templates[template_id].get("fields", [])
-            fields_str = ", ".join([f["name"] for f in fields])
-            prompt += f"\n\nIMPORTANT: You must extract EXACTLY the following fields in your JSON output: {fields_str}"
 
         is_folder_input = os.path.isdir(image_path)
         if is_folder_input:
@@ -538,10 +503,6 @@ def process_image_task(
 
                     combined_template_rows.extend(current_template_rows)
 
-                if template_id == "van_bang_dai_hoc":
-                    current_lv1_rows = _sort_rows_by_stt(current_lv1_rows)
-                    current_template_rows = _sort_rows_by_stt(current_template_rows)
-
                 ocr_text_preview, ocr_text_truncated = _truncate_text(
                     content, per_file_ocr_preview_limit
                 )
@@ -697,12 +658,6 @@ def process_image_task(
                 excel_template_path = folder_save_context["excel_template_path"]
 
                 if output_format == "json":
-                    if template_id == "van_bang_dai_hoc":
-                        combined_lv1_rows = _sort_rows_by_stt(combined_lv1_rows)
-                        combined_template_rows = _sort_rows_by_stt(
-                            combined_template_rows
-                        )
-
                     with open(saved_path, "w", encoding="utf-8") as f:
                         json.dump(folder_results, f, ensure_ascii=False, indent=2)
                     if raw_lightonocr_entries:
