@@ -177,6 +177,7 @@ class LightOnOCRProvider(AIProvider):
                 "api_json_path": None,
                 "api_excel_path": None,
                 "base_url": self.endpoint.replace("/extract", ""),
+                "raw_response": raw,
             }
 
         base_url = self.endpoint.replace("/extract", "")
@@ -203,4 +204,5 @@ class LightOnOCRProvider(AIProvider):
             "api_json_path": result.get("json_path"),
             "api_excel_path": result.get("excel_path"),
             "base_url": base_url,
+            "raw_response": result,
         }

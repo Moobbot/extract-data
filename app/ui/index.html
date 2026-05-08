@@ -571,6 +571,7 @@
             <button id="downloadJsonBtn" class="btn secondary" disabled>Download JSON</button>
             <button id="downloadExcelLv1Btn" class="btn secondary" disabled>Download Excel Goc (LV1)</button>
             <button id="downloadExcelBtn" class="btn secondary" disabled>Download Excel Template</button>
+            <button id="downloadPerImageZipBtn" class="btn secondary" disabled>Download từng ảnh (ZIP)</button>
             <button id="copyContentBtn" class="btn ghost" disabled>Copy Content</button>
             <button id="clearBtn" class="btn ghost">Clear</button>
           </div>
@@ -622,6 +623,7 @@
     const downloadJsonBtn = document.getElementById("downloadJsonBtn");
     const downloadExcelLv1Btn = document.getElementById("downloadExcelLv1Btn");
     const downloadExcelBtn = document.getElementById("downloadExcelBtn");
+    const downloadPerImageZipBtn = document.getElementById("downloadPerImageZipBtn");
     const copyContentBtn = document.getElementById("copyContentBtn");
     const clearBtn = document.getElementById("clearBtn");
     const statusText = document.getElementById("statusText");
@@ -742,6 +744,7 @@
       downloadJsonBtn.disabled = true;
       downloadExcelLv1Btn.disabled = true;
       downloadExcelBtn.disabled = true;
+      downloadPerImageZipBtn.disabled = true;
       copyContentBtn.disabled = true;
       clearFailedFilesView();
 
@@ -760,9 +763,11 @@
           const savedTo = typeof result.saved_to === "string" ? result.saved_to.toLowerCase() : "";
           const savedExcelLv1 = typeof result.saved_excel_lv1 === "string" ? result.saved_excel_lv1.toLowerCase() : "";
           const savedExcel = typeof result.saved_excel === "string" ? result.saved_excel.toLowerCase() : "";
+          const savedPerImageZip = typeof result.saved_per_image_zip === "string" ? result.saved_per_image_zip.toLowerCase() : "";
           const hasJsonArtifact = savedTo.endsWith(".json");
           const hasExcelLv1Artifact = savedExcelLv1.endsWith(".xlsx");
           const hasExcelArtifact = savedExcel.endsWith(".xlsx");
+          const hasPerImageZipArtifact = savedPerImageZip.endsWith(".zip");
 
           renderContentPreview(result.content || "");
           renderFailedFilesView(result.failed_files, {
@@ -773,9 +778,10 @@
           downloadJsonBtn.disabled = !hasJsonArtifact;
           downloadExcelLv1Btn.disabled = !hasExcelLv1Artifact;
           downloadExcelBtn.disabled = !hasExcelArtifact;
+          downloadPerImageZipBtn.disabled = !hasPerImageZipArtifact;
           copyContentBtn.disabled = !result.content;
 
-          if (!hasJsonArtifact && !hasExcelLv1Artifact && !hasExcelArtifact) {
+          if (!hasJsonArtifact && !hasExcelLv1Artifact && !hasExcelArtifact && !hasPerImageZipArtifact) {
             setStatus("Completed. Download buttons require Save output files enabled.", "");
           } else {
             setStatus("Completed", "ok");
@@ -915,6 +921,20 @@
       }
     });
 
+    downloadPerImageZipBtn.addEventListener("click", async () => {
+      if (!lastTaskId) {
+        return;
+      }
+      try {
+        await triggerDownload(
+          "/api/v1/task-artifact/" + encodeURIComponent(lastTaskId) + "/per-image-zip",
+          lastTaskId + "_per_image_artifacts.zip"
+        );
+      } catch (error) {
+        setStatus("Lỗi tải ZIP từng ảnh: " + error.message, "err");
+      }
+    });
+
     copyContentBtn.addEventListener("click", async () => {
       const text = (lastTaskResult && lastTaskResult.content) || lastContentRaw || "";
       if (!text) {
@@ -942,6 +962,7 @@
       downloadJsonBtn.disabled = true;
       downloadExcelLv1Btn.disabled = true;
       downloadExcelBtn.disabled = true;
+      downloadPerImageZipBtn.disabled = true;
       copyContentBtn.disabled = true;
       setStatus("Ready");
     });
@@ -962,6 +983,7 @@
       downloadJsonBtn.disabled = true;
       downloadExcelLv1Btn.disabled = true;
       downloadExcelBtn.disabled = true;
+      downloadPerImageZipBtn.disabled = true;
       copyContentBtn.disabled = true;
 
       try {
@@ -1080,6 +1102,20 @@
 
           renderContentPreview(renderedParts.join("\n\n"));
           copyContentBtn.disabled = renderedParts.length === 0;
+          const firstSuccessful = finalResults.find((entry) => isBatchTaskSuccess(entry));
+          if (firstSuccessful) {
+            const result = firstSuccessful.task_result.result || {};
+            lastTaskId = firstSuccessful.task_id;
+            lastTaskResult = result;
+            const savedTo = typeof result.saved_to === "string" ? result.saved_to.toLowerCase() : "";
+            const savedExcelLv1 = typeof result.saved_excel_lv1 === "string" ? result.saved_excel_lv1.toLowerCase() : "";
+            const savedExcel = typeof result.saved_excel === "string" ? result.saved_excel.toLowerCase() : "";
+            const savedPerImageZip = typeof result.saved_per_image_zip === "string" ? result.saved_per_image_zip.toLowerCase() : "";
+            downloadJsonBtn.disabled = !savedTo.endsWith(".json");
+            downloadExcelLv1Btn.disabled = !savedExcelLv1.endsWith(".xlsx");
+            downloadExcelBtn.disabled = !savedExcel.endsWith(".xlsx");
+            downloadPerImageZipBtn.disabled = !savedPerImageZip.endsWith(".zip");
+          }
 
           const successCount = finalResults.filter((entry) => isBatchTaskSuccess(entry)).length;
           const failCount = finalResults.length - successCount;
@@ -1119,7 +1155,14 @@
 
         // Handle folder batch submission response
         if (data.task_id === "folder_batch") {
-          setStatus("Đã gửi batch xử lý toàn bộ folder. Xem raw result để biết chi tiết.", "ok");
+          const folderTask = Array.isArray(data.tasks)
+            ? data.tasks.find((item) => item && item.task_id)
+            : null;
+          if (!folderTask) {
+            setStatus("Đã gửi batch xử lý toàn bộ folder. Xem raw result để biết chi tiết.", "ok");
+            return;
+          }
+          await pollTask(folderTask.task_id);
           return;
         }
 

@@ -4,6 +4,7 @@ import os
 import json
 import shutil
 import tempfile
+import zipfile
 from datetime import datetime
 from typing import Any, Dict, Optional
 from pathlib import Path
@@ -250,6 +251,14 @@ def process_image_task(
         except Exception:
             return None
 
+    def _save_json_artifact(data: Any, json_path: str) -> Optional[str]:
+        try:
+            with open(json_path, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            return json_path
+        except Exception:
+            return None
+
     def _numeric_stt(value: Any) -> Optional[int]:
         text = str(value or "").strip()
         return int(text) if text.isdigit() else None
@@ -319,6 +328,82 @@ def process_image_task(
             api_base_url = None
             api_json_path = None
             api_excel_path = None
+            saved_raw_lightonocr_json = None
+            saved_lv1_json = None
+            folder_save_context: Optional[dict[str, str]] = None
+            per_image_dir = None
+            per_image_artifacts: list[dict[str, Any]] = []
+            raw_lightonocr_entries: list[dict[str, Any]] = []
+            combined_lv1_payloads: list[dict[str, Any]] = []
+            saved_per_image_zip = None
+
+            if save_to_file:
+                from app.core.config import settings
+
+                def _safe_name(value: str) -> str:
+                    cleaned = "".join(
+                        ch if ch not in '<>:"/\\|?*' else "_" for ch in value
+                    )
+                    return cleaned.strip().strip(".") or "output"
+
+                display_filename = resolved_source_filename or os.path.basename(
+                    image_path
+                )
+                base_name = _safe_name(
+                    os.path.splitext(os.path.basename(display_filename))[0]
+                )
+                folder_label = ""
+                if resolved_source_folder:
+                    folder_label = _safe_name(
+                        os.path.basename(os.path.normpath(resolved_source_folder))
+                    )
+                base_slug = f"{folder_label}_{base_name}" if folder_label else base_name
+                if task_id != "unknown":
+                    base_slug = "_".join(
+                        [
+                            base_slug,
+                            _safe_name(template_id or "default"),
+                            _safe_name(task_id.split("-")[0]),
+                        ]
+                    )
+                elif template_id and template_id != "default":
+                    base_slug = f"{base_slug}_{_safe_name(template_id)}"
+                ext = "md" if output_format == "markdown" else "json"
+                now = datetime.now()
+                dated_output_dir = os.path.join(
+                    settings.OUTPUT_DIR,
+                    now.strftime("%Y"),
+                    now.strftime("%m"),
+                    now.strftime("%d"),
+                )
+                os.makedirs(dated_output_dir, exist_ok=True)
+                zip_dir = os.path.join(settings.OUTPUT_DIR, "per_image_zips")
+                os.makedirs(zip_dir, exist_ok=True)
+                folder_save_context = {
+                    "base_slug": base_slug,
+                    "dated_output_dir": dated_output_dir,
+                    "saved_path": os.path.join(dated_output_dir, f"{base_slug}.{ext}"),
+                    "raw_lightonocr_path": os.path.join(
+                        dated_output_dir, f"{base_slug}_raw_lightonocr.json"
+                    ),
+                    "lv1_json_path": os.path.join(
+                        dated_output_dir, f"{base_slug}_lv1.json"
+                    ),
+                    "excel_lv1_path": os.path.join(
+                        dated_output_dir, f"excel_{base_slug}_lv1.xlsx"
+                    ),
+                    "excel_template_path": os.path.join(
+                        dated_output_dir, f"excel_{base_slug}_template.xlsx"
+                    ),
+                    "per_image_zip_path": os.path.join(
+                        zip_dir, f"{task_id}_per_image_artifacts.zip"
+                    ),
+                }
+                if output_format == "json":
+                    per_image_dir = os.path.join(
+                        dated_output_dir, f"{base_slug}_per_image"
+                    )
+                    os.makedirs(per_image_dir, exist_ok=True)
 
             if save_to_file and output_format != "json":
                 fd, folder_content_spool_path = tempfile.mkstemp(
@@ -351,8 +436,18 @@ def process_image_task(
                     api_base_url = content_result.get("base_url", api_base_url)
                     api_json_path = content_result.get("api_json_path")
                     api_excel_path = content_result.get("api_excel_path")
+                    raw_lightonocr_response = content_result.get("raw_response")
                 else:
                     content = content_result
+                    raw_lightonocr_response = None
+
+                if raw_lightonocr_response is not None:
+                    raw_lightonocr_entries.append(
+                        {
+                            "filename": os.path.basename(current_image_path),
+                            "response": raw_lightonocr_response,
+                        }
+                    )
 
                 content_block = f"### {os.path.basename(current_image_path)}\n\n{content}"
                 if folder_content_spool_path:
@@ -383,6 +478,12 @@ def process_image_task(
                 parsed_lv1 = None
                 if parsed is not None:
                     parsed_lv1 = json.loads(json.dumps(parsed, ensure_ascii=False))
+                    combined_lv1_payloads.append(
+                        {
+                            "filename": os.path.basename(current_image_path),
+                            "data": parsed_lv1,
+                        }
+                    )
 
                 def _flatten_mapped_rows(value: Any) -> Any:
                     if not isinstance(value, list):
@@ -414,28 +515,37 @@ def process_image_task(
                         else:
                             parsed = map_extracted_data(parsed, template_id)
 
+                current_lv1_rows: list[dict] = []
                 if parsed_lv1 is not None:
                     raw_rows = _extract_records_for_mapping(parsed_lv1)
                     if isinstance(raw_rows, list):
-                        combined_lv1_rows.extend(
-                            [row for row in raw_rows if isinstance(row, dict)]
-                        )
+                        current_lv1_rows = [
+                            row for row in raw_rows if isinstance(row, dict)
+                        ]
                     elif isinstance(raw_rows, dict):
-                        combined_lv1_rows.append(raw_rows)
+                        current_lv1_rows = [raw_rows]
+                    combined_lv1_rows.extend(current_lv1_rows)
 
+                current_template_rows: list[dict] = []
                 if parsed is not None:
                     mapped_rows = _extract_records_for_mapping(parsed)
                     if isinstance(mapped_rows, list):
-                        combined_template_rows.extend(
-                            [row for row in mapped_rows if isinstance(row, dict)]
-                        )
+                        current_template_rows = [
+                            row for row in mapped_rows if isinstance(row, dict)
+                        ]
                     elif isinstance(mapped_rows, dict):
-                        combined_template_rows.append(mapped_rows)
+                        current_template_rows = [mapped_rows]
+
+                    combined_template_rows.extend(current_template_rows)
+
+                if template_id == "van_bang_dai_hoc":
+                    current_lv1_rows = _sort_rows_by_stt(current_lv1_rows)
+                    current_template_rows = _sort_rows_by_stt(current_template_rows)
 
                 ocr_text_preview, ocr_text_truncated = _truncate_text(
                     content, per_file_ocr_preview_limit
                 )
-                folder_results.append(
+                result_entry = (
                     {
                         "filename": os.path.basename(current_image_path),
                         "ocr_text": ocr_text_preview,
@@ -460,6 +570,99 @@ def process_image_task(
                         ),
                     }
                 )
+                folder_results.append(result_entry)
+
+                if per_image_dir and output_format == "json":
+                    image_filename = os.path.basename(current_image_path)
+                    image_base = _safe_name(os.path.splitext(image_filename)[0])
+                    image_slug = f"{index:05d}_{image_base}"
+                    image_json_path = os.path.join(per_image_dir, f"{image_slug}.json")
+                    image_raw_path = os.path.join(
+                        per_image_dir, f"{image_slug}_raw_lightonocr.json"
+                    )
+                    image_lv1_json_path = os.path.join(
+                        per_image_dir, f"{image_slug}_lv1.json"
+                    )
+                    image_lv1_path = os.path.join(
+                        per_image_dir, f"excel_{image_slug}_lv1.xlsx"
+                    )
+                    image_template_path = os.path.join(
+                        per_image_dir, f"excel_{image_slug}_template.xlsx"
+                    )
+
+                    per_image_payload = (
+                        parsed
+                        if parsed is not None
+                        else {
+                            "filename": image_filename,
+                            "ocr_text": content,
+                            "error": "Could not parse OCR response as JSON",
+                        }
+                    )
+                    with open(image_json_path, "w", encoding="utf-8") as f:
+                        json.dump(per_image_payload, f, ensure_ascii=False, indent=2)
+
+                    artifact_entry: dict[str, Any] = {
+                        "filename": image_filename,
+                        "stem": image_slug,
+                        "json": image_json_path,
+                        "template_json": image_json_path,
+                    }
+                    if raw_lightonocr_response is not None:
+                        artifact_entry["raw_lightonocr_json"] = _save_json_artifact(
+                            raw_lightonocr_response, image_raw_path
+                        )
+                    if parsed_lv1 is not None:
+                        artifact_entry["lv1_json"] = _save_json_artifact(
+                            parsed_lv1, image_lv1_json_path
+                        )
+
+                    if parsed_lv1 is not None:
+                        artifact_entry["excel_lv1"] = (
+                            _save_combined_excel(current_lv1_rows, image_lv1_path)
+                            if current_lv1_rows
+                            else _save_excel_from_json(parsed_lv1, image_lv1_path)
+                        )
+
+                    if parsed is not None:
+                        if template_id != "default" and current_template_rows:
+                            from app.services.excel_writer import (
+                                write_rows_to_template,
+                                get_template_excel_path,
+                                get_template_sheet_name,
+                            )
+
+                            tmpl_file = get_template_excel_path(template_id)
+                            tmpl_sheet = get_template_sheet_name(template_id)
+                            if tmpl_file:
+                                artifact_entry["excel_template"] = (
+                                    write_rows_to_template(
+                                        rows=current_template_rows,
+                                        template_path=tmpl_file,
+                                        output_path=image_template_path,
+                                        sheet_name=tmpl_sheet,
+                                    )
+                                )
+                            else:
+                                artifact_entry["excel_template"] = _save_combined_excel(
+                                    current_template_rows, image_template_path
+                                )
+                        elif current_template_rows:
+                            artifact_entry["excel_template"] = _save_combined_excel(
+                                current_template_rows, image_template_path
+                            )
+                        else:
+                            artifact_entry["excel_template"] = _save_excel_from_json(
+                                parsed, image_template_path
+                            )
+
+                    per_image_artifacts.append(
+                        {
+                            key: value
+                            for key, value in artifact_entry.items()
+                            if value is not None
+                        }
+                    )
 
             if not folder_results:
                 from app.core.db import update_task_status
@@ -485,44 +688,13 @@ def process_image_task(
             saved_excel_template = None
 
             if save_to_file:
-                from app.core.config import settings
-
-                def _safe_name(value: str) -> str:
-                    cleaned = "".join(
-                        ch if ch not in '<>:"/\\|?*' else "_" for ch in value
-                    )
-                    return cleaned.strip().strip(".") or "output"
-
-                display_filename = resolved_source_filename or os.path.basename(
-                    image_path
-                )
-                base_name = _safe_name(
-                    os.path.splitext(os.path.basename(display_filename))[0]
-                )
-                folder_label = ""
-                if resolved_source_folder:
-                    folder_label = _safe_name(
-                        os.path.basename(os.path.normpath(resolved_source_folder))
-                    )
-                base_slug = f"{folder_label}_{base_name}" if folder_label else base_name
-                ext = "md" if output_format == "markdown" else "json"
-                output_filename = f"{base_slug}.{ext}"
-                now = datetime.now()
-                dated_output_dir = os.path.join(
-                    settings.OUTPUT_DIR,
-                    now.strftime("%Y"),
-                    now.strftime("%m"),
-                    now.strftime("%d"),
-                )
-                os.makedirs(dated_output_dir, exist_ok=True)
-                saved_path = os.path.join(dated_output_dir, output_filename)
-                excel_name_prefix = f"excel_{base_slug}"
-                excel_lv1_path = os.path.join(
-                    dated_output_dir, f"{excel_name_prefix}_lv1.xlsx"
-                )
-                excel_template_path = os.path.join(
-                    dated_output_dir, f"{excel_name_prefix}_template.xlsx"
-                )
+                if folder_save_context is None:
+                    raise RuntimeError("Folder save context was not initialized")
+                saved_path = folder_save_context["saved_path"]
+                raw_lightonocr_path = folder_save_context["raw_lightonocr_path"]
+                lv1_json_path = folder_save_context["lv1_json_path"]
+                excel_lv1_path = folder_save_context["excel_lv1_path"]
+                excel_template_path = folder_save_context["excel_template_path"]
 
                 if output_format == "json":
                     if template_id == "van_bang_dai_hoc":
@@ -533,6 +705,14 @@ def process_image_task(
 
                     with open(saved_path, "w", encoding="utf-8") as f:
                         json.dump(folder_results, f, ensure_ascii=False, indent=2)
+                    if raw_lightonocr_entries:
+                        saved_raw_lightonocr_json = _save_json_artifact(
+                            raw_lightonocr_entries, raw_lightonocr_path
+                        )
+                    if combined_lv1_payloads:
+                        saved_lv1_json = _save_json_artifact(
+                            combined_lv1_payloads, lv1_json_path
+                        )
 
                     saved_excel_lv1 = _save_combined_excel(
                         combined_lv1_rows, excel_lv1_path
@@ -564,6 +744,72 @@ def process_image_task(
                         )
 
                     saved_excel = saved_excel_template or saved_excel_lv1
+                    if per_image_artifacts:
+                        manifest = []
+                        for artifact in per_image_artifacts:
+                            manifest.append(
+                                {
+                                    "filename": artifact.get("filename"),
+                                    "json": (
+                                        os.path.basename(artifact["json"])
+                                        if artifact.get("json")
+                                        else None
+                                    ),
+                                    "raw_lightonocr_json": (
+                                        os.path.basename(
+                                            artifact["raw_lightonocr_json"]
+                                        )
+                                        if artifact.get("raw_lightonocr_json")
+                                        else None
+                                    ),
+                                    "lv1_json": (
+                                        os.path.basename(artifact["lv1_json"])
+                                        if artifact.get("lv1_json")
+                                        else None
+                                    ),
+                                    "template_json": (
+                                        os.path.basename(artifact["template_json"])
+                                        if artifact.get("template_json")
+                                        else None
+                                    ),
+                                    "excel_lv1": (
+                                        os.path.basename(artifact["excel_lv1"])
+                                        if artifact.get("excel_lv1")
+                                        else None
+                                    ),
+                                    "excel_template": (
+                                        os.path.basename(artifact["excel_template"])
+                                        if artifact.get("excel_template")
+                                        else None
+                                    ),
+                                }
+                            )
+                        manifest_path = os.path.join(per_image_dir, "manifest.json")
+                        with open(manifest_path, "w", encoding="utf-8") as f:
+                            json.dump(manifest, f, ensure_ascii=False, indent=2)
+
+                        saved_per_image_zip = folder_save_context[
+                            "per_image_zip_path"
+                        ]
+                        with zipfile.ZipFile(
+                            saved_per_image_zip, "w", compression=zipfile.ZIP_DEFLATED
+                        ) as zip_file:
+                            zip_file.write(manifest_path, "manifest.json")
+                            for artifact in per_image_artifacts:
+                                stem = artifact.get("stem") or "image"
+                                for key in (
+                                    "raw_lightonocr_json",
+                                    "lv1_json",
+                                    "template_json",
+                                    "excel_lv1",
+                                    "excel_template",
+                                ):
+                                    file_path = artifact.get(key)
+                                    if file_path and os.path.exists(file_path):
+                                        zip_file.write(
+                                            file_path,
+                                            f"{stem}/{os.path.basename(file_path)}",
+                                        )
                 else:
                     if folder_content_spool_path and os.path.exists(
                         folder_content_spool_path
@@ -598,6 +844,10 @@ def process_image_task(
                 "saved_excel": saved_excel,
                 "saved_excel_lv1": saved_excel_lv1,
                 "saved_excel_template": saved_excel_template,
+                "saved_raw_lightonocr_json": saved_raw_lightonocr_json,
+                "saved_lv1_json": saved_lv1_json,
+                "saved_per_image_zip": saved_per_image_zip,
+                "per_image_artifact_count": len(per_image_artifacts),
                 "api_base_url": api_base_url,
                 "api_json_path": api_json_path,
                 "api_excel_path": api_excel_path,
@@ -620,12 +870,14 @@ def process_image_task(
         api_base_url = None
         api_json_path = None
         api_excel_path = None
+        raw_lightonocr_response = None
 
         if isinstance(content_result, dict):
             content = content_result.get("text", "")
             api_base_url = content_result.get("base_url", "http://localhost:8000")
             api_json_path = content_result.get("api_json_path")
             api_excel_path = content_result.get("api_excel_path")
+            raw_lightonocr_response = content_result.get("raw_response")
         else:
             content = content_result
 
@@ -634,6 +886,8 @@ def process_image_task(
         saved_excel = None
         saved_excel_lv1 = None
         saved_excel_template = None
+        saved_raw_lightonocr_json = None
+        saved_lv1_json = None
         if save_to_file:
             from app.core.config import settings
             import requests
@@ -652,6 +906,16 @@ def process_image_task(
                     os.path.basename(os.path.normpath(resolved_source_folder))
                 )
             base_slug = f"{folder_label}_{base_name}" if folder_label else base_name
+            if task_id != "unknown":
+                base_slug = "_".join(
+                    [
+                        base_slug,
+                        _safe_name(template_id or "default"),
+                        _safe_name(task_id.split("-")[0]),
+                    ]
+                )
+            elif template_id and template_id != "default":
+                base_slug = f"{base_slug}_{_safe_name(template_id)}"
             ext = "md" if output_format == "markdown" else "json"
             output_filename = f"{base_slug}.{ext}"
             now = datetime.now()
@@ -663,6 +927,10 @@ def process_image_task(
             )
             os.makedirs(dated_output_dir, exist_ok=True)
             saved_path = os.path.join(dated_output_dir, output_filename)
+            raw_lightonocr_path = os.path.join(
+                dated_output_dir, f"{base_slug}_raw_lightonocr.json"
+            )
+            lv1_json_path = os.path.join(dated_output_dir, f"{base_slug}_lv1.json")
             excel_name_prefix = f"excel_{base_slug}"
             excel_lv1_path = os.path.join(
                 dated_output_dir, f"{excel_name_prefix}_lv1.xlsx"
@@ -673,6 +941,10 @@ def process_image_task(
 
             # Nếu API có file JSON chuẩn và định dạng yêu cầu là json, thử tải về thay vì ghi text chay
             downloaded_json = False
+            if output_format == "json" and raw_lightonocr_response is not None:
+                saved_raw_lightonocr_json = _save_json_artifact(
+                    raw_lightonocr_response, raw_lightonocr_path
+                )
             if output_format == "json" and api_json_path and api_base_url:
                 try:
                     res = requests.post(
@@ -684,6 +956,15 @@ def process_image_task(
                     with open(saved_path, "wb") as f:
                         f.write(res.content)
                     downloaded_json = True
+                    if saved_raw_lightonocr_json is None:
+                        try:
+                            with open(saved_path, "r", encoding="utf-8") as f:
+                                downloaded_raw = json.load(f)
+                            saved_raw_lightonocr_json = _save_json_artifact(
+                                downloaded_raw, raw_lightonocr_path
+                            )
+                        except Exception:
+                            pass
                 except Exception:
                     pass
 
@@ -711,6 +992,7 @@ def process_image_task(
 
                 if parsed is not None:
                     parsed_lv1 = json.loads(json.dumps(parsed, ensure_ascii=False))
+                    saved_lv1_json = _save_json_artifact(parsed_lv1, lv1_json_path)
 
                 def _flatten_mapped_rows(value: Any) -> Any:
                     if not isinstance(value, list):
@@ -829,6 +1111,8 @@ def process_image_task(
             "saved_excel": saved_excel,
             "saved_excel_lv1": saved_excel_lv1,
             "saved_excel_template": saved_excel_template,
+            "saved_raw_lightonocr_json": saved_raw_lightonocr_json,
+            "saved_lv1_json": saved_lv1_json,
             "api_base_url": api_base_url,
             "api_json_path": api_json_path,
             "api_excel_path": api_excel_path,
