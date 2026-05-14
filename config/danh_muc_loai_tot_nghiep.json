@@ -25,6 +25,13 @@
   },
   "7": {
     "ten": "Trung bình khá",
-    "extra": []
+    "extra": [
+      "TB Khá",
+      "TB khá",
+      "TBK",
+      "T.B Khá",
+      "Tr.Bình Khá",
+      "Trung bình-khá"
+    ]
   }
 }
