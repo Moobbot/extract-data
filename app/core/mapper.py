@@ -1,5 +1,6 @@
 import os
 import json
+import re
 import unicodedata
 from typing import Any
 from app.core.reference_data import get_reference_data
@@ -33,6 +34,12 @@ def unaccent_and_lower(text: str) -> str:
     return text.replace("đ", "d")
 
 
+def _normalize_lookup_text(text: str) -> str:
+    normalized = unaccent_and_lower(text or "")
+    normalized = re.sub(r"[^a-z0-9]+", " ", normalized)
+    return " ".join(normalized.split())
+
+
 def find_category_code(value: str, category_dict: dict) -> str:
     """
     Tìm tên chuẩn của giá trị trong danh mục dựa vào so sánh không dấu, không phân biệt hoa thường.
@@ -41,15 +48,15 @@ def find_category_code(value: str, category_dict: dict) -> str:
     if not value or not isinstance(value, str):
         return ""
 
-    search_val = unaccent_and_lower(value.strip())
+    search_val = _normalize_lookup_text(value.strip())
 
     for code, info in category_dict.items():
         # Kiểm tra tên chính
-        if unaccent_and_lower(info.get("ten", "")) == search_val:
+        if _normalize_lookup_text(info.get("ten", "")) == search_val:
             return info.get("ten")
         # Kiểm tra các tên phụ (extra)
         for extra_name in info.get("extra", []):
-            if unaccent_and_lower(extra_name) == search_val:
+            if _normalize_lookup_text(extra_name) == search_val:
                 return info.get("ten")
 
     return ""
@@ -183,10 +190,12 @@ def map_extracted_data(data, template_id: str):
 
     def _candidate_values(record: dict, field_name: str) -> list[tuple[str, Any]]:
         aliases = set(_field_aliases(field_name))
+        compact_aliases = {_compact_key(alias) for alias in aliases}
         return [
             (str(k), v)
             for k, v in record.items()
             if _normalize_key(str(k)) in aliases
+            or _compact_key(str(k)) in compact_aliases
         ]
 
     def _raw_values_by_compact_aliases(
@@ -197,6 +206,31 @@ def map_extracted_data(data, template_id: str):
             for k, v in record.items()
             if _compact_key(str(k)) in aliases
         ]
+
+    def _has_value(value: Any) -> bool:
+        if value is None:
+            return False
+        if isinstance(value, str):
+            return bool(value.strip())
+        if isinstance(value, dict):
+            return any(_has_value(item) for item in value.values())
+        if isinstance(value, (list, tuple, set)):
+            return any(_has_value(item) for item in value)
+        return True
+
+    def _is_meaningful_van_bang_row(row: dict) -> bool:
+        important_fields = (
+            "Số hiệu bằng",
+            "Số vào sổ gốc cấp văn bằng",
+            "Họ, chữ đệm và tên",
+            "Ngày, tháng, năm sinh",
+            "Nơi sinh",
+            "Xếp loại/hạng tốt nghiệp",
+            "Ngày tháng năm cấp bằng",
+        )
+        populated = sum(1 for field in important_fields if _has_value(row.get(field)))
+        stt = str(row.get("STT", "") or "").strip()
+        return populated >= 2 or (populated >= 1 and stt.isdigit())
 
     def _extract_with_aliases(record: dict, field_name: str) -> Any:
         candidates = _candidate_values(record, field_name)
@@ -401,6 +435,12 @@ def map_extracted_data(data, template_id: str):
     def _postprocess_mapped_rows(rows: list[dict]) -> list[dict]:
         if template_id != "van_bang_dai_hoc":
             return rows
+
+        rows = [
+            row
+            for row in rows
+            if not isinstance(row, dict) or _is_meaningful_van_bang_row(row)
+        ]
 
         issue_date_key = "Ngày tháng năm cấp bằng"
         year_counts: dict[str, int] = {}
